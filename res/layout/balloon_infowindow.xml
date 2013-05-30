@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content"
+	android:orientation="vertical" 
+	android:paddingBottom="13dip"
+	android:minWidth="300dip" 
+	android:id="@+id/balloon_main_layout"
+	android:background="@drawable/balloonbackground"
+	android:paddingTop="0dip">
+    
+    <LinearLayout
+        android:id="@+id/balloon_inner_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:minHeight="50dip"
+        android:paddingTop="2dip"
+        android:orientation="vertical"
+        android:layout_weight="1" >
+        
+        <RelativeLayout
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal">
+            
+           <TextView
+               android:id="@+id/balloon_note_title"
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"
+               android:layout_alignParentLeft="true"
+               android:background="#F3F0EA"
+               android:textColor="#104E9B"
+               android:textSize="22sp"
+        	   android:textStyle="bold"/>
+
+        </RelativeLayout>
+        
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dip"
+            android:orientation="horizontal"
+            android:paddingLeft="5dip"
+            android:paddingRight="5dip"
+            android:paddingTop="5dip"> 
+            
+            <LinearLayout
+                android:id="@+id/balloon_image_layout"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+                
+	            <ImageView
+		            android:id="@+id/balloon_note_image"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginRight="8dp"
+		            android:visibility="gone"
+		            android:background="@drawable/image_background"/>
+			</LinearLayout>
+			
+            <TextView
+                android:id="@+id/balloon_note_body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/balloon_image_layout"
+                android:layout_toRightOf="@id/balloon_image_layout"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:scrollHorizontally="true"
+                android:textColor="@android:color/black"
+                android:textSize="12dip" />
+    
+        </RelativeLayout> 
+          
+    </LinearLayout>
+
+
+    <TextView 
+        android:id="@+id/balloon_create_info"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:textStyle="italic"
+        android:textSize="12dip"/> 
+
+</LinearLayout>

@@ -1,0 +1,122 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+        <TextView 
+            android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentLeft="true"
+        	android:padding="15dp"
+        	android:textSize="20sp"
+        	android:textColor="#499FCF"
+        	android:text="@string/signup_sign_up" />
+
+        <ProgressBar
+            android:id="@+id/signup_progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+        
+    </RelativeLayout>
+    
+    <View 
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#499FCF"/>
+    
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+	    <ImageView
+	        android:id="@+id/signup_photo"
+	        android:layout_width="100dp"
+	        android:layout_height="100dp"
+	        android:layout_marginTop="15dp"
+	        android:layout_centerHorizontal="true"
+	        android:src="@drawable/default_image"/>
+	    
+	    <Button 
+	        android:id="@+id/signup_photo_button"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/signup_photo"
+	        android:layout_centerHorizontal="true"
+	        android:text="@string/signup_pick_photo"
+	        android:textColor="@android:color/black" />
+	    
+    </RelativeLayout>    
+    
+    <EditText
+        android:id="@+id/signup_username_field"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:singleLine="true"
+        android:hint="@string/signup_username" />
+    <EditText
+        android:id="@+id/signup_password_field"
+        android:inputType="textPassword"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:fontFamily="sans-serif"
+        android:singleLine="true"
+        android:hint="@string/signup_password"/>
+    
+    <EditText
+        android:id="@+id/signup_confirm_password_field"
+        android:inputType="textPassword"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="sans-serif"
+        android:singleLine="true"
+        android:hint="@string/signup_confirm_password"/>
+        
+    <View
+	    android:layout_width="fill_parent"
+	    android:layout_height="1dip"
+	    android:background="?android:attr/dividerVertical" />
+    
+    <LinearLayout 
+	    style="?android:attr/buttonBarStyle"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:paddingTop="0dip"
+	    android:paddingLeft="2dip"
+	    android:paddingRight="2dip"
+	    android:measureWithLargestChild="true">
+
+	    <Button 
+	        android:id="@+id/signup_confirm_signup_button"
+	        style="?android:attr/buttonBarButtonStyle"
+	        android:layout_width="0dip"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:text="@string/signup_sign_up"/>
+	    
+	    <Button 
+	        android:id="@+id/signup_cancel_button"
+	        style="?android:attr/buttonBarButtonStyle"
+	        android:layout_width="0dip"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:text="@string/cancel_string"/>
+	</LinearLayout>
+</LinearLayout>
