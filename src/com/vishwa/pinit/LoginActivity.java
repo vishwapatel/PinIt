@@ -58,7 +58,6 @@ public class LoginActivity extends Activity {
 	    mLoginButton.setOnClickListener(new LoginClickListener());
 	    
 	    mSignupButton.setOnClickListener(new SignupClickListener());
-		
 	}
 	
 	public class LoginClickListener implements View.OnClickListener {

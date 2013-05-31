@@ -4,15 +4,15 @@
 	android:layout_height="wrap_content"
 	android:orientation="vertical" 
 	android:paddingBottom="13dip"
-	android:minWidth="300dip" 
+	android:minWidth="300dp"
 	android:id="@+id/balloon_main_layout"
-	android:background="@drawable/balloonbackground"
+	android:background="@drawable/balloonbackground2"
 	android:paddingTop="0dip">
-    
+    <!-- 	android:minWidth="300dip"  -->
     <LinearLayout
         android:id="@+id/balloon_inner_layout"
         android:layout_width="fill_parent"
-        android:layout_height="0dip"
+        android:layout_height="wrap_content"
         android:minHeight="50dip"
         android:paddingTop="2dip"
         android:orientation="vertical"
@@ -28,7 +28,10 @@
                android:layout_width="fill_parent"
                android:layout_height="wrap_content"
                android:layout_alignParentLeft="true"
-               android:background="#F3F0EA"
+               android:layout_marginLeft="1dp"
+               android:paddingLeft="5dp"
+               android:paddingRight="5dp"
+               android:background="@drawable/balloon_note_title"
                android:textColor="#104E9B"
                android:textSize="22sp"
         	   android:textStyle="bold"/>
@@ -41,7 +44,8 @@
             android:orientation="horizontal"
             android:paddingLeft="5dip"
             android:paddingRight="5dip"
-            android:paddingTop="5dip"> 
+            android:paddingTop="5dip"
+            android:layout_weight="1"> 
             
             <LinearLayout
                 android:id="@+id/balloon_image_layout"
