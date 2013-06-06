@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/display_note_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    
+    <ScrollView
+        android:id="@+id/display_scroll_layout"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content">
+        <RelativeLayout 
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+		    <ImageView 
+		        android:id="@+id/display_note_photo"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content">
+		    </ImageView>
+		    
+		    <ProgressBar
+		        android:id="@+id/display_note_progressbar"
+		        style="?android:attr/progressBarStyleLarge"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerInParent="true"/>
+		    
+		    <TextView
+		        android:id="@+id/display_note_body"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@id/display_note_photo"
+		        android:layout_alignLeft="@id/display_note_photo"
+		        android:layout_alignRight="@id/display_note_photo"
+		        android:paddingLeft="5dp"
+		        android:paddingRight="5dp"
+		        android:background="#FFFFFF"
+		        android:textSize="16dp"/>
+    	</RelativeLayout>
+    </ScrollView>
+    
+    <TextView
+        android:id="@+id/display_note_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/display_scroll_layout"
+        android:layout_alignLeft="@id/display_scroll_layout"
+        android:layout_alignRight="@id/display_scroll_layout"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:minHeight="60dp"
+        android:background="@drawable/display_title_background"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
+
+</RelativeLayout>

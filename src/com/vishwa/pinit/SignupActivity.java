@@ -241,6 +241,7 @@ public class SignupActivity extends Activity {
 			    mPhotoImageView.setAdjustViewBounds(true);
 			   
 				mProfilePhotoThumbnail = ThumbnailUtils.extractThumbnail(mProfilePhoto, 100, 100);
+				mProfilePhoto.recycle();
 				int profilePhotoThumbnailWidth = mProfilePhotoThumbnail.getWidth();
 				int profilePhotoThumbnailHeight = mProfilePhotoThumbnail.getHeight();
 				mProfilePhotoThumbnail = Bitmap.createBitmap(mProfilePhotoThumbnail, 0, 0, 

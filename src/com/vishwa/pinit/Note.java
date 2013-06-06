@@ -1,9 +1,14 @@
 package com.vishwa.pinit;
 
-import com.google.android.gms.maps.model.Marker;
+import java.io.Serializable;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseGeoPoint;
 
-public class Note {
+public class Note implements Parcelable{
 	
 	private String id;
 	private String title;
@@ -12,19 +17,47 @@ public class Note {
 	private String thumbnailUrl;
 	private String createdAt;
 	private String createdAtFull;
-	private ParseGeoPoint geopoint;
+	private double latitude;
+	private double longitude;
 	
-	public Note(String id, String creator, String title, String body, ParseGeoPoint geopoint, String url, String createdAt, String createdAtFull) {
+	public Note(String id, String creator, String title, String body, LatLng geopoint, 
+			String url, String createdAt, String createdAtFull) {
 		this.id = id;
 		this.title = title;
 		this.body = body;
 		this.creator = creator;
-		this.geopoint = geopoint;
 		this.thumbnailUrl = url;
 		this.createdAt = createdAt;
 		this.createdAtFull = createdAtFull;
+		this.latitude = geopoint.latitude;
+		this.longitude = geopoint.longitude;
 	}
 	
+	public Note(Parcel parcel) {
+		String[] data = new String[9];
+		
+		parcel.readStringArray(data);
+		id = data[0];
+		title = data[1];
+		body = data[2];
+		creator = data[3];
+		thumbnailUrl = data[4];
+		createdAt = data[5];
+		createdAtFull = data[6];
+		latitude = Double.parseDouble(data[7]);
+		longitude = Double.parseDouble(data[8]);
+	}
+	
+	public static final Parcelable.Creator<Note> CREATOR = new Parcelable.Creator<Note>() {
+        public Note createFromParcel(Parcel in) {
+            return new Note(in); 
+        }
+
+        public Note[] newArray(int size) {
+            return new Note[size];
+        }
+    };
+    
 	public String getNoteTitle() {
 		return title;
 	}
@@ -41,8 +74,12 @@ public class Note {
 		return thumbnailUrl;
 	}
 	
-	public ParseGeoPoint getNoteGeoPoint() {
-		return geopoint;
+	public double getNoteLatitude() {
+		return latitude;
+	}
+	
+	public double getNoteLongitude() {
+		return longitude;
 	}
 	
 	public String getNoteCreatedAt() {
@@ -66,11 +103,35 @@ public class Note {
 		builder.append(", ");
 		builder.append(body);
 		builder.append(", ");
-		builder.append(geopoint.toString());
+		builder.append(latitude);
+		builder.append(", ");
+		builder.append(longitude);
 		builder.append(", ");
 		builder.append(thumbnailUrl);
 		builder.append(", ");
 		builder.append(createdAt);
 		return builder.toString();
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel arg0, int arg1) {
+		String[] data = new String[9];
+		
+		data[0] = id;
+		data[1] = title;
+		data[2] = body;
+		data[3] = creator;
+		data[4] = thumbnailUrl;
+		data[5] = createdAt;
+		data[6] = createdAtFull;
+		data[7] = Double.toString(latitude);
+		data[8] = Double.toString(longitude);
+		
+		arg0.writeStringArray(data);
 	}
 }

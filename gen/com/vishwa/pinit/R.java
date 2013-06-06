@@ -8,6 +8,10 @@
 package com.vishwa.pinit;
 
 public final class R {
+    public static final class anim {
+        public static final int activity_enter_open=0x7f040000;
+        public static final int scale_from_center=0x7f040001;
+    }
     public static final class attr {
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
@@ -16,7 +20,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int cameraBearing=0x7f010007;
+        public static final int cameraBearing=0x7f010001;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -24,7 +28,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int cameraTargetLat=0x7f010008;
+        public static final int cameraTargetLat=0x7f010002;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -32,7 +36,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int cameraTargetLng=0x7f010009;
+        public static final int cameraTargetLng=0x7f010003;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -40,7 +44,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int cameraTilt=0x7f01000a;
+        public static final int cameraTilt=0x7f010004;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -48,7 +52,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int cameraZoom=0x7f01000b;
+        public static final int cameraZoom=0x7f010005;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -56,7 +60,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int classType=0x7f010005;
+        public static final int classType=0x7f010013;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -64,7 +68,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int customRegexp=0x7f010003;
+        public static final int customRegexp=0x7f010011;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -72,7 +76,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int emptyAllowed=0x7f010004;
+        public static final int emptyAllowed=0x7f010012;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -80,7 +84,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int emptyErrorString=0x7f010002;
+        public static final int emptyErrorString=0x7f010010;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -94,7 +98,7 @@ containing a value of this type.
 <tr><td><code>hybrid</code></td><td>4</td><td></td></tr>
 </table>
          */
-        public static final int mapType=0x7f010006;
+        public static final int mapType=0x7f010000;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -102,7 +106,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int testErrorString=0x7f010001;
+        public static final int testErrorString=0x7f01000f;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -123,7 +127,7 @@ containing a value of this type.
 <tr><td><code>custom</code></td><td>11</td><td></td></tr>
 </table>
          */
-        public static final int testType=0x7f010000;
+        public static final int testType=0x7f01000e;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -131,7 +135,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiCompass=0x7f01000c;
+        public static final int uiCompass=0x7f010006;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -139,7 +143,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiRotateGestures=0x7f01000d;
+        public static final int uiRotateGestures=0x7f010007;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -147,7 +151,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiScrollGestures=0x7f01000e;
+        public static final int uiScrollGestures=0x7f010008;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -155,7 +159,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiTiltGestures=0x7f01000f;
+        public static final int uiTiltGestures=0x7f010009;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -163,7 +167,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiZoomControls=0x7f010010;
+        public static final int uiZoomControls=0x7f01000a;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -171,7 +175,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiZoomGestures=0x7f010011;
+        public static final int uiZoomGestures=0x7f01000b;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -179,7 +183,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int useViewLifecycle=0x7f010012;
+        public static final int useViewLifecycle=0x7f01000c;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -187,7 +191,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int zOrderOnTop=0x7f010013;
+        public static final int zOrderOnTop=0x7f01000d;
     }
     public static final class color {
         public static final int common_action_bar_splitter=0x7f060009;
@@ -212,13 +216,13 @@ containing a value of this type.
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
     
          */
-        public static final int activity_horizontal_margin=0x7f070000;
-        public static final int activity_vertical_margin=0x7f070001;
+        public static final int activity_horizontal_margin=0x7f090000;
+        public static final int activity_vertical_margin=0x7f090001;
     }
     public static final class drawable {
         public static final int balloon_background=0x7f020000;
-        public static final int balloon_note_title=0x7f020001;
-        public static final int balloon_overlay_close=0x7f020002;
+        public static final int balloon_overlay_close=0x7f020001;
+        public static final int balloon_title_background=0x7f020002;
         public static final int balloonbackground=0x7f020003;
         public static final int balloonbackground2=0x7f020004;
         public static final int btn_default_pressed_holo_light=0x7f020005;
@@ -250,168 +254,186 @@ containing a value of this type.
         public static final int custom_login_button=0x7f02001f;
         public static final int custom_signup_button=0x7f020020;
         public static final int default_image=0x7f020021;
-        public static final int googlemaps=0x7f020022;
-        public static final int ic_action_search=0x7f020023;
-        public static final int ic_launcher=0x7f020024;
-        public static final int ic_menu_refresh=0x7f020025;
-        public static final int image_background=0x7f020026;
-        public static final int login_header=0x7f020027;
-        public static final int navigation_refresh=0x7f020028;
-        public static final int plus_sign=0x7f020029;
-        public static final int pointer_new=0x7f02002a;
+        public static final int display_title_background=0x7f020022;
+        public static final int googlemaps=0x7f020023;
+        public static final int ic_action_search=0x7f020024;
+        public static final int ic_launcher=0x7f020025;
+        public static final int ic_menu_refresh=0x7f020026;
+        public static final int image_background=0x7f020027;
+        public static final int login_header=0x7f020028;
+        public static final int navigation_refresh=0x7f020029;
+        public static final int plus_sign=0x7f02002a;
+        public static final int pointer_new=0x7f02002b;
     }
     public static final class id {
-        public static final int action_create_note=0x7f040035;
-        public static final int action_logout=0x7f040037;
-        public static final int action_refresh=0x7f040038;
-        public static final int action_search=0x7f040034;
-        public static final int action_settings=0x7f040036;
-        public static final int alpha=0x7f040002;
-        public static final int alphaNumeric=0x7f040003;
-        public static final int balloon_create_info=0x7f040033;
-        public static final int balloon_image_layout=0x7f040030;
-        public static final int balloon_inner_layout=0x7f04002e;
-        public static final int balloon_main_layout=0x7f04002d;
-        public static final int balloon_note_body=0x7f040032;
-        public static final int balloon_note_image=0x7f040031;
-        public static final int balloon_note_title=0x7f04002f;
-        public static final int create_buttons_layout=0x7f040017;
-        public static final int create_note_body=0x7f040014;
-        public static final int create_note_cancel_button=0x7f040019;
-        public static final int create_note_confirm_button=0x7f040018;
-        public static final int create_note_contents_layout=0x7f040011;
-        public static final int create_note_photo=0x7f040015;
-        public static final int create_note_photo_close_button=0x7f040016;
-        public static final int create_note_progressbar=0x7f040013;
-        public static final int create_note_title=0x7f040012;
-        public static final int creditCard=0x7f040005;
-        public static final int custom=0x7f04000b;
-        public static final int domainName=0x7f040007;
-        public static final int email=0x7f040004;
-        public static final int hybrid=0x7f040010;
-        public static final int ipAddress=0x7f040008;
-        public static final int linearlayout=0x7f04001a;
-        public static final int login_button=0x7f04001f;
-        public static final int login_header=0x7f04001c;
-        public static final int login_password_field=0x7f04001e;
-        public static final int login_username_field=0x7f04001d;
-        public static final int main_all_notes_button=0x7f040022;
-        public static final int main_buttons_layout=0x7f040021;
-        public static final int main_your_notes_button=0x7f040023;
-        public static final int map=0x7f040024;
-        public static final int nocheck=0x7f04000a;
-        public static final int none=0x7f04000c;
-        public static final int normal=0x7f04000d;
-        public static final int numeric=0x7f040001;
-        public static final int phone=0x7f040006;
-        public static final int regexp=0x7f040000;
-        public static final int relativelayout=0x7f04001b;
-        public static final int satellite=0x7f04000e;
-        public static final int signup_button=0x7f040020;
-        public static final int signup_cancel_button=0x7f04002c;
-        public static final int signup_confirm_password_field=0x7f04002a;
-        public static final int signup_confirm_signup_button=0x7f04002b;
-        public static final int signup_password_field=0x7f040029;
-        public static final int signup_photo=0x7f040026;
-        public static final int signup_photo_button=0x7f040027;
-        public static final int signup_progressBar=0x7f040025;
-        public static final int signup_username_field=0x7f040028;
-        public static final int terrain=0x7f04000f;
-        public static final int webUrl=0x7f040009;
+        public static final int action_create_note=0x7f070043;
+        public static final int action_logout=0x7f070045;
+        public static final int action_refresh=0x7f070046;
+        public static final int action_search=0x7f070042;
+        public static final int action_settings=0x7f070044;
+        public static final int alpha=0x7f070007;
+        public static final int alphaNumeric=0x7f070008;
+        public static final int balloon_create_info=0x7f07003b;
+        public static final int balloon_create_info_alt=0x7f07003f;
+        public static final int balloon_image_layout=0x7f070038;
+        public static final int balloon_inner_layout=0x7f070036;
+        public static final int balloon_main_layout=0x7f070035;
+        public static final int balloon_note_body=0x7f07003a;
+        public static final int balloon_note_body_alt=0x7f07003e;
+        public static final int balloon_note_image=0x7f070039;
+        public static final int balloon_note_title=0x7f070037;
+        public static final int balloon_note_title_alt=0x7f07003d;
+        public static final int create_buttons_layout=0x7f070017;
+        public static final int create_note_body=0x7f070014;
+        public static final int create_note_cancel_button=0x7f070019;
+        public static final int create_note_confirm_button=0x7f070018;
+        public static final int create_note_contents_layout=0x7f070011;
+        public static final int create_note_photo=0x7f070015;
+        public static final int create_note_photo_close_button=0x7f070016;
+        public static final int create_note_progressbar=0x7f070013;
+        public static final int create_note_title=0x7f070012;
+        public static final int creditCard=0x7f07000a;
+        public static final int custom=0x7f070010;
+        public static final int decelerate_cubic=0x7f070041;
+        public static final int decelerate_quint=0x7f070040;
+        public static final int display_note_body=0x7f07001e;
+        public static final int display_note_body_alt=0x7f070021;
+        public static final int display_note_layout=0x7f07001a;
+        public static final int display_note_photo=0x7f07001c;
+        public static final int display_note_progressbar=0x7f07001d;
+        public static final int display_note_title=0x7f07001f;
+        public static final int display_note_title_alt=0x7f070020;
+        public static final int display_scroll_layout=0x7f07001b;
+        public static final int domainName=0x7f07000c;
+        public static final int email=0x7f070009;
+        public static final int hybrid=0x7f070004;
+        public static final int ipAddress=0x7f07000d;
+        public static final int layout_alt=0x7f07003c;
+        public static final int linearlayout=0x7f070022;
+        public static final int login_button=0x7f070027;
+        public static final int login_header=0x7f070024;
+        public static final int login_password_field=0x7f070026;
+        public static final int login_username_field=0x7f070025;
+        public static final int main_all_notes_button=0x7f07002a;
+        public static final int main_buttons_layout=0x7f070029;
+        public static final int main_your_notes_button=0x7f07002b;
+        public static final int map=0x7f07002c;
+        public static final int nocheck=0x7f07000f;
+        public static final int none=0x7f070000;
+        public static final int normal=0x7f070001;
+        public static final int numeric=0x7f070006;
+        public static final int phone=0x7f07000b;
+        public static final int regexp=0x7f070005;
+        public static final int relativelayout=0x7f070023;
+        public static final int satellite=0x7f070002;
+        public static final int signup_button=0x7f070028;
+        public static final int signup_cancel_button=0x7f070034;
+        public static final int signup_confirm_password_field=0x7f070032;
+        public static final int signup_confirm_signup_button=0x7f070033;
+        public static final int signup_password_field=0x7f070031;
+        public static final int signup_photo=0x7f07002e;
+        public static final int signup_photo_button=0x7f07002f;
+        public static final int signup_progressBar=0x7f07002d;
+        public static final int signup_username_field=0x7f070030;
+        public static final int terrain=0x7f070003;
+        public static final int webUrl=0x7f07000e;
     }
     public static final class layout {
         public static final int activity_create_note=0x7f030000;
-        public static final int activity_login=0x7f030001;
-        public static final int activity_main=0x7f030002;
-        public static final int activity_signup=0x7f030003;
-        public static final int balloon_infowindow=0x7f030004;
+        public static final int activity_display_note=0x7f030001;
+        public static final int activity_display_note_alt=0x7f030002;
+        public static final int activity_login=0x7f030003;
+        public static final int activity_main=0x7f030004;
+        public static final int activity_signup=0x7f030005;
+        public static final int balloon_infowindow=0x7f030006;
+        public static final int balloon_infowindow_alt=0x7f030007;
     }
     public static final class menu {
-        public static final int main_action_bar=0x7f090000;
+        public static final int main_action_bar=0x7f0b0000;
     }
     public static final class string {
-        public static final int app_name=0x7f050020;
+        public static final int app_name=0x7f080020;
         /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=70] 
          */
-        public static final int auth_client_availability_notification_title=0x7f050019;
+        public static final int auth_client_availability_notification_title=0x7f08000f;
         /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=42] 
          */
-        public static final int auth_client_play_services_err_notification_msg=0x7f05001a;
+        public static final int auth_client_play_services_err_notification_msg=0x7f080010;
         /**   Requested by string saying which app requested the notification. [CHAR LIMIT=42] 
          */
-        public static final int auth_client_requested_by_msg=0x7f05001b;
-        public static final int cancel_string=0x7f050021;
+        public static final int auth_client_requested_by_msg=0x7f080011;
+        public static final int cancel_string=0x7f080021;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
         can enable it [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_enable_button=0x7f050010;
+        public static final int common_google_play_services_enable_button=0x7f080006;
         /**  Message in confirmation dialog informing user they need to enable
         Google Play services in application settings [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_enable_text=0x7f05000f;
+        public static final int common_google_play_services_enable_text=0x7f080005;
         /**  Title of confirmation dialog informing user they need to enable
         Google Play services in application settings [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_enable_title=0x7f05000e;
+        public static final int common_google_play_services_enable_title=0x7f080004;
         /**  Button in confirmation dialog for installing Google Play services [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_install_button=0x7f05000d;
+        public static final int common_google_play_services_install_button=0x7f080003;
         /**  (For phones) Message in confirmation dialog informing user that
         they need to install Google Play services (from Play Store) [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_install_text_phone=0x7f05000b;
+        public static final int common_google_play_services_install_text_phone=0x7f080001;
         /**  (For tablets) Message in confirmation dialog informing user that
         they need to install Google Play services (from Play Store) [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_install_text_tablet=0x7f05000c;
+        public static final int common_google_play_services_install_text_tablet=0x7f080002;
         /**  Title of confirmation dialog informing user that they need to install
         Google Play services (from Play Store) [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_install_title=0x7f05000a;
+        public static final int common_google_play_services_install_title=0x7f080000;
         /**  Message in confirmation dialog informing user there is an unknown issue in Google Play
         services [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_unknown_issue=0x7f050013;
+        public static final int common_google_play_services_unknown_issue=0x7f080009;
         /**  Message in confirmation dialog informing user that Google Play services is not supported on their device [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_unsupported_text=0x7f050015;
+        public static final int common_google_play_services_unsupported_text=0x7f08000b;
         /**  Title of confirmation dialog informing user that Google Play services is not supported on their device [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_unsupported_title=0x7f050014;
+        public static final int common_google_play_services_unsupported_title=0x7f08000a;
         /**  Button in confirmation dialog for updating Google Play services [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_update_button=0x7f050016;
+        public static final int common_google_play_services_update_button=0x7f08000c;
         /**  Message in confirmation dialog informing user that they need to update
         Google Play services (from Play Store) [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_update_text=0x7f050012;
+        public static final int common_google_play_services_update_text=0x7f080008;
         /**  Title of confirmation dialog informing user that they need to update
         Google Play services (from Play Store) [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_update_title=0x7f050011;
+        public static final int common_google_play_services_update_title=0x7f080007;
         /**  Sign-in button text [CHAR LIMIT=15] 
          */
-        public static final int common_signin_button_text=0x7f050017;
+        public static final int common_signin_button_text=0x7f08000d;
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
-        public static final int common_signin_button_text_long=0x7f050018;
-        public static final int create_note_enter_body=0x7f050033;
+        public static final int common_signin_button_text_long=0x7f08000e;
+        public static final int create_note_enter_body=0x7f080033;
         /**  Create Note Screen Strings 
          */
-        public static final int create_note_enter_title=0x7f050032;
-        public static final int create_note_share=0x7f050034;
-        public static final int error_creditcard_number_not_valid=0x7f050005;
-        public static final int error_domain_not_valid=0x7f050007;
-        public static final int error_email_address_not_valid=0x7f050004;
-        public static final int error_field_must_not_be_empty=0x7f050003;
-        public static final int error_ip_not_valid=0x7f050008;
-        public static final int error_only_numeric_digits_allowed=0x7f050000;
-        public static final int error_only_standard_letters_are_allowed=0x7f050002;
-        public static final int error_phone_not_valid=0x7f050006;
-        public static final int error_this_field_cannot_contain_special_character=0x7f050001;
-        public static final int error_url_not_valid=0x7f050009;
-        public static final int google_maps_api_key=0x7f05001f;
+        public static final int create_note_enter_title=0x7f080032;
+        public static final int create_note_share=0x7f080034;
+        public static final int error_creditcard_number_not_valid=0x7f08001a;
+        public static final int error_domain_not_valid=0x7f08001c;
+        public static final int error_email_address_not_valid=0x7f080019;
+        public static final int error_field_must_not_be_empty=0x7f080018;
+        public static final int error_ip_not_valid=0x7f08001d;
+        public static final int error_only_numeric_digits_allowed=0x7f080015;
+        public static final int error_only_standard_letters_are_allowed=0x7f080017;
+        public static final int error_phone_not_valid=0x7f08001b;
+        public static final int error_this_field_cannot_contain_special_character=0x7f080016;
+        public static final int error_url_not_valid=0x7f08001e;
+        public static final int google_maps_api_key=0x7f08001f;
         /**  Location client code resources (prefix with location_client) 
 
         Begin strings for location.reporting
@@ -420,33 +442,33 @@ containing a value of this type.
         Some InactiveReason names.  See more in OneUp/package/location/res/values/strings.xml
     
          */
-        public static final int location_client_ulr_inactive_age_under_13=0x7f05001c;
-        public static final int location_client_ulr_inactive_age_unknown=0x7f05001d;
-        public static final int location_client_ulr_inactive_unknown_restriction=0x7f05001e;
-        public static final int login_enter_password=0x7f050028;
+        public static final int location_client_ulr_inactive_age_under_13=0x7f080012;
+        public static final int location_client_ulr_inactive_age_unknown=0x7f080013;
+        public static final int location_client_ulr_inactive_unknown_restriction=0x7f080014;
+        public static final int login_enter_password=0x7f080028;
         /**  Login Screen Strings 
          */
-        public static final int login_enter_username=0x7f050027;
-        public static final int login_log_in=0x7f050029;
-        public static final int login_sign_up=0x7f05002a;
+        public static final int login_enter_username=0x7f080027;
+        public static final int login_log_in=0x7f080029;
+        public static final int login_sign_up=0x7f08002a;
         /**  Main Screen Strings 
          */
-        public static final int main_all_notes=0x7f050030;
-        public static final int main_your_notes=0x7f050031;
-        public static final int menu_create_note=0x7f050023;
-        public static final int menu_logout=0x7f050025;
-        public static final int menu_refresh=0x7f050026;
+        public static final int main_all_notes=0x7f080030;
+        public static final int main_your_notes=0x7f080031;
+        public static final int menu_create_note=0x7f080023;
+        public static final int menu_logout=0x7f080025;
+        public static final int menu_refresh=0x7f080026;
         /**  ActionBar/Menu Strings 
          */
-        public static final int menu_search=0x7f050022;
-        public static final int menu_settings=0x7f050024;
-        public static final int signup_confirm_password=0x7f05002f;
-        public static final int signup_password=0x7f05002e;
-        public static final int signup_pick_photo=0x7f05002c;
+        public static final int menu_search=0x7f080022;
+        public static final int menu_settings=0x7f080024;
+        public static final int signup_confirm_password=0x7f08002f;
+        public static final int signup_password=0x7f08002e;
+        public static final int signup_pick_photo=0x7f08002c;
         /**  Signup Screen Strings  
          */
-        public static final int signup_sign_up=0x7f05002b;
-        public static final int signup_username=0x7f05002d;
+        public static final int signup_sign_up=0x7f08002b;
+        public static final int signup_username=0x7f08002d;
     }
     public static final class style {
         /** 
@@ -470,11 +492,14 @@ containing a value of this type.
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f080000;
+        public static final int AppBaseTheme=0x7f0a0000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f080001;
+        public static final int AppTheme=0x7f0a0001;
+    }
+    public static final class xml {
+        public static final int searchable=0x7f050000;
     }
     public static final class styleable {
         /** Attributes that can be used with a FormEditText.
@@ -498,8 +523,8 @@ containing a value of this type.
            @see #FormEditText_testType
          */
         public static final int[] FormEditText = {
-            0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003,
-            0x7f010004, 0x7f010005
+            0x7f01000e, 0x7f01000f, 0x7f010010, 0x7f010011,
+            0x7f010012, 0x7f010013
         };
         /**
           <p>This symbol is the offset where the {@link com.vishwa.pinit.R.attr#classType}
@@ -635,10 +660,10 @@ containing a value of this type.
            @see #MapAttrs_zOrderOnTop
          */
         public static final int[] MapAttrs = {
-            0x7f010006, 0x7f010007, 0x7f010008, 0x7f010009,
-            0x7f01000a, 0x7f01000b, 0x7f01000c, 0x7f01000d,
-            0x7f01000e, 0x7f01000f, 0x7f010010, 0x7f010011,
-            0x7f010012, 0x7f010013
+            0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003,
+            0x7f010004, 0x7f010005, 0x7f010006, 0x7f010007,
+            0x7f010008, 0x7f010009, 0x7f01000a, 0x7f01000b,
+            0x7f01000c, 0x7f01000d
         };
         /**
           <p>This symbol is the offset where the {@link com.vishwa.pinit.R.attr#cameraBearing}

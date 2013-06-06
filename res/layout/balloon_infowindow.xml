@@ -8,7 +8,7 @@
 	android:id="@+id/balloon_main_layout"
 	android:background="@drawable/balloonbackground2"
 	android:paddingTop="0dip">
-    <!-- 	android:minWidth="300dip"  -->
+
     <LinearLayout
         android:id="@+id/balloon_inner_layout"
         android:layout_width="fill_parent"
@@ -16,7 +16,7 @@
         android:minHeight="50dip"
         android:paddingTop="2dip"
         android:orientation="vertical"
-        android:layout_weight="1" >
+ >
         
         <RelativeLayout
            android:layout_width="fill_parent"
@@ -31,26 +31,25 @@
                android:layout_marginLeft="1dp"
                android:paddingLeft="5dp"
                android:paddingRight="5dp"
-               android:background="@drawable/balloon_note_title"
+               android:background="@drawable/balloon_title_background"
                android:textColor="#104E9B"
                android:textSize="22sp"
         	   android:textStyle="bold"/>
 
         </RelativeLayout>
         
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="0dip"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingLeft="5dip"
             android:paddingRight="5dip"
-            android:paddingTop="5dip"
-            android:layout_weight="1"> 
+            android:paddingTop="5dip"> 
             
             <LinearLayout
                 android:id="@+id/balloon_image_layout"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:visibility="gone">
                 
@@ -69,13 +68,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@id/balloon_image_layout"
                 android:layout_toRightOf="@id/balloon_image_layout"
-                android:maxLines="3"
                 android:ellipsize="end"
+                android:maxLines="3"
                 android:scrollHorizontally="true"
                 android:textColor="@android:color/black"
                 android:textSize="12dip" />
     
-        </RelativeLayout> 
+        </LinearLayout> 
           
     </LinearLayout>
 
@@ -83,8 +82,10 @@
     <TextView 
         android:id="@+id/balloon_create_info"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
         android:textStyle="italic"
-        android:textSize="12dip"/> 
+        android:textSize="12sp"/> 
 
 </LinearLayout>

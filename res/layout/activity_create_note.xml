@@ -32,8 +32,8 @@
  		
  		<View
 			android:layout_width="fill_parent"
-		    android:layout_height="1dip"
-		    android:background="?android:attr/dividerHorizontal" />
+			android:layout_height="1dip"
+			android:background="?android:attr/dividerHorizontal" />
 		    
     	<ScrollView 
 			android:orientation="vertical" 
