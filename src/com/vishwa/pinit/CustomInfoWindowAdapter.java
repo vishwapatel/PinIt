@@ -8,21 +8,18 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 public class CustomInfoWindowAdapter implements InfoWindowAdapter {
@@ -76,8 +73,6 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
 
 	@Override
 	public View getInfoWindow(Marker marker){
-		
-		MainActivity.mFocusedMarker = marker;
 		
 		note = mNoteStore.get(marker.getId());
 		

@@ -1,59 +1,51 @@
 package com.vishwa.pinit;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.util.LruCache;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MenuItem.OnActionExpandListener;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CursorAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SearchView.OnSuggestionListener;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
@@ -64,6 +56,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -71,9 +64,10 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 public class MainActivity extends FragmentActivity implements OnMapLongClickListener, OnMarkerDragListener, 
-	OnMarkerClickListener, OnInfoWindowClickListener{
+	OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
   
   public static final int REQUEST_CODE_CREATE_NOTE = 102;
   public static final int REQUEST_CODE_DISPLAY_NOTE = 103;
@@ -124,7 +118,7 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
     
     mAllNotesButton = (Button) findViewById(R.id.main_all_notes_button);
     mYourNotesButton = (Button) findViewById(R.id.main_your_notes_button);
-    
+
     mAllNotesButton.setOnClickListener(new OnClickListener() {
 		
 		@Override
@@ -191,7 +185,7 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
 					  BitmapFactory.decodeResource(getResources(), R.drawable.default_image), 
 					  100, 100);
 			mMemoryCache.put("defaultPhoto", defaultPhoto);
-		}
+	  }
 	  
 	  LoadCurrentUserPhotoTask loadUserPhotoTask = new LoadCurrentUserPhotoTask();
 	  loadUserPhotoTask.execute();
@@ -210,15 +204,14 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
 		    	mHasInternet = false;
     	    	hideNonRefreshMenuItems();
     	    	
-    	    	hideAllMarkers();
-    	    	
     	    	mMap.getUiSettings().setAllGesturesEnabled(false);
     	    	mMap.getUiSettings().setZoomControlsEnabled(false);
     	    	mMap.getUiSettings().setZoomGesturesEnabled(false);
 		    }
-			else if(mMapEditMode == MapEditMode.DEFAULT_MODE){
-				mHasInternet = true;
+			else if(mMapEditMode == MapEditMode.DEFAULT_MODE) {
 			
+				mHasInternet = true;
+				
 				LatLngBounds mapBounds = mMap.getProjection().getVisibleRegion().latLngBounds;	
 				LatLng southwest = mapBounds.southwest;
 				LatLng northeast = mapBounds.northeast;
@@ -227,6 +220,13 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
 				while(iterator.hasNext()) {
 					Marker marker = iterator.next();
 					if(!mapBounds.contains(marker.getPosition())) {
+						if(mFocusedMarker != null) {
+							if(marker.getId().equals(mFocusedMarker.getId())) {
+								mFocusedMarker.hideInfoWindow();
+								hideNoteEditButtons();
+								mFocusedMarker = null;
+							}
+						}
 						Note note = mNoteStore.get(marker.getId());
 						mNoteStore.remove(marker.getId());
 						mReverseNoteStore.remove(note.getNoteId());
@@ -265,6 +265,7 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
 
   private void setUpMap() {
       mMap.setOnMapLongClickListener(this);
+      mMap.setOnMapClickListener(this);
       mMap.setOnMarkerClickListener(this);
       mMap.setOnInfoWindowClickListener(this);
       mMap.getUiSettings().setCompassEnabled(false);
@@ -277,14 +278,23 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
 		@Override
 		protected Void doInBackground(Void... params) {
 			if(ParseUser.getCurrentUser().getBoolean("isDefaultPhoto")) {
-				  mUserPhotoThumbnail = ThumbnailUtils.extractThumbnail(
-						  BitmapFactory.decodeResource(getResources(), R.drawable.default_image), 
-						  100, 100);
+				Bitmap userPhoto = mMemoryCache.get("defaultPhoto");
+				if(userPhoto != null) {
+					mUserPhotoThumbnail = ThumbnailUtils.extractThumbnail(userPhoto, 100, 100);
+					mMemoryCache.put(mCurrentUsername, mUserPhotoThumbnail);
+				}
+				else {
+				    mUserPhotoThumbnail = ThumbnailUtils.extractThumbnail(
+						    BitmapFactory.decodeResource(getResources(), R.drawable.default_image), 
+						    100, 100);
+				    mMemoryCache.put(mCurrentUsername, mUserPhotoThumbnail);
+				}
 			}
 			else {
 				try {
 					FileInputStream inputStream = openFileInput(mCurrentUsername + ".png");
 					mUserPhotoThumbnail = BitmapFactory.decodeStream(inputStream);
+					mMemoryCache.put(mCurrentUsername, mUserPhotoThumbnail);
 				}
 				catch(FileNotFoundException e) {
 					loadAndCacheProfilePicture();
@@ -303,6 +313,7 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
 		      public void done(byte[] data, ParseException e) {
 		    	if(e == null) {
 		    		mUserPhotoThumbnail = BitmapFactory.decodeByteArray(data, 0, data.length);
+		    		mMemoryCache.put(mCurrentUsername, mUserPhotoThumbnail);
 		    		try {
 						FileOutputStream outputStream = 
 								openFileOutput(mCurrentUsername, Context.MODE_PRIVATE);
@@ -467,6 +478,16 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
 		switch(requestCode) {
 		case REQUEST_CODE_CREATE_NOTE:
 			if(resultCode != Activity.RESULT_OK) {
+				mMapEditMode = MapEditMode.DEFAULT_MODE;
+				mMapViewMode = MapViewMode.YOUR_NOTES;
+				mMenu.findItem(R.id.action_create_note).setVisible(true);
+				
+				LatLngBounds mapBounds = mMap.getProjection().getVisibleRegion().latLngBounds;	
+				LatLng southwest = mapBounds.southwest;
+				LatLng northeast = mapBounds.northeast;
+				LatLngTuple tuple = new LatLngTuple(southwest, northeast);
+				LoadNotesTask currentUserNotesTask = new LoadNotesTask(tuple, true);
+				currentUserNotesTask.execute();
 				return;
 			}
 			
@@ -491,80 +512,83 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
   
   private void createMarkerAtLocation(final double latitude, final double longitude, final Note note) {
 	  if(mReverseNoteStore.get(note.getNoteId()) == null) {
-      Bitmap balloonBackground = BitmapFactory.decodeResource(
-    		  getResources(), R.drawable.balloon_background);
-      Bitmap userPhoto = null;
-	
-      if(note.getNoteCreator() == mCurrentUsername) {
-		  balloonBackground = Bitmap.createScaledBitmap(balloonBackground, 87, 94, false);
-		  userPhoto = Bitmap.createScaledBitmap(mUserPhotoThumbnail, 75, 71, false);
-		  
-		  Canvas canvas = new Canvas(balloonBackground);
-		  canvas.drawBitmap(balloonBackground, 0, 0, null);
-		  canvas.drawBitmap(userPhoto, 6, 6, null);
-      }
-      else {
-    	  if(mMemoryCache.get(note.getNoteCreator()) != null) {
-    		  balloonBackground = Bitmap.createScaledBitmap(balloonBackground, 87, 94, false);
-    		  userPhoto = Bitmap.createScaledBitmap(
-    				  mMemoryCache.get(note.getNoteCreator()), 75, 71, false);
-    		  
-    		  Canvas canvas = new Canvas(balloonBackground);
-    		  canvas.drawBitmap(balloonBackground, 0, 0, null);
-    		  canvas.drawBitmap(userPhoto, 6, 6, null);
-    		  
-    		  addMarkerToMap(note, balloonBackground, latitude, longitude);
-    	  }
-    	  else {
-			  ParseQuery query = ParseUser.getQuery();
-			  query.whereEqualTo("username", note.getNoteCreator());
-			  try {
-				  ParseObject noteCreator = query.find().get(0);
-				  
-				  if(noteCreator.getBoolean("isDefaultPhoto")) {
-					  balloonBackground = Bitmap.createScaledBitmap(balloonBackground, 87, 94, false);
-		    		  userPhoto = Bitmap.createScaledBitmap(
-		    				  mMemoryCache.get("defaultPhoto"), 75, 71, false);
-		    		  
-		    		  Canvas canvas = new Canvas(balloonBackground);
-		    		  canvas.drawBitmap(balloonBackground, 0, 0, null);
-		    		  canvas.drawBitmap(userPhoto, 6, 6, null);
-		    		  
-		    		  addMarkerToMap(note, balloonBackground, latitude, longitude);
-				  }
-				  
-				  ParseFile userPhotoFile = noteCreator.getParseFile("profilePhotoThumbnail");
-			      userPhotoFile.getDataInBackground(new GetDataCallback() {
-							
-				      @Override
-				      public void done(byte[] data, ParseException e) {
-				    	if(e == null) {
-				    		Bitmap balloonBackground = BitmapFactory.decodeResource(
-				    	    		  getResources(), R.drawable.balloon_background);
-				    		
-				    		Bitmap userPhoto = BitmapFactory.decodeByteArray(data, 0, data.length);
-				    		mMemoryCache.put(note.getNoteCreator(), userPhoto);
-				    		
-				    		balloonBackground = Bitmap.createScaledBitmap(balloonBackground, 87, 94, false);
-				    		userPhoto = Bitmap.createScaledBitmap(userPhoto, 75, 71, false);
-				    		  
-				    		Canvas canvas = new Canvas(balloonBackground);
-				    		canvas.drawBitmap(balloonBackground, 0, 0, null);
-				    		canvas.drawBitmap(userPhoto, 6, 6, null);
-				    		
-				    		addMarkerToMap(note, balloonBackground, latitude, longitude);
-						}
-				    	else {
-				    		Log.e("vishwa", "PARSE EXCEPTION (in creatingmarker): "+e.getMessage());
-				    	}
+	      Bitmap balloonBackground = BitmapFactory.decodeResource(
+	    		  getResources(), R.drawable.balloon_background);
+	      Bitmap userPhoto = null;
+
+	      if(note.getNoteCreator().equals(mCurrentUsername)) {
+			  balloonBackground = Bitmap.createScaledBitmap(balloonBackground, 87, 94, false);
+			  userPhoto = Bitmap.createScaledBitmap(mUserPhotoThumbnail, 75, 71, false);
+			  
+			  Canvas canvas = new Canvas(balloonBackground);
+			  canvas.drawBitmap(balloonBackground, 0, 0, null);
+			  canvas.drawBitmap(userPhoto, 6, 6, null);
+			  
+			  addMarkerToMap(note, balloonBackground, latitude, longitude);
+	      }
+	      else {
+	    	  if(mMemoryCache.get(note.getNoteCreator()) != null) {
+	    		  balloonBackground = Bitmap.createScaledBitmap(balloonBackground, 87, 94, false);
+	    		  userPhoto = Bitmap.createScaledBitmap(
+	    				  mMemoryCache.get(note.getNoteCreator()), 75, 71, false);
+	    		  
+	    		  Canvas canvas = new Canvas(balloonBackground);
+	    		  canvas.drawBitmap(balloonBackground, 0, 0, null);
+	    		  canvas.drawBitmap(userPhoto, 6, 6, null);
+	    		  
+	    		  addMarkerToMap(note, balloonBackground, latitude, longitude);
+	    	  }
+	    	  else {
+				  ParseQuery query = ParseUser.getQuery();
+				  query.whereEqualTo("username", note.getNoteCreator());
+				  try {
+					  ParseObject noteCreator = query.find().get(0);
+					  
+					  if(noteCreator.getBoolean("isDefaultPhoto")) {
+						  balloonBackground = Bitmap.createScaledBitmap(balloonBackground, 87, 94, false);
+			    		  userPhoto = Bitmap.createScaledBitmap(
+			    				  mMemoryCache.get("defaultPhoto"), 75, 71, false);
+			    		  
+			    		  Canvas canvas = new Canvas(balloonBackground);
+			    		  canvas.drawBitmap(balloonBackground, 0, 0, null);
+			    		  canvas.drawBitmap(userPhoto, 6, 6, null);
+			    		  
+			    		  addMarkerToMap(note, balloonBackground, latitude, longitude);
 					  }
-					});
-			  }
-			  catch(ParseException e) {
-				  PinItUtils.createAlert("This is embarrassing", "Please log out and login again", this);
-			  }
-    		  }
-    	  }
+					  else {
+						  ParseFile userPhotoFile = noteCreator.getParseFile("profilePhotoThumbnail");
+					      userPhotoFile.getDataInBackground(new GetDataCallback() {
+									
+						      @Override
+						      public void done(byte[] data, ParseException e) {
+						    	if(e == null) {
+						    		Bitmap balloonBackground = BitmapFactory.decodeResource(
+						    	    		  getResources(), R.drawable.balloon_background);
+						    		
+						    		Bitmap userPhoto = BitmapFactory.decodeByteArray(data, 0, data.length);
+						    		mMemoryCache.put(note.getNoteCreator(), userPhoto);
+						    		
+						    		balloonBackground = Bitmap.createScaledBitmap(balloonBackground, 87, 94, false);
+						    		userPhoto = Bitmap.createScaledBitmap(userPhoto, 75, 71, false);
+						    		  
+						    		Canvas canvas = new Canvas(balloonBackground);
+						    		canvas.drawBitmap(balloonBackground, 0, 0, null);
+						    		canvas.drawBitmap(userPhoto, 6, 6, null);
+						    		
+						    		addMarkerToMap(note, balloonBackground, latitude, longitude);
+								}
+						    	else {
+						    		Log.e("vishwa", "PARSE EXCEPTION (in creatingmarker): "+e.getMessage());
+						    	}
+							  }
+							});
+					  }
+				  }
+				  catch(ParseException e) {
+					  PinItUtils.createAlert("This is embarrassing", "Please log out and login again", this);
+				  }
+	    	  }
+	      }
 	  }
   }
   
@@ -630,16 +654,22 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
 		public boolean onSuggestionClick(int position) {
 			CursorAdapter adapter = mSearchView.getSuggestionsAdapter();
 			Cursor cursor = adapter.getCursor();
-			if(cursor.moveToPosition(position)) {
-				InputMethodManager imm = (InputMethodManager)getSystemService(
-					      Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(mSearchView.getWindowToken(), 0);
-				mSearchMenuItem.collapseActionView();
-				String geoLocation = cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID));
-				double latitude = Double.parseDouble(geoLocation.split(",")[0]);
-				double longitude = Double.parseDouble(geoLocation.split(",")[1]);
-				LatLng geopoint = new LatLng(latitude, longitude);
-				mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(geopoint, 17, 0, 0)));
+			if(cursor != null) {
+				if(cursor.moveToPosition(position)) {
+					InputMethodManager imm = (InputMethodManager)getSystemService(
+						      Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(mSearchView.getWindowToken(), 0);
+					mSearchMenuItem.collapseActionView();
+					String geoLocation = cursor.getString(
+							cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID));
+					if(!geoLocation.isEmpty()) {
+						double latitude = Double.parseDouble(geoLocation.split(",")[0]);
+						double longitude = Double.parseDouble(geoLocation.split(",")[1]);
+						LatLng geopoint = new LatLng(latitude, longitude);
+						mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
+								new CameraPosition(geopoint, 17, 0, 0)));
+					}
+				}
 			}
 			return true;
 		}
@@ -659,11 +689,13 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
 					mSearchMenuItem.collapseActionView();
 					String geoLocation = cursor.getString(
 							cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID));
-					double latitude = Double.parseDouble(geoLocation.split(",")[0]);
-					double longitude = Double.parseDouble(geoLocation.split(",")[1]);
-					LatLng geopoint = new LatLng(latitude, longitude);
-					mMap.animateCamera(
-							CameraUpdateFactory.newCameraPosition(new CameraPosition(geopoint, 17, 0, 0)));
+					if(!geoLocation.isEmpty()) {
+						double latitude = Double.parseDouble(geoLocation.split(",")[0]);
+						double longitude = Double.parseDouble(geoLocation.split(",")[1]);
+						LatLng geopoint = new LatLng(latitude, longitude);
+						mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
+								new CameraPosition(geopoint, 17, 0, 0)));
+					}
 				}
 			}
 			return true;
@@ -707,9 +739,10 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
     	case R.id.action_create_note:
     		mMapEditMode = MapEditMode.CREATE_NOTE;
     		item.setVisible(false);
+    		mMenu.findItem(R.id.action_cancel).setVisible(true).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     		Toast.makeText(getApplicationContext(), 
-    				"Press and hold the location where you'd like to create a note", Toast.LENGTH_SHORT).show();
-    		hideAllMarkers();
+    				"Press and hold the location where you'd like to create a note", 
+    				Toast.LENGTH_SHORT).show();
     		break;
     	case R.id.action_logout:
     		ParseUser.logOut();
@@ -732,6 +765,77 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
     	    	mMap.getUiSettings().setZoomControlsEnabled(true);
     	    	mMap.getUiSettings().setZoomGesturesEnabled(true);
     	    }
+    	break;
+    	case R.id.action_edit_location:
+    		if(mFocusedMarker != null) {
+				Toast.makeText(getApplicationContext(), 
+						"Press and hold the current note and then drag it to where " +
+						"you'd like to position it and click save", Toast.LENGTH_LONG).show();
+				mMenu.findItem(R.id.action_save).setVisible(true);
+				mMenu.findItem(R.id.action_cancel).setVisible(true);
+				mMenu.findItem(R.id.action_create_note).setVisible(false);
+				mMenu.findItem(R.id.action_search).setVisible(false);
+				mMenu.findItem(R.id.action_edit).setVisible(false);
+				for(Marker marker: mMarkerList) {
+					marker.setDraggable(false);
+				}
+				mFocusedMarker.setDraggable(true);
+			}
+			else {
+				Toast.makeText(getApplicationContext(), "Please click on the note you'd like " +
+						"to move and then try again", Toast.LENGTH_SHORT).show();
+			}
+    		break;
+    	case R.id.action_save:
+    		if(mHasInternet) {
+	    		ParseQuery query = new ParseQuery("Note");
+	    		query.getInBackground(mNoteStore.get(mFocusedMarker.getId()).getNoteId(), new GetCallback() {
+	    		  public void done(ParseObject object, ParseException e) {
+	    		    if (e == null) {
+	    		    	ParseGeoPoint geopoint = new ParseGeoPoint(
+	    		    			mFocusedMarker.getPosition().latitude, 
+	    		    			mFocusedMarker.getPosition().longitude);
+	    		    	object.put("geopoint", geopoint);
+	    		    	object.saveInBackground(new SaveCallback() {
+						
+	    		    		@Override
+	    		    		public void done(ParseException e) {
+	    		    			if(e == null) {
+	    		    				mFocusedMarker.setDraggable(false);
+	    		    				hideNoteEditButtons();
+	    		    				mMenu.findItem(R.id.action_edit).setVisible(true);
+	    		    				Toast.makeText(getApplicationContext(), "Note location updated!", 
+	    		    						Toast.LENGTH_LONG).show();
+	    		    			}
+	    		    			else {
+	    		    				PinItUtils.createAlert("This note could not be updated.", 
+	    		    						"We apologize, this note update failed, please try again", 
+	    		    						MainActivity.this);
+	    		    			}
+	    		    		}
+	    		      });
+	    		    } else {
+	    		      PinItUtils.createAlert("This note could not be updated.", 
+	    		    		  "We apologize, this note update failed, please try again", 
+	    		    		  MainActivity.this);
+	    		    }
+	    		  }
+	    		});
+    		}
+    		break;
+    	case R.id.action_cancel:
+    		if(mFocusedMarker != null) {
+    			double latitude = mNoteStore.get(mFocusedMarker.getId()).getNoteLatitude();
+        		double longitude = mNoteStore.get(mFocusedMarker.getId()).getNoteLongitude();
+        		LatLng geopoint = new LatLng(latitude, longitude);
+	    		mFocusedMarker.setPosition(geopoint);
+	    		mFocusedMarker.setDraggable(false);
+	    		mFocusedMarker.hideInfoWindow();
+    		}
+    		if(mMapEditMode == MapEditMode.CREATE_NOTE) {
+    			mMapEditMode = MapEditMode.DEFAULT_MODE;
+    		}
+    		hideNoteEditButtons();
     	default:
             return super.onOptionsItemSelected(item);
     }
@@ -739,19 +843,15 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
 	return true;
   }
   
-  public void hideAllMarkers() {
-	  for(Marker marker: mMarkerList) {
-		  marker.setVisible(false);
-	  }
+  private void hideNoteEditButtons() {
+	  mMenu.findItem(R.id.action_edit).setVisible(false);
+	  mMenu.findItem(R.id.action_save).setVisible(false);
+	  mMenu.findItem(R.id.action_cancel).setVisible(false);
+	  mMenu.findItem(R.id.action_search).setVisible(true);
+	  mMenu.findItem(R.id.action_create_note).setVisible(true);
   }
   
-  public void showAllMarkers() {
-	  for(Marker marker: mMarkerList) {
-		  marker.setVisible(true);
-	  }
-  }
-  
-  public void hideNonRefreshMenuItems() {
+  private void hideNonRefreshMenuItems() {
 	  for(int i = 0; i < mMenu.size(); i++) {
   		if(mMenu.getItem(i).getItemId() != R.id.action_refresh) {
   			mMenu.getItem(i).setVisible(false);
@@ -762,9 +862,12 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
   	}
   }
   
-  public void showNonRefreshMenuItems() {
+  private void showNonRefreshMenuItems() {
 	  for(int i = 0; i < mMenu.size(); i++) {
-  		if(mMenu.getItem(i).getItemId() != R.id.action_refresh) {
+  		if(mMenu.getItem(i).getItemId() != R.id.action_refresh && 
+  				mMenu.getItem(i).getItemId() != R.id.action_save &&
+  				mMenu.getItem(i).getItemId() != R.id.action_edit &&
+  				mMenu.getItem(i).getItemId() != R.id.action_cancel) {
   			mMenu.getItem(i).setVisible(true);
   		}
   		else {
@@ -783,18 +886,31 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
 	
 	@Override
 	public void onMarkerDragStart(Marker marker) {
+		mFocusedMarker = marker;
 	}
 
 	@Override
 	public boolean onMarkerClick(final Marker marker) {
-		
-		marker.showInfoWindow();
-	
-		LatLng markerGeoPoint = marker.getPosition();
-		Point markerPoint = mMap.getProjection().toScreenLocation(markerGeoPoint);
-		Point poinToMoveCameraTo = new Point(markerPoint.x, markerPoint.y - 150);
-		LatLng newMarkerGeoPoint = mMap.getProjection().fromScreenLocation(poinToMoveCameraTo);
-		mMap.animateCamera(CameraUpdateFactory.newLatLng(newMarkerGeoPoint), 500, null);
+		if(mHasInternet) {
+			mFocusedMarker = marker;
+			
+			if(mNoteStore.get(marker.getId()).getNoteCreator().equals(mCurrentUsername)) {
+				if(!mMenu.findItem(R.id.action_save).isVisible()) {
+					mMenu.findItem(R.id.action_edit).setVisible(true);
+				}
+			}
+			else {
+				mMenu.findItem(R.id.action_edit).setVisible(false);
+			}
+			
+			marker.showInfoWindow();
+
+			LatLng markerGeoPoint = marker.getPosition();
+			Point markerPoint = mMap.getProjection().toScreenLocation(markerGeoPoint);
+			Point poinToMoveCameraTo = new Point(markerPoint.x, markerPoint.y - 160);
+			LatLng newMarkerGeoPoint = mMap.getProjection().fromScreenLocation(poinToMoveCameraTo);
+			mMap.animateCamera(CameraUpdateFactory.newLatLng(newMarkerGeoPoint), 500, null);
+		}
 
 		return true;
 	}
@@ -811,9 +927,12 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
 
 	@Override
 	public void onBackPressed() {
-		if(mFocusedMarker != null && mFocusedMarker.isInfoWindowShown()) {
-			mFocusedMarker.hideInfoWindow();
-			mFocusedMarker = null;
+		if(mFocusedMarker != null) {
+			if(mFocusedMarker.isInfoWindowShown()) {
+				hideNoteEditButtons();
+				mFocusedMarker.hideInfoWindow();
+				mFocusedMarker = null;
+			}
 		}
 		else {
 			super.onBackPressed();
@@ -822,9 +941,25 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
 	
 	@Override
 	public void onInfoWindowClick(Marker marker) {
+		hideNoteEditButtons();
+		mMenu.findItem(R.id.action_edit).setVisible(true);
 		Note note = mNoteStore.get(marker.getId());
+		ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
+		mMemoryCache.get(note.getNoteCreator()).compress(CompressFormat.PNG, 100, byteArrayStream);
 		Intent intent = new Intent(this, DisplayNoteActivity.class);
 		intent.putExtra("note", note);
+		intent.putExtra("userPhoto", byteArrayStream.toByteArray());
 		startActivityForResult(intent, REQUEST_CODE_DISPLAY_NOTE);
+	}
+
+	@Override
+	public void onMapClick(LatLng point) {
+		if(mFocusedMarker != null) {
+			if(mNoteStore.get(mFocusedMarker.getId()).getNoteCreator().equals(mCurrentUsername)) {
+			    hideNoteEditButtons();
+			}
+			mFocusedMarker.hideInfoWindow();
+			mFocusedMarker = null;
+		}
 	}
 } 

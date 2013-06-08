@@ -102,7 +102,15 @@
 	    android:paddingLeft="2dip"
 	    android:paddingRight="2dip"
 	    android:measureWithLargestChild="true">
-
+		
+        <Button 
+	        android:id="@+id/signup_cancel_button"
+	        style="?android:attr/buttonBarButtonStyle"
+	        android:layout_width="0dip"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:text="@string/cancel_string"/>
+        
 	    <Button 
 	        android:id="@+id/signup_confirm_signup_button"
 	        style="?android:attr/buttonBarButtonStyle"
@@ -110,13 +118,5 @@
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
 	        android:text="@string/signup_sign_up"/>
-	    
-	    <Button 
-	        android:id="@+id/signup_cancel_button"
-	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_width="0dip"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
-	        android:text="@string/cancel_string"/>
 	</LinearLayout>
 </LinearLayout>

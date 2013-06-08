@@ -31,6 +31,7 @@
                android:layout_marginLeft="1dp"
                android:paddingLeft="5dp"
                android:paddingRight="5dp"
+               android:paddingBottom="5dp"
                android:background="@drawable/balloon_title_background"
                android:textColor="#104E9B"
                android:textSize="22sp"

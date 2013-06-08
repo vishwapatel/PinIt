@@ -27,5 +27,30 @@
         android:orderInCategory="1"
         android:title="@string/menu_refresh"
         android:showAsAction="always"/>
+    <item
+        android:id="@+id/action_save"
+        android:title="@string/menu_save"
+        android:visible="false"
+        android:showAsAction="always"/>
+    <item
+        android:id="@+id/action_cancel"
+        android:title="@string/cancel_string"
+        android:visible="false"
+        android:showAsAction="always"/>
+    <item 
+        android:id="@+id/action_edit"
+        android:title="@string/menu_edit"
+        android:visible="false" 
+        android:showAsAction="always">
+     	<menu>
+    		<item 
+    		    android:id="@+id/action_edit_location"
+         	 	android:title="@string/menu_edit_location"/>
+    		<item 
+    		    android:id="@+id/action_edit_note"
+          		android:title="@string/menu_edit_note"/>
+    	</menu> 
+   </item>
+        
 
 </menu>

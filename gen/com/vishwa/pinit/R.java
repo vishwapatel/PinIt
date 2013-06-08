@@ -266,27 +266,32 @@ containing a value of this type.
         public static final int pointer_new=0x7f02002b;
     }
     public static final class id {
-        public static final int action_create_note=0x7f070043;
-        public static final int action_logout=0x7f070045;
-        public static final int action_refresh=0x7f070046;
-        public static final int action_search=0x7f070042;
-        public static final int action_settings=0x7f070044;
+        public static final int action_cancel=0x7f07004b;
+        public static final int action_create_note=0x7f070046;
+        public static final int action_edit=0x7f07004c;
+        public static final int action_edit_location=0x7f07004d;
+        public static final int action_edit_note=0x7f07004e;
+        public static final int action_logout=0x7f070048;
+        public static final int action_refresh=0x7f070049;
+        public static final int action_save=0x7f07004a;
+        public static final int action_search=0x7f070045;
+        public static final int action_settings=0x7f070047;
         public static final int alpha=0x7f070007;
         public static final int alphaNumeric=0x7f070008;
-        public static final int balloon_create_info=0x7f07003b;
-        public static final int balloon_create_info_alt=0x7f07003f;
-        public static final int balloon_image_layout=0x7f070038;
-        public static final int balloon_inner_layout=0x7f070036;
-        public static final int balloon_main_layout=0x7f070035;
-        public static final int balloon_note_body=0x7f07003a;
-        public static final int balloon_note_body_alt=0x7f07003e;
-        public static final int balloon_note_image=0x7f070039;
-        public static final int balloon_note_title=0x7f070037;
-        public static final int balloon_note_title_alt=0x7f07003d;
+        public static final int balloon_create_info=0x7f07003f;
+        public static final int balloon_create_info_alt=0x7f070042;
+        public static final int balloon_image_layout=0x7f07003c;
+        public static final int balloon_inner_layout=0x7f07003a;
+        public static final int balloon_main_layout=0x7f070039;
+        public static final int balloon_note_body=0x7f07003e;
+        public static final int balloon_note_body_alt=0x7f070041;
+        public static final int balloon_note_image=0x7f07003d;
+        public static final int balloon_note_title=0x7f07003b;
+        public static final int balloon_note_title_alt=0x7f070040;
         public static final int create_buttons_layout=0x7f070017;
         public static final int create_note_body=0x7f070014;
-        public static final int create_note_cancel_button=0x7f070019;
-        public static final int create_note_confirm_button=0x7f070018;
+        public static final int create_note_cancel_button=0x7f070018;
+        public static final int create_note_confirm_button=0x7f070019;
         public static final int create_note_contents_layout=0x7f070011;
         public static final int create_note_photo=0x7f070015;
         public static final int create_note_photo_close_button=0x7f070016;
@@ -294,47 +299,50 @@ containing a value of this type.
         public static final int create_note_title=0x7f070012;
         public static final int creditCard=0x7f07000a;
         public static final int custom=0x7f070010;
-        public static final int decelerate_cubic=0x7f070041;
-        public static final int decelerate_quint=0x7f070040;
+        public static final int decelerate_cubic=0x7f070044;
+        public static final int decelerate_quint=0x7f070043;
+        public static final int display_divider=0x7f070025;
         public static final int display_note_body=0x7f07001e;
-        public static final int display_note_body_alt=0x7f070021;
+        public static final int display_note_body_alt=0x7f070023;
         public static final int display_note_layout=0x7f07001a;
         public static final int display_note_photo=0x7f07001c;
         public static final int display_note_progressbar=0x7f07001d;
         public static final int display_note_title=0x7f07001f;
-        public static final int display_note_title_alt=0x7f070020;
+        public static final int display_note_title_alt=0x7f070021;
+        public static final int display_note_userinfo=0x7f070020;
+        public static final int display_note_userinfo_alt=0x7f070024;
         public static final int display_scroll_layout=0x7f07001b;
+        public static final int display_scroll_layout_alt=0x7f070022;
         public static final int domainName=0x7f07000c;
         public static final int email=0x7f070009;
         public static final int hybrid=0x7f070004;
         public static final int ipAddress=0x7f07000d;
-        public static final int layout_alt=0x7f07003c;
-        public static final int linearlayout=0x7f070022;
-        public static final int login_button=0x7f070027;
-        public static final int login_header=0x7f070024;
-        public static final int login_password_field=0x7f070026;
-        public static final int login_username_field=0x7f070025;
-        public static final int main_all_notes_button=0x7f07002a;
-        public static final int main_buttons_layout=0x7f070029;
-        public static final int main_your_notes_button=0x7f07002b;
-        public static final int map=0x7f07002c;
+        public static final int linearlayout=0x7f070026;
+        public static final int login_button=0x7f07002b;
+        public static final int login_header=0x7f070028;
+        public static final int login_password_field=0x7f07002a;
+        public static final int login_username_field=0x7f070029;
+        public static final int main_all_notes_button=0x7f07002e;
+        public static final int main_buttons_layout=0x7f07002d;
+        public static final int main_your_notes_button=0x7f07002f;
+        public static final int map=0x7f070030;
         public static final int nocheck=0x7f07000f;
         public static final int none=0x7f070000;
         public static final int normal=0x7f070001;
         public static final int numeric=0x7f070006;
         public static final int phone=0x7f07000b;
         public static final int regexp=0x7f070005;
-        public static final int relativelayout=0x7f070023;
+        public static final int relativelayout=0x7f070027;
         public static final int satellite=0x7f070002;
-        public static final int signup_button=0x7f070028;
-        public static final int signup_cancel_button=0x7f070034;
-        public static final int signup_confirm_password_field=0x7f070032;
-        public static final int signup_confirm_signup_button=0x7f070033;
-        public static final int signup_password_field=0x7f070031;
-        public static final int signup_photo=0x7f07002e;
-        public static final int signup_photo_button=0x7f07002f;
-        public static final int signup_progressBar=0x7f07002d;
-        public static final int signup_username_field=0x7f070030;
+        public static final int signup_button=0x7f07002c;
+        public static final int signup_cancel_button=0x7f070037;
+        public static final int signup_confirm_password_field=0x7f070036;
+        public static final int signup_confirm_signup_button=0x7f070038;
+        public static final int signup_password_field=0x7f070035;
+        public static final int signup_photo=0x7f070032;
+        public static final int signup_photo_button=0x7f070033;
+        public static final int signup_progressBar=0x7f070031;
+        public static final int signup_username_field=0x7f070034;
         public static final int terrain=0x7f070003;
         public static final int webUrl=0x7f07000e;
     }
@@ -347,6 +355,7 @@ containing a value of this type.
         public static final int activity_signup=0x7f030005;
         public static final int balloon_infowindow=0x7f030006;
         public static final int balloon_infowindow_alt=0x7f030007;
+        public static final int custom_spinner_item=0x7f030008;
     }
     public static final class menu {
         public static final int main_action_bar=0x7f0b0000;
@@ -418,11 +427,11 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f08000e;
-        public static final int create_note_enter_body=0x7f080033;
+        public static final int create_note_enter_body=0x7f080037;
         /**  Create Note Screen Strings 
          */
-        public static final int create_note_enter_title=0x7f080032;
-        public static final int create_note_share=0x7f080034;
+        public static final int create_note_enter_title=0x7f080036;
+        public static final int create_note_share=0x7f080038;
         public static final int error_creditcard_number_not_valid=0x7f08001a;
         public static final int error_domain_not_valid=0x7f08001c;
         public static final int error_email_address_not_valid=0x7f080019;
@@ -445,41 +454,40 @@ containing a value of this type.
         public static final int location_client_ulr_inactive_age_under_13=0x7f080012;
         public static final int location_client_ulr_inactive_age_unknown=0x7f080013;
         public static final int location_client_ulr_inactive_unknown_restriction=0x7f080014;
-        public static final int login_enter_password=0x7f080028;
+        public static final int login_enter_password=0x7f08002c;
         /**  Login Screen Strings 
          */
-        public static final int login_enter_username=0x7f080027;
-        public static final int login_log_in=0x7f080029;
-        public static final int login_sign_up=0x7f08002a;
+        public static final int login_enter_username=0x7f08002b;
+        public static final int login_log_in=0x7f08002d;
+        public static final int login_sign_up=0x7f08002e;
         /**  Main Screen Strings 
          */
-        public static final int main_all_notes=0x7f080030;
-        public static final int main_your_notes=0x7f080031;
+        public static final int main_all_notes=0x7f080034;
+        public static final int main_your_notes=0x7f080035;
         public static final int menu_create_note=0x7f080023;
+        public static final int menu_edit=0x7f080028;
+        public static final int menu_edit_location=0x7f080029;
+        public static final int menu_edit_note=0x7f08002a;
         public static final int menu_logout=0x7f080025;
         public static final int menu_refresh=0x7f080026;
+        public static final int menu_save=0x7f080027;
         /**  ActionBar/Menu Strings 
          */
         public static final int menu_search=0x7f080022;
         public static final int menu_settings=0x7f080024;
-        public static final int signup_confirm_password=0x7f08002f;
-        public static final int signup_password=0x7f08002e;
-        public static final int signup_pick_photo=0x7f08002c;
+        public static final int signup_confirm_password=0x7f080033;
+        public static final int signup_password=0x7f080032;
+        public static final int signup_pick_photo=0x7f080030;
         /**  Signup Screen Strings  
          */
-        public static final int signup_sign_up=0x7f08002b;
-        public static final int signup_username=0x7f08002d;
+        public static final int signup_sign_up=0x7f08002f;
+        public static final int signup_username=0x7f080031;
     }
     public static final class style {
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     
-
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        
 
         Base application theme for API 11+. This theme completely replaces
         AppBaseTheme from res/values/styles.xml on API 11+ devices.
@@ -497,6 +505,13 @@ containing a value of this type.
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f0a0001;
+        public static final int pinit_TextAppearance_Widget_DropDownItem=0x7f0a0004;
+        public static final int pinit_Widget_DropDownItem_Spinner=0x7f0a0003;
+        /**      <style name="Theme.pinit" parent="android:Theme.Holo.Light.DarkActionBar">       
+	    <item name="android:actionBarWidgetTheme">@style/pinit.actionBarWidgetTheme</item>
+	</style> 
+         */
+        public static final int pinit_actionBarWidgetTheme=0x7f0a0002;
     }
     public static final class xml {
         public static final int searchable=0x7f050000;

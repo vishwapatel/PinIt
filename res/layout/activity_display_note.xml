@@ -8,7 +8,8 @@
     <ScrollView
         android:id="@+id/display_scroll_layout"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content">
+        android:layout_width="wrap_content"
+        android:paddingBottom="40dp">
         <RelativeLayout 
             android:layout_height="wrap_content"
             android:layout_width="wrap_content">
@@ -34,6 +35,7 @@
 		        android:layout_alignRight="@id/display_note_photo"
 		        android:paddingLeft="5dp"
 		        android:paddingRight="5dp"
+		        android:paddingBottom="5dp"
 		        android:background="#FFFFFF"
 		        android:textSize="16dp"/>
     	</RelativeLayout>
@@ -53,5 +55,20 @@
         android:textColor="#FFFFFF"
         android:textSize="20dp"
         android:textStyle="bold"/>
+    
+    <TextView
+        android:id="@+id/display_note_userinfo"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@id/display_scroll_layout"
+        android:layout_alignLeft="@id/display_scroll_layout"
+        android:layout_alignRight="@id/display_scroll_layout"
+        android:paddingLeft="5dp"
+        android:drawablePadding="5dp"
+        android:gravity="center_vertical"
+        android:background="#F3F0EA"
+        android:textSize="12dp"
+        android:textStyle="italic"
+        android:textColor="#104E9B"/>
 
 </RelativeLayout>

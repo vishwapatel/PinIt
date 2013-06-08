@@ -14,7 +14,10 @@
 			android:id="@+id/create_note_title"
 		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
+		    android:paddingLeft="10dp"
 	        android:paddingRight="30dp"
+	        android:paddingTop="10dp"
+	        android:paddingBottom="10dp"
 		    android:maxLength="80"
 	        android:textSize="22sp"
 	        android:textStyle="bold"
@@ -51,8 +54,8 @@
 				    android:id="@+id/create_note_body"
 				    android:layout_width="fill_parent"
 				    android:layout_height="200dp"
-				    android:paddingLeft="5dp"
-				    android:paddingRight="5dp"
+				    android:paddingLeft="10dp"
+				    android:paddingRight="10dp"
 				    android:background="#FFFFFF"
 				    android:hint="@string/create_note_enter_body"/>
 			
@@ -100,15 +103,6 @@
 		    android:layout_height="wrap_content"
 		    android:orientation="horizontal" 
 		    style="?android:attr/buttonBarStyle">
-
-			<Button
-			    android:id="@+id/create_note_confirm_button"
-			    style="?android:attr/buttonBarButtonStyle"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:background="#FFFFFF"
-			    android:layout_weight="0.5"
-			    android:text="@string/create_note_share" />
 	
 		    <Button
 		        android:id="@+id/create_note_cancel_button"
@@ -118,6 +112,16 @@
 		        android:background="#FFFFFF"
 		        android:layout_weight="0.5"
 		        android:text="@string/cancel_string" />
+		    
+			<Button
+			    android:id="@+id/create_note_confirm_button"
+			    style="?android:attr/buttonBarButtonStyle"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:background="#FFFFFF"
+			    android:layout_weight="0.5"
+			    android:text="@string/create_note_share" />
+	
 		</LinearLayout>
 		
 		<View

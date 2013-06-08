@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
@@ -10,14 +10,18 @@
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
+        android:paddingBottom="5dp"
         android:background="#F3F0EA"
         android:textColor="#AA434343"
         android:textSize="20dp"
         android:textStyle="bold"/>
     
     <ScrollView
+        android:id="@+id/display_scroll_layout_alt"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/display_note_title_alt"
+        android:paddingBottom="40dp">
 	    <TextView
 	        android:id="@+id/display_note_body_alt"
 	        android:layout_width="match_parent"
@@ -28,4 +32,26 @@
 	        android:textColor="#555555"
 	        android:textSize="16dp"/>
     </ScrollView>
-</LinearLayout>
+    
+    <TextView
+        android:id="@+id/display_note_userinfo_alt"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@id/display_scroll_layout_alt"
+        android:layout_alignLeft="@id/display_scroll_layout_alt"
+        android:layout_alignRight="@id/display_scroll_layout_alt"
+        android:padding="5dp"
+        android:drawablePadding="5dp"
+        android:gravity="center_vertical"
+        android:background="#F3F0EA"
+        android:textSize="12dp"
+        android:textStyle="italic"
+        android:textColor="#104E9B"/>
+    
+    <View
+        android:id="@+id/display_divider"
+		android:layout_width="match_parent"
+		android:layout_height="2dip"
+		android:layout_above="@id/display_note_userinfo_alt"
+		android:background="#FFFFFF" />
+</RelativeLayout>

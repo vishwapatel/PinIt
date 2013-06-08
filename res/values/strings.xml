@@ -10,7 +10,11 @@
 	<string name="menu_create_note">Create Note</string>
 	<string name="menu_settings">Settings</string>
 	<string name="menu_logout">Logout</string>
-	<string name="menu_refresh">Refresh</string>    
+	<string name="menu_refresh">Refresh</string>
+	<string name="menu_save">Save</string>
+	<string name="menu_edit">Edit</string>
+	<string name="menu_edit_location">Edit Note Location</string>
+	<string name="menu_edit_note">Edit Note Info</string>
     
     <!-- Login Screen Strings -->
 	<string name="login_enter_username">Enter Username</string>

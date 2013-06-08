@@ -1,9 +1,6 @@
 package com.vishwa.pinit;
 
 import com.parse.Parse;
-import com.parse.ParseACL;
-
-import com.parse.ParseUser;
 
 import android.app.Application;
 import android.view.ViewConfiguration;

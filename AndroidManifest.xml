@@ -54,7 +54,7 @@
         </activity>
         
         <provider
-        	android:name="com.vishwa.pinit.PlacesSuggestionProvider"
+        	android:name="com.vishwa.pinit.LocationSuggestionProvider"
             android:authorities="com.vishwa.pinit.search_suggestion_provider"
             android:syncable="false" />
          

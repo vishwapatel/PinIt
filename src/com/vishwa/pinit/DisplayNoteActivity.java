@@ -1,9 +1,15 @@
 package com.vishwa.pinit;
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Window;
 import android.widget.ImageView;
@@ -26,7 +32,10 @@ public class DisplayNoteActivity extends Activity {
 	private TextView mNoteTitleAlt;
 	private TextView mNoteBody;
 	private TextView mNoteBodyAlt;
+	private TextView mNoteCreatedInfo;
 	private ProgressBar mProgressBar;
+	
+	private Bitmap mNotePhoto = null;
 	
 	private Note mNote;
 	
@@ -40,18 +49,27 @@ public class DisplayNoteActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		mNote = (Note) getIntent().getExtras().getParcelable("note");
+		byte[] array = getIntent().getByteArrayExtra("userPhoto");
+		Bitmap bitmap = getCroppedBitmap(BitmapFactory.decodeByteArray(array, 0, array.length));
+		Bitmap userPhoto = Bitmap.createScaledBitmap(bitmap, 40, 40, true);
+		Drawable userPhotoDrawable = new BitmapDrawable(getResources(), userPhoto);
 		
 		if(mNote.getNoteImageThumbnailUrl().isEmpty()) {
 			setContentView(R.layout.activity_display_note_alt);
 
 			mNoteBodyAlt = (TextView) findViewById(R.id.display_note_body_alt);
 			mNoteTitleAlt = (TextView) findViewById(R.id.display_note_title_alt);
+			mNoteCreatedInfo = (TextView) findViewById(R.id.display_note_userinfo_alt);
+			mNoteCreatedInfo.setCompoundDrawablesWithIntrinsicBounds(userPhotoDrawable, null, null, null);
 			
 			mNoteTitleAlt.setVisibility(TextView.GONE);
 			mNoteBodyAlt.setVisibility(TextView.GONE);
+			mNoteCreatedInfo.setVisibility(TextView.GONE);
 
 			mNoteTitleAlt.setText(mNote.getNoteTitle());
 			mNoteTitleAlt.setVisibility(TextView.VISIBLE);
+			mNoteCreatedInfo.setText("Created by "+mNote.getNoteCreator()+" on "+mNote.getNoteCreatedAt());
+			mNoteCreatedInfo.setVisibility(TextView.VISIBLE);
 			if(!mNote.getNoteBody().isEmpty()) {
 				mNoteBodyAlt.setText(mNote.getNoteBody());
 				mNoteBodyAlt.setVisibility(TextView.VISIBLE);
@@ -63,10 +81,13 @@ public class DisplayNoteActivity extends Activity {
 			mProgressBar = (ProgressBar) findViewById(R.id.display_note_progressbar);
 			mNoteBody = (TextView) findViewById(R.id.display_note_body);
 			mNoteTitle = (TextView) findViewById(R.id.display_note_title);
+			mNoteCreatedInfo = (TextView) findViewById(R.id.display_note_userinfo);
+			mNoteCreatedInfo.setCompoundDrawablesWithIntrinsicBounds(userPhotoDrawable, null, null, null);
 			
 			mNotePhotoImageView.setVisibility(ImageView.GONE);
 			mNoteTitle.setVisibility(TextView.GONE);
 			mNoteBody.setVisibility(TextView.GONE);
+			mNoteCreatedInfo.setVisibility(TextView.GONE);
 			
 			ParseQuery query = new ParseQuery("Note");
 			query.getInBackground(mNote.getNoteId(), new GetCallback() {
@@ -81,14 +102,17 @@ public class DisplayNoteActivity extends Activity {
 							@Override
 							public void done(byte[] data, ParseException e) {
 								if(e == null) {
-									Bitmap notePhoto = 
+									mNotePhoto = 
 											BitmapFactory.decodeByteArray(data, 0, data.length);
 									mProgressBar.setVisibility(ProgressBar.GONE);
 									mNotePhotoImageView.setAdjustViewBounds(true);
-									mNotePhotoImageView.setImageBitmap(notePhoto);
+									mNotePhotoImageView.setImageBitmap(mNotePhoto);
 									mNoteTitle.setText(mNote.getNoteTitle());
+									mNoteCreatedInfo.setText("Created by "+mNote.getNoteCreator()+
+											" on "+mNote.getNoteCreatedAt());
 									mNotePhotoImageView.setVisibility(ImageView.VISIBLE);
 									mNoteTitle.setVisibility(TextView.VISIBLE);
+									mNoteCreatedInfo.setVisibility(TextView.VISIBLE);
 									if(!mNote.getNoteBody().isEmpty()) {
 										mNoteBody.setText(mNote.getNoteBody());
 										mNoteBody.setVisibility(TextView.VISIBLE);
@@ -105,9 +129,30 @@ public class DisplayNoteActivity extends Activity {
 			});
 		}
 	}
+	
+	private Bitmap getCroppedBitmap(Bitmap bitmap) {
+	    Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
+	    Canvas canvas = new Canvas(output);
+
+	    final int color = 0xff424242;
+	    final Paint paint = new Paint();
+	    final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+	    paint.setAntiAlias(true);
+	    canvas.drawARGB(0, 0, 0, 0);
+	    paint.setColor(color);
+	    canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 2, paint);
+	    paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+	    canvas.drawBitmap(bitmap, rect, rect, paint);
+	    return output;
+	}
 
 	@Override
 	protected void onDestroy() {
+		if(mNotePhoto != null) {
+			mNotePhoto.recycle();
+			mNotePhoto = null;
+		}
 		super.onDestroy();
 	}
 	
