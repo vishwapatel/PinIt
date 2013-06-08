@@ -16,6 +16,7 @@ public class Note implements Parcelable{
 	private String createdAtFull;
 	private double latitude;
 	private double longitude;
+	private boolean creatorHasDefaultPhoto;
 	
 	public Note(String id, String creator, String title, String body, LatLng geopoint, 
 			String url, String createdAt, String createdAtFull) {
@@ -28,6 +29,7 @@ public class Note implements Parcelable{
 		this.createdAtFull = createdAtFull;
 		this.latitude = geopoint.latitude;
 		this.longitude = geopoint.longitude;
+		this.creatorHasDefaultPhoto = false;
 	}
 	
 	public Note(Parcel parcel) {
@@ -89,6 +91,14 @@ public class Note implements Parcelable{
 	
 	public String getNoteId() {
 		return id;
+	}
+	
+	public void setNoteCreatorHasDefaultPhoto(boolean b) {
+		creatorHasDefaultPhoto = b;
+	}
+	
+	public boolean getNoteCreatorHasDefaultPhoto() {
+		return creatorHasDefaultPhoto;
 	}
 	
 	@Override

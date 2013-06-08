@@ -20,7 +20,6 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,7 +39,6 @@ import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SearchView.OnSuggestionListener;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
@@ -548,6 +546,7 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
 						  balloonBackground = Bitmap.createScaledBitmap(balloonBackground, 87, 94, false);
 			    		  userPhoto = Bitmap.createScaledBitmap(
 			    				  mMemoryCache.get("defaultPhoto"), 75, 71, false);
+			    		  note.setNoteCreatorHasDefaultPhoto(true);
 			    		  
 			    		  Canvas canvas = new Canvas(balloonBackground);
 			    		  canvas.drawBitmap(balloonBackground, 0, 0, null);
@@ -945,7 +944,12 @@ public class MainActivity extends FragmentActivity implements OnMapLongClickList
 		mMenu.findItem(R.id.action_edit).setVisible(true);
 		Note note = mNoteStore.get(marker.getId());
 		ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
-		mMemoryCache.get(note.getNoteCreator()).compress(CompressFormat.PNG, 100, byteArrayStream);
+		if(note.getNoteCreatorHasDefaultPhoto()) {
+			mMemoryCache.get("defaultPhoto").compress(CompressFormat.PNG, 100, byteArrayStream);
+		}
+		else {
+			mMemoryCache.get(note.getNoteCreator()).compress(CompressFormat.PNG, 100, byteArrayStream);
+		}
 		Intent intent = new Intent(this, DisplayNoteActivity.class);
 		intent.putExtra("note", note);
 		intent.putExtra("userPhoto", byteArrayStream.toByteArray());

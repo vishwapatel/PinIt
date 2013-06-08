@@ -264,18 +264,19 @@ containing a value of this type.
         public static final int navigation_refresh=0x7f020029;
         public static final int plus_sign=0x7f02002a;
         public static final int pointer_new=0x7f02002b;
+        public static final int splash_screen=0x7f02002c;
     }
     public static final class id {
-        public static final int action_cancel=0x7f07004b;
-        public static final int action_create_note=0x7f070046;
-        public static final int action_edit=0x7f07004c;
-        public static final int action_edit_location=0x7f07004d;
-        public static final int action_edit_note=0x7f07004e;
-        public static final int action_logout=0x7f070048;
-        public static final int action_refresh=0x7f070049;
-        public static final int action_save=0x7f07004a;
-        public static final int action_search=0x7f070045;
-        public static final int action_settings=0x7f070047;
+        public static final int action_cancel=0x7f07004c;
+        public static final int action_create_note=0x7f070047;
+        public static final int action_edit=0x7f07004d;
+        public static final int action_edit_location=0x7f07004e;
+        public static final int action_edit_note=0x7f07004f;
+        public static final int action_logout=0x7f070049;
+        public static final int action_refresh=0x7f07004a;
+        public static final int action_save=0x7f07004b;
+        public static final int action_search=0x7f070046;
+        public static final int action_settings=0x7f070048;
         public static final int alpha=0x7f070007;
         public static final int alphaNumeric=0x7f070008;
         public static final int balloon_create_info=0x7f07003f;
@@ -299,8 +300,8 @@ containing a value of this type.
         public static final int create_note_title=0x7f070012;
         public static final int creditCard=0x7f07000a;
         public static final int custom=0x7f070010;
-        public static final int decelerate_cubic=0x7f070044;
-        public static final int decelerate_quint=0x7f070043;
+        public static final int decelerate_cubic=0x7f070045;
+        public static final int decelerate_quint=0x7f070044;
         public static final int display_divider=0x7f070025;
         public static final int display_note_body=0x7f07001e;
         public static final int display_note_body_alt=0x7f070023;
@@ -343,6 +344,7 @@ containing a value of this type.
         public static final int signup_photo_button=0x7f070033;
         public static final int signup_progressBar=0x7f070031;
         public static final int signup_username_field=0x7f070034;
+        public static final int splash_screen_image=0x7f070043;
         public static final int terrain=0x7f070003;
         public static final int webUrl=0x7f07000e;
     }
@@ -356,6 +358,7 @@ containing a value of this type.
         public static final int balloon_infowindow=0x7f030006;
         public static final int balloon_infowindow_alt=0x7f030007;
         public static final int custom_spinner_item=0x7f030008;
+        public static final int splash_screen=0x7f030009;
     }
     public static final class menu {
         public static final int main_action_bar=0x7f0b0000;
