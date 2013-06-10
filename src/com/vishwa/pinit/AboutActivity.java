@@ -27,7 +27,7 @@ public class AboutActivity extends Activity {
 			"PinIt was inspired by Findery (www.findery.com) a great web application that allows " +
 			"users to discover new places and create great memories. I love their web-app and " +
 			"wanted to build a beautiful Android app that was entirely built using native " +
-			"componenets and that lets users discover the magic of visiting a new place and " +
+			"components and that lets users discover the magic of visiting a new place and " +
 			"learning some quirky aspect of that place, or discovering great places to eat in an " +
 			"area and the amazing food they serve or discovering where someone was born and grew up." +
 			" These are all beautiful experiences and I wanted to capture them through PinIt. I've " +
