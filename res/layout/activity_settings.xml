@@ -14,10 +14,10 @@
         	android:padding="15dp"
         	android:textSize="20sp"
         	android:textColor="#499FCF"
-        	android:text="@string/signup_sign_up" />
+        	android:text="@string/settings_settings" />
 
         <ProgressBar
-            android:id="@+id/signup_progressBar"
+            android:id="@+id/settings_progressbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -34,8 +34,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         
+        <ProgressBar 
+            android:id="@+id/settings_photo_progressbar"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+     		android:layout_centerHorizontal="true"/>
+        
 	    <ImageView
-	        android:id="@+id/signup_photo"
+	        android:id="@+id/settings_photo"
 	        android:layout_width="100dp"
 	        android:layout_height="100dp"
 	        android:layout_marginTop="15dp"
@@ -43,50 +49,36 @@
 	        android:src="@drawable/default_image_signup"/>
 	    
 	    <Button 
-	        android:id="@+id/signup_photo_button"
+	        android:id="@+id/settings_photo_button"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_below="@id/signup_photo"
+	        android:layout_below="@id/settings_photo"
 	        android:layout_centerHorizontal="true"
-	        android:text="@string/signup_pick_photo"
+	        android:text="@string/settings_pick_photo"
 	        android:textColor="@android:color/black" />
 	    
+	    <EditText
+	        android:id="@+id/settings_email_field"
+	        android:inputType="textEmailAddress"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="16dp"
+	        android:layout_marginLeft="4dp"
+	        android:layout_marginRight="4dp"
+	        android:layout_marginBottom="4dp"
+	        android:layout_below="@id/settings_photo_button"
+	        android:singleLine="true"
+	        android:hint="@string/settings_email" />
+    
+	    <Button
+	        android:id="@+id/settings_reset_password_button"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/settings_email_field"
+	        android:layout_centerHorizontal="true"
+	        android:text="@string/settings_reset_password" />
+	    
     </RelativeLayout>    
-    
-    <EditText
-        android:id="@+id/signup_username_field"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"
-        android:singleLine="true"
-        android:hint="@string/signup_username" />
-    <EditText
-        android:id="@+id/signup_password_field"
-        android:inputType="textPassword"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:fontFamily="sans-serif"
-        android:singleLine="true"
-        android:hint="@string/signup_password"/>
-    
-    <EditText
-        android:id="@+id/signup_confirm_password_field"
-        android:inputType="textPassword"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="16dp"
-        android:fontFamily="sans-serif"
-        android:singleLine="true"
-        android:hint="@string/signup_confirm_password"/>
         
     <View
 	    android:layout_width="fill_parent"
@@ -104,7 +96,7 @@
 	    android:measureWithLargestChild="true">
 		
         <Button 
-	        android:id="@+id/signup_cancel_button"
+	        android:id="@+id/settings_cancel_button"
 	        style="?android:attr/buttonBarButtonStyle"
 	        android:layout_width="0dip"
 	        android:layout_height="wrap_content"
@@ -112,11 +104,11 @@
 	        android:text="@string/cancel_string"/>
         
 	    <Button 
-	        android:id="@+id/signup_confirm_signup_button"
+	        android:id="@+id/settings_save_button"
 	        style="?android:attr/buttonBarButtonStyle"
 	        android:layout_width="0dip"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
-	        android:text="@string/signup_sign_up"/>
+	        android:text="@string/settings_save"/>
 	</LinearLayout>
 </LinearLayout>

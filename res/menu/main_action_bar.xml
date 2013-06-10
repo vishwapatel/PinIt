@@ -17,7 +17,7 @@
         android:title="@string/menu_settings"/>
     <item
         android:id="@+id/action_logout"
-        android:orderInCategory="3"
+        android:orderInCategory="4"
         android:title="@string/menu_logout"
         android:showAsAction="never"/>
     <item 
@@ -27,6 +27,11 @@
         android:orderInCategory="1"
         android:title="@string/menu_refresh"
         android:showAsAction="always"/>
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="3"
+        android:title="@string/menu_about"
+        android:showAsAction="never"/>
     <item
         android:id="@+id/action_save"
         android:title="@string/menu_save"
@@ -49,6 +54,9 @@
     		<item 
     		    android:id="@+id/action_edit_note"
           		android:title="@string/menu_edit_note"/>
+    		<item
+    		    android:id="@+id/action_delete_note"
+    		    android:title="@string/menu_delete_note"/>
     	</menu> 
    </item>
         

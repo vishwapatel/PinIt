@@ -8,7 +8,7 @@ import android.view.ViewConfiguration;
 import java.lang.reflect.Field;
 
 public class PinItApplication extends Application {
-
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();

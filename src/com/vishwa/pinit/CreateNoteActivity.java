@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
@@ -168,14 +169,17 @@ public class CreateNoteActivity extends Activity {
 		   mNote.put("notePhotoThumbnail", mNotePhotoThumbnailObject);
 		   mNoteImageThumbnailUrl = mNotePhotoThumbnailObject.getUrl();
 	   }
-		mNote.saveInBackground(new SaveCallback() {
+	   ParseACL noteAcl = new ParseACL(ParseUser.getCurrentUser());
+	   noteAcl.setPublicReadAccess(true);
+	   mNote.setACL(noteAcl);
+	   mNote.saveInBackground(new SaveCallback() {
 			
-			@Override
-			public void done(ParseException e) {
-				mProgressBar.setVisibility(View.INVISIBLE);
-				handleNoteUploadResponse(e);
-			}
-		});
+	       @Override
+		   public void done(ParseException e) {
+		       mProgressBar.setVisibility(View.INVISIBLE);
+			   handleNoteUploadResponse(e);
+		   }
+       });
    }
    
    private void handleNoteUploadResponse(ParseException e) {
@@ -264,7 +268,4 @@ public class CreateNoteActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 	}
-	
-	
-
 }

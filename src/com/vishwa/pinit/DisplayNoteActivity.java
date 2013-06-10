@@ -11,9 +11,12 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +37,7 @@ public class DisplayNoteActivity extends Activity {
 	private TextView mNoteBodyAlt;
 	private TextView mNoteCreatedInfo;
 	private ProgressBar mProgressBar;
+	private ScrollView mScrollView;
 	
 	private Bitmap mNotePhoto = null;
 	
@@ -52,6 +56,7 @@ public class DisplayNoteActivity extends Activity {
 		byte[] array = getIntent().getByteArrayExtra("userPhoto");
 		Bitmap bitmap = getCroppedBitmap(BitmapFactory.decodeByteArray(array, 0, array.length));
 		Bitmap userPhoto = Bitmap.createScaledBitmap(bitmap, 40, 40, true);
+		bitmap.recycle();
 		Drawable userPhotoDrawable = new BitmapDrawable(getResources(), userPhoto);
 		
 		if(mNote.getNoteImageThumbnailUrl().isEmpty()) {
@@ -82,6 +87,7 @@ public class DisplayNoteActivity extends Activity {
 			mNoteBody = (TextView) findViewById(R.id.display_note_body);
 			mNoteTitle = (TextView) findViewById(R.id.display_note_title);
 			mNoteCreatedInfo = (TextView) findViewById(R.id.display_note_userinfo);
+			mScrollView = (ScrollView) findViewById(R.id.display_scroll_layout);
 			mNoteCreatedInfo.setCompoundDrawablesWithIntrinsicBounds(userPhotoDrawable, null, null, null);
 			
 			mNotePhotoImageView.setVisibility(ImageView.GONE);
@@ -117,6 +123,23 @@ public class DisplayNoteActivity extends Activity {
 										mNoteBody.setText(mNote.getNoteBody());
 										mNoteBody.setVisibility(TextView.VISIBLE);
 									}
+									ViewTreeObserver viewObserver = mScrollView.getViewTreeObserver();
+									viewObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+										
+										@SuppressWarnings("deprecation")
+										@Override
+										public void onGlobalLayout() {
+											if(mScrollView.canScrollVertically(1)) {
+												mScrollView.post(new Runnable() { 
+											        public void run() { 
+											        	int halfWay = mScrollView.getHeight()/2;
+											            mScrollView.scrollTo(0, halfWay);
+											        } 
+												});
+											}
+											mScrollView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+										}
+									});
 								}
 							}
 						});
@@ -129,6 +152,7 @@ public class DisplayNoteActivity extends Activity {
 			});
 		}
 	}
+	
 	
 	private Bitmap getCroppedBitmap(Bitmap bitmap) {
 	    Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);

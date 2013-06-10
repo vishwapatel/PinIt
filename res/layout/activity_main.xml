@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical"
     tools:context=".MainActivity" >
     
@@ -20,7 +20,7 @@
 	    android:paddingTop="0dip"
 	    android:paddingLeft="2dip"
 	    android:paddingRight="2dip"
-	    android:measureWithLargestChild="true">
+	    android:measureWithLargestChild="true" >
 
 	    <Button 
 	        android:id="@+id/main_all_notes_button"
@@ -28,7 +28,7 @@
 	        android:layout_width="0dip"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
-	        android:text="@string/main_all_notes"/>
+	        android:text="@string/main_all_notes" />
 	    
 	    <Button 
 	        android:id="@+id/main_your_notes_button"
@@ -36,13 +36,14 @@
 	        android:layout_width="0dip"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
-	        android:text="@string/main_your_notes"/>
+	        android:text="@string/main_your_notes" />
 	</LinearLayout>
 
     <fragment
-        android:id="@+id/map"
+        android:id="@+id/main_map"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/main_buttons_layout"
         class="com.google.android.gms.maps.SupportMapFragment" />
+
 </RelativeLayout> 

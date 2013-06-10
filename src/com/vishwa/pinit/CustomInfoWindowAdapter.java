@@ -2,15 +2,19 @@ package com.vishwa.pinit;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +40,7 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
 	private HashMap<String, Note> mNoteStore;
 	private LruCache<String, Bitmap> mMemoryCache;
 	
-	public CustomInfoWindowAdapter(Context ctx, HashMap<String, Note> noteStore, LruCache<String, Bitmap> memoryCache) {
+	public CustomInfoWindowAdapter(Context ctx, HashMap<String, Note> noteStore, LruCache<String, Bitmap> memoryCache){
 		mContext = ctx;
 		mNoteStore = noteStore;
 		mMemoryCache = memoryCache;
@@ -72,6 +76,7 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
 
 	@Override
 	public View getInfoWindow(Marker marker){
+		
 		
 		note = mNoteStore.get(marker.getId());
 		
