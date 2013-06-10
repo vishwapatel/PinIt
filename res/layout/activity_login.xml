@@ -2,10 +2,10 @@
     xmlns:whatever="http://schemas.android.com/apk/res/com.vishwa.pinit"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" 
     android:background="@drawable/googlemaps"
-    android:padding="10dp">
-			
+    android:orientation="vertical"
+    android:padding="10dp" >
+
     <LinearLayout
         android:id="@+id/linearlayout"
         android:layout_width="fill_parent"
@@ -13,78 +13,76 @@
         android:layout_gravity="center"
         android:orientation="vertical"
         android:padding="15dp" >
-        
+
         <RelativeLayout
-            android:id="@+id/relativelayout" 
+            android:id="@+id/relativelayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
-            
-	        <ImageView
-	            android:id="@+id/login_header"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_centerInParent="true"
-	            android:src="@drawable/login_header"/>
-        
+            android:layout_gravity="center" >
+
+            <ImageView
+                android:id="@+id/login_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/login_header" />
         </RelativeLayout>
-        
-        <LinearLayout 
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="vertical"
-            android:background="@drawable/balloonbackground">
-        
-	         <com.andreabaccega.widget.FormEditText
-	             whatever:testType="nocheck"
-	             whatever:emptyErrorString="Username cannot be empty"
-	             android:id="@+id/login_username_field"
-	             android:layout_width="fill_parent"
-	             android:layout_height="wrap_content"
-	             android:paddingTop="30dp"
-	             android:singleLine="true"
-	             android:hint="@string/login_enter_username" />
-         
-	         <com.andreabaccega.widget.FormEditText
-	             whatever:testType="nocheck"
-	             whatever:emptyErrorString="Password cannot be empty"
-	             android:id="@+id/login_password_field"
-	             android:layout_width="fill_parent"
-	             android:layout_height="wrap_content"
-	             android:paddingTop="30dp"
-	             android:inputType="textPassword"
-	             android:singleLine="true"
-	             android:hint="@string/login_enter_password" />
+            android:background="@drawable/balloonbackground"
+            android:orientation="vertical" >
+
+            <com.andreabaccega.widget.FormEditText
+                android:id="@+id/login_username_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/login_enter_username"
+                android:paddingTop="30dp"
+                android:singleLine="true"
+                whatever:emptyErrorString="Username cannot be empty"
+                whatever:testType="nocheck" />
+
+            <com.andreabaccega.widget.FormEditText
+                android:id="@+id/login_password_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/login_enter_password"
+                android:inputType="textPassword"
+                android:paddingTop="30dp"
+                android:singleLine="true"
+                whatever:emptyErrorString="Password cannot be empty"
+                whatever:testType="nocheck" />
         </LinearLayout>
-        
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/linearlayout"
-        android:paddingTop="3dp">
+        android:paddingTop="3dp" >
 
         <Button
             android:id="@+id/login_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:textColor="@android:color/white"
-           	android:background="@drawable/custom_login_button"
-           	android:text="@string/login_log_in" />
-        
+            android:background="@drawable/custom_login_button"
+            android:text="@string/login_log_in"
+            android:textColor="@android:color/white" />
+
         <Button
             android:id="@+id/signup_button"
-         	android:layout_width="fill_parent"
-         	android:layout_height="wrap_content"
-         	android:layout_alignParentBottom="true"
-         	android:layout_centerHorizontal="true"
-         	android:layout_marginBottom="50dp"
-         	android:textColor="@android:color/white"
-         	android:background="@drawable/custom_signup_button"
-         	android:text="@string/login_sign_up">
-    	</Button>
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/custom_signup_button"
+            android:text="@string/login_sign_up"
+            android:textColor="@android:color/white" >
+        </Button>
     </RelativeLayout>
 
 </RelativeLayout>

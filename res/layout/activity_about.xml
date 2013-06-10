@@ -1,49 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-	<ScrollView 
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:background="#F3F0EA">
-		<RelativeLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content">
-		    
-		    <ImageView 
-		        android:id="@+id/about_my_picture"
-		        android:layout_height="match_parent"
-		        android:layout_width="match_parent"
-		        android:paddingTop="10dp"
-		        android:paddingBottom="10dp"
-		        android:layout_centerHorizontal="true"
-		        android:background="#FFFFFF"
-		        android:src="@drawable/vishwa"/>
-			<TextView
-			    android:id="@+id/about_about_me"
-			    android:layout_height="wrap_content"
-			    android:layout_width="fill_parent"
-			    android:layout_below="@id/about_my_picture"
-			    android:padding="5dp"
-			    android:autoLink="web"
-			    android:textColor="#AA434343"
-			    android:textSize="16sp"/>
-			<TextView
-			    android:id="@+id/about_google_attribution"
-			    android:layout_height="wrap_content"
-			    android:layout_width="fill_parent"
-			    android:layout_below="@id/about_about_me"
-			    android:padding="10dp"
-			    android:textSize="18sp"
-			    android:text="@string/about_google_attribution"/>
-			<Button
-			    android:id="@+id/about_close_button"
-			    style="?android:attr/buttonBarButtonStyle"
-			    android:layout_height="40dp"
-			    android:layout_width="fill_parent"
-			    android:layout_below="@id/about_google_attribution"
-			    android:background="#FFFFFF"
-			    android:text="@string/about_close"/>
-		</RelativeLayout>
-	</ScrollView>
+    android:layout_height="wrap_content" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F3F0EA" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/about_my_picture"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:background="#FFFFFF"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:src="@drawable/vishwa" />
+
+            <TextView
+                android:id="@+id/about_about_me"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/about_my_picture"
+                android:autoLink="web"
+                android:padding="5dp"
+                android:textColor="#AA434343"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/about_google_attribution"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/about_about_me"
+                android:padding="10dp"
+                android:text="@string/about_google_attribution"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/about_close_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/about_google_attribution"
+                android:background="#FFFFFF"
+                android:text="@string/about_close" />
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

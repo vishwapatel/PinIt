@@ -3,36 +3,37 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
-   	
+
     <TextView
         android:id="@+id/display_note_title_alt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#F3F0EA"
+        android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:paddingBottom="5dp"
-        android:background="#F3F0EA"
         android:textColor="#AA434343"
         android:textSize="20dp"
-        android:textStyle="bold"/>
-    
+        android:textStyle="bold" />
+
     <ScrollView
         android:id="@+id/display_scroll_layout_alt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/display_note_title_alt"
-        android:paddingBottom="40dp">
-	    <TextView
-	        android:id="@+id/display_note_body_alt"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:paddingLeft="5dp"
-	        android:paddingRight="5dp"
-	        android:background="#FFFFFF"
-	        android:textColor="#555555"
-	        android:textSize="16dp"/>
+        android:paddingBottom="40dp" >
+
+        <TextView
+            android:id="@+id/display_note_body_alt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textColor="#555555"
+            android:textSize="16dp" />
     </ScrollView>
-    
+
     <TextView
         android:id="@+id/display_note_userinfo_alt"
         android:layout_width="match_parent"
@@ -40,18 +41,19 @@
         android:layout_alignBottom="@id/display_scroll_layout_alt"
         android:layout_alignLeft="@id/display_scroll_layout_alt"
         android:layout_alignRight="@id/display_scroll_layout_alt"
-        android:padding="5dp"
+        android:background="#F3F0EA"
         android:drawablePadding="5dp"
         android:gravity="center_vertical"
-        android:background="#F3F0EA"
+        android:padding="5dp"
+        android:textColor="#104E9B"
         android:textSize="12dp"
-        android:textStyle="italic"
-        android:textColor="#104E9B"/>
-    
+        android:textStyle="italic" />
+
     <View
         android:id="@+id/display_divider"
-		android:layout_width="match_parent"
-		android:layout_height="2dip"
-		android:layout_above="@id/display_note_userinfo_alt"
-		android:background="#FFFFFF" />
+        android:layout_width="match_parent"
+        android:layout_height="2dip"
+        android:layout_above="@id/display_note_userinfo_alt"
+        android:background="#FFFFFF" />
+
 </RelativeLayout>

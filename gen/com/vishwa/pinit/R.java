@@ -400,8 +400,7 @@ containing a value of this type.
         public static final int activity_signup=0x7f030008;
         public static final int balloon_infowindow=0x7f030009;
         public static final int balloon_infowindow_alt=0x7f03000a;
-        public static final int custom_spinner_item=0x7f03000b;
-        public static final int splash_screen=0x7f03000c;
+        public static final int splash_screen=0x7f03000b;
     }
     public static final class menu {
         public static final int main_action_bar=0x7f0c0000;
@@ -541,7 +540,7 @@ containing a value of this type.
         public static final int signup_confirm_password=0x7f080035;
         public static final int signup_password=0x7f080034;
         public static final int signup_pick_photo=0x7f080032;
-        /**  Signup Screen Strings  
+        /**  Signup Screen Strings 
          */
         public static final int signup_sign_up=0x7f080031;
         public static final int signup_username=0x7f080033;
@@ -570,9 +569,11 @@ containing a value of this type.
         public static final int AppTheme=0x7f0b0001;
         public static final int pinit_TextAppearance_Widget_DropDownItem=0x7f0b0004;
         public static final int pinit_Widget_DropDownItem_Spinner=0x7f0b0003;
-        /**      <style name="Theme.pinit" parent="android:Theme.Holo.Light.DarkActionBar">       
+        /** 
+         <style name="Theme.pinit" parent="android:Theme.Holo.Light.DarkActionBar">       
 	    <item name="android:actionBarWidgetTheme">@style/pinit.actionBarWidgetTheme</item>
-	</style> 
+	</style>
+    
          */
         public static final int pinit_actionBarWidgetTheme=0x7f0b0002;
     }

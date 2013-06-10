@@ -1,20 +1,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
-    
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-        
-        <TextView 
+        android:layout_height="wrap_content" >
+
+        <TextView
             android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_alignParentLeft="true"
-        	android:padding="15dp"
-        	android:textSize="20sp"
-        	android:textColor="#499FCF"
-        	android:text="@string/settings_settings" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:padding="15dp"
+            android:text="@string/settings_settings"
+            android:textColor="#499FCF"
+            android:textSize="20sp" />
 
         <ProgressBar
             android:id="@+id/settings_progressbar"
@@ -22,93 +22,92 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true" />
-        
     </RelativeLayout>
-    
-    <View 
+
+    <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#499FCF"/>
-    
-    <RelativeLayout 
+        android:background="#499FCF" />
+
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-        
-        <ProgressBar 
+        android:layout_height="wrap_content" >
+
+        <ProgressBar
             android:id="@+id/settings_photo_progressbar"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-     		android:layout_centerHorizontal="true"/>
-        
-	    <ImageView
-	        android:id="@+id/settings_photo"
-	        android:layout_width="100dp"
-	        android:layout_height="100dp"
-	        android:layout_marginTop="15dp"
-	        android:layout_centerHorizontal="true"
-	        android:src="@drawable/default_image_signup"/>
-	    
-	    <Button 
-	        android:id="@+id/settings_photo_button"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@id/settings_photo"
-	        android:layout_centerHorizontal="true"
-	        android:text="@string/settings_pick_photo"
-	        android:textColor="@android:color/black" />
-	    
-	    <EditText
-	        android:id="@+id/settings_email_field"
-	        android:inputType="textEmailAddress"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="16dp"
-	        android:layout_marginLeft="4dp"
-	        android:layout_marginRight="4dp"
-	        android:layout_marginBottom="4dp"
-	        android:layout_below="@id/settings_photo_button"
-	        android:singleLine="true"
-	        android:hint="@string/settings_email" />
-    
-	    <Button
-	        android:id="@+id/settings_reset_password_button"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@id/settings_email_field"
-	        android:layout_centerHorizontal="true"
-	        android:text="@string/settings_reset_password" />
-	    
-    </RelativeLayout>    
-        
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true" />
+
+        <ImageView
+            android:id="@+id/settings_photo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/default_image_signup" />
+
+        <Button
+            android:id="@+id/settings_photo_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/settings_photo"
+            android:layout_centerHorizontal="true"
+            android:text="@string/settings_pick_photo"
+            android:textColor="@android:color/black" />
+
+        <EditText
+            android:id="@+id/settings_email_field"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/settings_photo_button"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="16dp"
+            android:hint="@string/settings_email"
+            android:inputType="textEmailAddress"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/settings_reset_password_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/settings_email_field"
+            android:layout_centerHorizontal="true"
+            android:text="@string/settings_reset_password" />
+    </RelativeLayout>
+
     <View
-	    android:layout_width="fill_parent"
-	    android:layout_height="1dip"
-	    android:background="?android:attr/dividerVertical" />
-    
-    <LinearLayout 
-	    style="?android:attr/buttonBarStyle"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal"
-	    android:paddingTop="0dip"
-	    android:paddingLeft="2dip"
-	    android:paddingRight="2dip"
-	    android:measureWithLargestChild="true">
-		
-        <Button 
-	        android:id="@+id/settings_cancel_button"
-	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_width="0dip"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
-	        android:text="@string/cancel_string"/>
-        
-	    <Button 
-	        android:id="@+id/settings_save_button"
-	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_width="0dip"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
-	        android:text="@string/settings_save"/>
-	</LinearLayout>
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="?android:attr/dividerVertical" />
+
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:measureWithLargestChild="true"
+        android:orientation="horizontal"
+        android:paddingLeft="2dip"
+        android:paddingRight="2dip"
+        android:paddingTop="0dip" >
+
+        <Button
+            android:id="@+id/settings_cancel_button"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel_string" />
+
+        <Button
+            android:id="@+id/settings_save_button"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/settings_save" />
+    </LinearLayout>
+
 </LinearLayout>

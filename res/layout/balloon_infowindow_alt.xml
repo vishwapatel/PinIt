@@ -1,50 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content" 
-	android:layout_height="wrap_content"
-	android:orientation="vertical" 
-	android:paddingBottom="13dip"
-	android:id="@+id/balloon_main_layout"
-	android:background="@drawable/balloonbackground2"
-	android:paddingTop="2dip">
-	
+    android:id="@+id/balloon_main_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/balloonbackground2"
+    android:orientation="vertical"
+    android:paddingBottom="13dip"
+    android:paddingTop="2dip" >
+
     <LinearLayout
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-	    <TextView
-		    android:id="@+id/balloon_note_title_alt"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		   	android:layout_marginLeft="1dp"
-		   	android:paddingLeft="5dp"
-		   	android:paddingRight="5dp"
-		   	android:paddingBottom="5dp"
-		   	android:background="@drawable/balloon_title_background"
-		   	android:textColor="#104E9B"
-		   	android:singleLine="false"
-		   	android:textSize="22sp"
-		   	android:textStyle="bold"/>
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/balloon_note_title_alt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:background="@drawable/balloon_title_background"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:singleLine="false"
+            android:textColor="#104E9B"
+            android:textSize="22sp"
+            android:textStyle="bold" />
     </LinearLayout>
-   
+
     <TextView
         android:id="@+id/balloon_note_body_alt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
         android:ellipsize="end"
         android:maxLines="3"
+        android:paddingLeft="10dp"
         android:scrollHorizontally="true"
         android:textColor="@android:color/black"
         android:textSize="12dip" />
 
-    <TextView 
+    <TextView
         android:id="@+id/balloon_create_info_alt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
-        android:textStyle="italic"
-        android:textSize="12sp"/> 
+        android:textSize="12sp"
+        android:textStyle="italic" />
 
 </LinearLayout>

@@ -5,6 +5,7 @@
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
+
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -18,20 +19,22 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
-<!--     <style name="Theme.pinit" parent="android:Theme.Holo.Light.DarkActionBar">       
+    <!--
+         <style name="Theme.pinit" parent="android:Theme.Holo.Light.DarkActionBar">       
 	    <item name="android:actionBarWidgetTheme">@style/pinit.actionBarWidgetTheme</item>
-	</style> -->
-       
-    <style name="pinit.actionBarWidgetTheme" parent="@style/AppTheme">
-    	<item name="android:spinnerDropDownItemStyle">@style/pinit.Widget.DropDownItem.Spinner</item>
 	</style>
+    -->
 
-	<style name="pinit.Widget.DropDownItem.Spinner" parent="android:Widget.Holo.DropDownItem.Spinner">
-	    <item name="android:textAppearance">@style/pinit.TextAppearance.Widget.DropDownItem</item>
-	</style>
-	
-	<style name="pinit.TextAppearance.Widget.DropDownItem" parent="android:TextAppearance.Widget.DropDownItem">
-	    <item name="android:textColor">@android:color/white</item>
-	</style>
+    <style name="pinit.actionBarWidgetTheme" parent="@style/AppTheme">
+        <item name="android:spinnerDropDownItemStyle">@style/pinit.Widget.DropDownItem.Spinner</item>
+    </style>
+
+    <style name="pinit.Widget.DropDownItem.Spinner" parent="android:Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textAppearance">@style/pinit.TextAppearance.Widget.DropDownItem</item>
+    </style>
+
+    <style name="pinit.TextAppearance.Widget.DropDownItem" parent="android:TextAppearance.Widget.DropDownItem">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 
 </resources>

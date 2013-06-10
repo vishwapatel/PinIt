@@ -1,147 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" 
-    android:orientation="vertical">
-     
-	<RelativeLayout 
-		android:id="@+id/edit_note_contents_layout"
-	    android:orientation="vertical"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content">
-	
-		<EditText
-			android:id="@+id/edit_note_title"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:paddingLeft="10dp"
-	        android:paddingRight="30dp"
-	        android:paddingTop="10dp"
-	        android:paddingBottom="10dp"
-		    android:maxLength="80"
-	        android:textSize="22sp"
-	        android:textStyle="bold"
-	        android:background="#F3F0EA"
-	        android:textColor="#AA434343"
-	        android:hint="@string/create_note_enter_title"/>
-		
- 		<ProgressBar
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/edit_note_contents_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/edit_note_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F3F0EA"
+            android:hint="@string/create_note_enter_title"
+            android:maxLength="80"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="30dp"
+            android:paddingTop="10dp"
+            android:textColor="#AA434343"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <ProgressBar
             android:id="@+id/edit_note_progressbar"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_centerVertical="true"/>
- 		
- 		<View
-			android:layout_width="fill_parent"
-			android:layout_height="1dip"
-			android:background="?android:attr/dividerHorizontal" />
-		    
-    	<ScrollView 
-			android:orientation="vertical" 
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_below="@id/edit_note_title"
-			android:layout_marginBottom="67dp">
-					
-    	    <LinearLayout 
-    	        android:layout_width="match_parent"
-    	        android:layout_height="wrap_content"
-    	        android:orientation="vertical">	    
-		    
-				<EditText
-				    android:id="@+id/edit_note_body"
-				    android:layout_width="fill_parent"
-				    android:layout_height="200dp"
-				    android:paddingLeft="10dp"
-				    android:paddingRight="10dp"
-				    android:background="#FFFFFF"
-				    android:hint="@string/create_note_enter_body"/>
-			
-				<View
-				    android:layout_width="fill_parent"
-				    android:layout_height="1dip"
-				    android:background="?android:attr/dividerHorizontal" />
-			
-			    <RelativeLayout
-			        android:layout_width="fill_parent"
-			        android:layout_height="wrap_content"
-			        android:orientation="horizontal" >
-					
-			        <ProgressBar
-			            android:id="@+id/edit_note_photo_progressbar"
-			            android:layout_width="60dp"
-			            android:layout_height="60dp"
-			            android:layout_centerHorizontal="true"/>
-			        
-					<ImageView
-				        android:id="@+id/edit_note_photo" 
-				        android:layout_width="wrap_content" 
-				        android:layout_height="wrap_content"
-				        android:layout_margin="20dp"
-				        android:layout_centerHorizontal="true"
-				        android:src="@drawable/plus_sign"/>
-			
-					<ImageView 
-					    android:id="@+id/edit_note_photo_close_button"
-					    android:layout_width="25dp"
-					    android:layout_height="25dp" 
-					    android:layout_alignParentRight="true"
-					    android:layout_alignParentTop="true"
-					    android:visibility="invisible"
-					    android:src="@drawable/close_sign"/>
-					
-					<TextView
-					    android:id="@+id/edit_note_photo_change_text"
-					    android:layout_width="wrap_content"
-					    android:layout_height="wrap_content"
-					    android:layout_centerHorizontal="true"
-					    android:textColor="#AA434343"
-					    android:text="@string/edit_change_photo"/>
-				</RelativeLayout>
-				
-		    </LinearLayout>
-		</ScrollView>
-	</RelativeLayout>
-	
-	<RelativeLayout
-	    android:layout_alignParentBottom="true" 
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content">
+            android:layout_centerVertical="true" />
 
-		<LinearLayout
-		    android:id="@+id/edit_buttons_layout"
-		    android:layout_alignParentBottom="true"
-		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-		    android:orientation="horizontal" 
-		    style="?android:attr/buttonBarStyle">
-	
-		    <Button
-		        android:id="@+id/edit_note_cancel_button"
-		        style="?android:attr/buttonBarButtonStyle"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:background="#FFFFFF"
-		        android:layout_weight="0.5"
-		        android:text="@string/cancel_string" />
-		    
-			<Button
-			    android:id="@+id/edit_note_confirm_button"
-			    style="?android:attr/buttonBarButtonStyle"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:background="#FFFFFF"
-			    android:layout_weight="0.5"
-			    android:text="@string/edit_note_save" />
-	
-		</LinearLayout>
-		
-		<View
-		    android:layout_width="fill_parent"
-		    android:layout_height="1dip"
-		    android:layout_above="@id/edit_buttons_layout"
-		    android:background="?android:attr/dividerHorizontal" /> 
-	</RelativeLayout>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="?android:attr/dividerHorizontal" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edit_note_title"
+            android:layout_marginBottom="67dp"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <EditText
+                    android:id="@+id/edit_note_body"
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:background="#FFFFFF"
+                    android:hint="@string/create_note_enter_body"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:background="?android:attr/dividerHorizontal" />
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <ProgressBar
+                        android:id="@+id/edit_note_photo_progressbar"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_centerHorizontal="true" />
+
+                    <ImageView
+                        android:id="@+id/edit_note_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="20dp"
+                        android:src="@drawable/plus_sign" />
+
+                    <ImageView
+                        android:id="@+id/edit_note_photo_close_button"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:src="@drawable/close_sign"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:id="@+id/edit_note_photo_change_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/edit_change_photo"
+                        android:textColor="#AA434343" />
+                </RelativeLayout>
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <LinearLayout
+            android:id="@+id/edit_buttons_layout"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/edit_note_cancel_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:background="#FFFFFF"
+                android:text="@string/cancel_string" />
+
+            <Button
+                android:id="@+id/edit_note_confirm_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:background="#FFFFFF"
+                android:text="@string/edit_note_save" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_above="@id/edit_buttons_layout"
+            android:background="?android:attr/dividerHorizontal" />
+    </RelativeLayout>
+
 </RelativeLayout>
