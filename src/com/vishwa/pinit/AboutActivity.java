@@ -1,3 +1,20 @@
+/*
+ * Copyright 2013 Vishwa Patel
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License in the 'assets' directory of this 
+ * application or at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.vishwa.pinit;
 
 import android.app.Activity;
@@ -18,7 +35,7 @@ public class AboutActivity extends Activity {
     private Button mCloseButton;
 
     private String mAboutMe = "PinIt is developed and maintained by a swell fellow called Vishwa Patel. Yep, that's me up " +
-            "there. I'm a junior studying computer science at the University of Pennsylvania. I " +
+            "there. I'm a junior at the University of Pennsylvania studying computer science and theatre. I " +
             "enjoy developing beautiful apps and paying close attention to building a great user " +
             "experience. I also believe in open and free software. This is why PinIt is free and " +
             "completely open-source and you can find it's source code at www.github.com/vishwapatel/pinit \n" +
@@ -31,7 +48,9 @@ public class AboutActivity extends Activity {
             "area and the amazing food they serve or discovering where someone was born and grew up." +
             " These are all beautiful experiences and I wanted to capture them through PinIt. I've " +
             "loved building it and will continue to do so. I hope you love using it too! \n" +
-            "Feel free to reach out to me with feedback at vishwa@seas.upenn.edu";
+            "Feel free to reach out to me with feedback at vishwa@seas.upenn.edu \n" +
+            "Please note that the source code is released under Apache License 2.0, a copy of which is" +
+            "available in the assets directory of the source code and is also available at www.apache.org/licenses/LICENSE-2.0.html";
 
     private String mGoogleLicenseInfo = "Google Play Services are not available.";
     @Override

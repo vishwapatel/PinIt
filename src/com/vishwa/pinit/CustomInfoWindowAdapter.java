@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013 Vishwa Patel
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License in the 'assets' directory of this 
+ * application or at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.vishwa.pinit;
 
 import java.io.IOException;
@@ -15,7 +31,6 @@ import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -28,7 +43,6 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
     private ImageView notePhotoImageView;
     private TextView noteCreatedAtTextView;
     private View view;
-    private LinearLayout layout;
     private Context mContext;
 
     private Note note;
@@ -47,29 +61,6 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
         return null;
     }
 
-    class FetchImageTask extends AsyncTask<String, Void, Bitmap> {
-        @Override
-        protected Bitmap doInBackground(String... arg0) {
-            Bitmap notePhoto = null;
-            try {
-                if(arg0.equals(null) || arg0.equals(""))
-                {
-                    notePhotoImageView.setVisibility(ImageView.GONE);
-                    return null;
-                }
-                else
-                {
-                    notePhoto = BitmapFactory.decodeStream((InputStream) new URL(arg0[0]).getContent());
-                }
-            } catch (MalformedURLException e) {
-                return null;
-            } catch (IOException e) {
-                return null;
-            } 
-            return notePhoto;
-        }	
-    }
-
     @Override
     public View getInfoWindow(Marker marker){
 
@@ -86,7 +77,6 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
             notePhotoImageView = (ImageView) view.findViewById(R.id.balloon_note_image);
             notePhotoImageView.setAdjustViewBounds(true);
             noteCreatedAtTextView = (TextView) view.findViewById(R.id.balloon_create_info);
-            layout = (LinearLayout) view.findViewById(R.id.balloon_image_layout);
         }
         else {
             LayoutInflater inflater = (LayoutInflater) mContext.getApplicationContext()
@@ -96,7 +86,6 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
             noteTitleTextView = (TextView) view.findViewById(R.id.balloon_note_title_alt);
             noteBodyTextView = (TextView) view.findViewById(R.id.balloon_note_body_alt);
             noteCreatedAtTextView = (TextView) view.findViewById(R.id.balloon_create_info_alt);
-            layout = (LinearLayout) view.findViewById(R.id.balloon_image_layout);
         }
 
         noteTitleTextView.setText(note.getNoteTitle());
@@ -120,13 +109,11 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
                 if(result != null) {
                     notePhotoImageView.setImageBitmap(result);
                     notePhotoImageView.setVisibility(ImageView.VISIBLE);
-                    layout.setVisibility(LinearLayout.VISIBLE);
                 }
                 else {
                     result = fetchImageTask.execute(note.getNoteImageThumbnailUrl()).get();
                     notePhotoImageView.setImageBitmap(result);
                     notePhotoImageView.setVisibility(ImageView.VISIBLE);
-                    layout.setVisibility(LinearLayout.VISIBLE);
                     mMemoryCache.put(noteId, result);
                 }
             } catch (InterruptedException e) {
@@ -136,5 +123,28 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
             }
         }
         return view;
+    }
+    
+    class FetchImageTask extends AsyncTask<String, Void, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(String... arg0) {
+            Bitmap notePhoto = null;
+            try {
+                if(arg0.equals(null) || arg0.equals(""))
+                {
+                    notePhotoImageView.setVisibility(ImageView.GONE);
+                    return null;
+                }
+                else
+                {
+                    notePhoto = BitmapFactory.decodeStream((InputStream) new URL(arg0[0]).getContent());
+                }
+            } catch (MalformedURLException e) {
+                return null;
+            } catch (IOException e) {
+                return null;
+            } 
+            return notePhoto;
+        }   
     }
 }

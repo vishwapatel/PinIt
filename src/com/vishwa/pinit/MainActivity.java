@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013 Vishwa Patel
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License in the 'assets' directory of this 
+ * application or at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.vishwa.pinit;
 
 import java.io.ByteArrayOutputStream;
@@ -9,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import android.app.AlertDialog;
 import android.app.SearchManager;
@@ -29,7 +46,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.util.LruCache;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,6 +68,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.CancelableCallback;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
@@ -94,7 +111,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
     private GoogleMap mMap;
     private Menu mMenu;
     private MenuItem mSearchMenuItem;
-    protected static Marker mFocusedMarker;
+    protected static Marker mFocusedMarker = null;
     private Handler mHandler;
 
     private Bitmap mUserPhotoThumbnail;
@@ -147,6 +164,9 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         mFrameLayout.removeViewAt(1);
+                        if(PinItUtils.isUsersFirstLogin(mCurrentUsername, getApplicationContext())) {
+                            handleUsersFirstTime();
+                        }
                     }
                 });
                 mFrameLayout.getChildAt(1).startAnimation(fadeOutAnimation);
@@ -154,6 +174,8 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
 
         };
         mHandler.postDelayed(runnable, 2300);
+        
+        mCurrentUsername = ParseUser.getCurrentUser().getUsername();
 
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 
@@ -250,8 +272,6 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
         LoadCurrentUserPhotoTask loadUserPhotoTask = new LoadCurrentUserPhotoTask();
         loadUserPhotoTask.execute();
 
-        mCurrentUsername = ParseUser.getCurrentUser().getUsername();
-
         mMap.setOnCameraChangeListener(new OnCameraChangeListener() {
 
             @Override
@@ -306,11 +326,30 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                         LoadNotesTask currentUserNotesTask = new LoadNotesTask(tuple, false);
                         currentUserNotesTask.execute();
                     }
-                    Log.d("vishwa", "mMarkerlist Size: " + mMarkerList.size());
-                    Log.d("vishwa", "mNoteStore Size: " + mNoteStore.size());
                 }
             }
 
+        });
+    }
+    
+    private void handleUsersFirstTime() {
+        final String userTutorialInstruction1 = "You can tilt the map by using a two-finger up or down swipe. Try it!";
+        final String userTutorialInstruction2 = "Click on a map pin to open a note preview";
+        LatLng timesSquare = new LatLng(40.758582795476215, -73.98525886237621);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(timesSquare, 17.0f), 1500, new CancelableCallback() {
+            
+            @Override
+            public void onFinish() {
+               Toast.makeText(getApplicationContext(), userTutorialInstruction1, Toast.LENGTH_LONG).show();
+               Toast.makeText(getApplicationContext(), userTutorialInstruction1, Toast.LENGTH_LONG).show();
+               Toast.makeText(getApplicationContext(), userTutorialInstruction2, Toast.LENGTH_LONG).show();
+               PinItUtils.finishUsersFirstLogin(mCurrentUsername, getApplicationContext());
+            }
+            
+            @Override
+            public void onCancel() {
+               
+            }
         });
     }
 
@@ -318,6 +357,10 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
         if (mMap == null) {
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.main_map))
                     .getMap();
+            //The name is random
+            Random itsIstanbulNotConstantinople = new Random();
+            double longitude = itsIstanbulNotConstantinople.nextInt(360) - 180;
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(0,longitude)));
             if (mMap != null) {
                 setUpMap();
             }
@@ -390,7 +433,6 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                         }
                     }
                     else {
-                        Log.e("vishwa", "PARSE EXCEPTION (in loadImageTask): "+e.getMessage());
                         publishProgress(false);
                     }
                 }
@@ -478,7 +520,6 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                 return new ArrayList<ParseObject>();
 
             } catch (ParseException e) {
-                Log.e("vishwa", "PARSE EXCEPTION (in loadnotestask): "+e.getMessage());
                 errorMessage = e.getMessage();
                 return null;
             }
@@ -552,10 +593,18 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                 currentUserNotesTask.execute();
                 return;
             }
-
+            
+            if(PinItUtils.isUsersFirstNoteCreate(mCurrentUsername, getApplicationContext())) {
+                String userTutorialInstruction = "You can always edit your note by clicking on the pin " +
+                		"and then clicking the 'Edit' button in the menu above";
+                Toast.makeText(getApplicationContext(), userTutorialInstruction, Toast.LENGTH_LONG).show();
+                PinItUtils.finishUsersFirstNoteCreate(mCurrentUsername, getApplicationContext());
+            }
+            
             mMapEditMode = MapEditMode.DEFAULT_MODE;
             mMapViewMode = MapViewMode.YOUR_NOTES;
             mMenu.findItem(R.id.action_create_note).setVisible(true);
+            mMenu.findItem(R.id.action_cancel).setVisible(false);
 
             double latitude = Double.parseDouble(data.getStringExtra("geopoint").split(",")[0]);
             double longitude = Double.parseDouble(data.getStringExtra("geopoint").split(",")[1]);
@@ -574,10 +623,8 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
             if(resultCode == RESULT_OK) {
                 mFocusedMarker.hideInfoWindow();
                 Note editedNote = (Note) data.getExtras().getParcelable("note");
-                if(data.getBooleanExtra("wasPhotoChanged", false)) {
-                    mMemoryCache.remove(editedNote.getNoteId());
-                    mNoteStore.put(mFocusedMarker.getId(), editedNote);
-                }
+                mMemoryCache.remove(editedNote.getNoteId());
+                mNoteStore.put(mFocusedMarker.getId(), editedNote);
                 mFocusedMarker.showInfoWindow();
             }
             break;
@@ -701,9 +748,9 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
         LatLng geopoint = new LatLng(latitude, longitude);
 
         Marker newMarker = mMap.addMarker(new MarkerOptions()
-        .position(geopoint)
-        .draggable(false)
-        .icon(BitmapDescriptorFactory.fromBitmap(balloonBackground)));
+                .position(geopoint)
+                .draggable(false)
+                .icon(BitmapDescriptorFactory.fromBitmap(balloonBackground)));
 
         if(mNoteStore.get(newMarker.getId()) == null) {
             mNoteStore.put(newMarker.getId(), note);
@@ -713,18 +760,26 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                 if(mFocusedMarker != null) {
                     if(marker.getId() == mFocusedMarker.getId()) {
                         marker = mMarkerList.remove(1);
+                        Note removeNote = mNoteStore.remove(marker.getId());
+                        mReverseNoteStore.remove(removeNote.getNoteId());
+                        marker.remove();
+                    }
+                    else {
+                        marker = mMarkerList.remove(0);
+                        Note removeNote = mNoteStore.remove(marker.getId());
+                        mReverseNoteStore.remove(removeNote.getNoteId());
+                        marker.remove();
                     }
                 }
                 else {
+                    marker = mMarkerList.remove(0);
                     Note removeNote = mNoteStore.get(marker.getId());
                     mNoteStore.remove(marker.getId());
                     mReverseNoteStore.remove(removeNote.getNoteId());
                     marker.remove();
                 }
             }
-            else {
-                mMarkerList.add(newMarker);
-            }
+            mMarkerList.add(newMarker);
         }
     }
 
@@ -746,7 +801,8 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         mSearchView = (SearchView) mSearchMenuItem.getActionView();
         mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
+        mSearchView.setQueryHint("Search for locations...");
+        
         mSearchView.setOnSuggestionListener(new OnSuggestionListener() {
 
             @Override
@@ -842,7 +898,8 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
             break;
         case R.id.action_create_note:
             mMapEditMode = MapEditMode.CREATE_NOTE;
-            item.setVisible(false);
+            mMenu.findItem(R.id.action_create_note).setVisible(false);
+            hideNoteEditButtons();
             mMenu.findItem(R.id.action_cancel).setVisible(true).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
             Toast.makeText(getApplicationContext(), 
                     "Press and hold the location where you'd like to create a note", 
@@ -967,9 +1024,6 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                                                     hideNoteEditButtons();
                                                 }
                                             }
-                                            else {
-                                                Log.e("VishwaMainActivity", "Note deletion failed!");
-                                            }
                                         }
                                     });
                                 }
@@ -1081,9 +1135,14 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
     @Override
     public boolean onMarkerClick(final Marker marker) {
         if(mHasInternet) {
-            setProgressBarIndeterminateVisibility(true);
             mFocusedMarker = marker;
-
+            
+            if(PinItUtils.isUsersFirstMarkerClick(mCurrentUsername, getApplicationContext())) {
+                String userTutorialInstruction = "Now click on the window above the pin to view " +
+                		"the full note!";
+                Toast.makeText(getApplicationContext(), userTutorialInstruction, Toast.LENGTH_LONG).show();
+                PinItUtils.finishUsersFirstMarkerClick(mCurrentUsername, getApplicationContext());
+            }
             if(mNoteStore.get(marker.getId()).getNoteCreator().equals(mCurrentUsername)) {
                 if(!mMenu.findItem(R.id.action_save).isVisible()) {
                     mMenu.findItem(R.id.action_edit).setVisible(true);
@@ -1094,7 +1153,6 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
             }
 
             marker.showInfoWindow();
-            setProgressBarIndeterminateVisibility(false);
             LatLng markerGeoPoint = marker.getPosition();
             Point markerPoint = mMap.getProjection().toScreenLocation(markerGeoPoint);
             Point poinToMoveCameraTo = new Point(markerPoint.x, markerPoint.y - 160);
@@ -1117,7 +1175,13 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
 
     @Override
     public void onBackPressed() {
-        if(mFocusedMarker != null) {
+        if(mMapEditMode == MapEditMode.CREATE_NOTE) {
+            hideNoteEditButtons();
+            mMenu.findItem(R.id.action_create_note).setVisible(true);
+            mMenu.findItem(R.id.action_search).setVisible(true);
+            mMapEditMode = MapEditMode.DEFAULT_MODE;
+        }
+        else if(mFocusedMarker != null) {
             if(mFocusedMarker.isInfoWindowShown()) {
                 hideNoteEditButtons();
                 mFocusedMarker.hideInfoWindow();
