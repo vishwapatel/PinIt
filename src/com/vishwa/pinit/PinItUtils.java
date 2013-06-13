@@ -23,6 +23,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.ConnectivityManager;
@@ -88,6 +90,37 @@ public class PinItUtils {
         } catch (IOException e) {
             return new Matrix();
         }
+    }
+    
+    public static Bitmap decodeSampledBitmapFromFilePath(String filePath, int reqWidth, int reqHeight) {
+
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(filePath, options);
+    }
+    
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+    
+        if (height > reqHeight || width > reqWidth) {
+    
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+    
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+            inSampleSize = inSampleSize < 2 ? 2: inSampleSize;
+        }
+    
+        return inSampleSize;
     }
     
     public static boolean isUsersFirstLogin(String username, Context context) {

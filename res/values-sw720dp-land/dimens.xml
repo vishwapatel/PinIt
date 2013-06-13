@@ -5,5 +5,9 @@
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
     -->
     <dimen name="activity_horizontal_margin">128dp</dimen>
-
+	
+    <bool name="portrait_only">false</bool>
+	
+    <dimen name="balloon_min_width">400dp</dimen>
+    <dimen name="balloon_image_layout_width">150dp</dimen>
 </resources>

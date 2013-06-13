@@ -88,6 +88,18 @@
             android:background="@drawable/custom_login_button"
             android:text="@string/login_log_in"
             android:textColor="@android:color/white" />
+        
+        <Button
+            android:id="@+id/login_fb_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/custom_fb_login_button"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/login_button"
+            android:text="@string/login_fb_log_in"
+            android:drawableLeft="@drawable/fb_logo"
+            android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/signup_button"
@@ -95,7 +107,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="50dp"
             android:background="@drawable/custom_signup_button"
             android:text="@string/login_sign_up"
             android:textColor="@android:color/white" >

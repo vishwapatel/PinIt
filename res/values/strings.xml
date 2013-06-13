@@ -21,6 +21,7 @@
     <string name="login_enter_username">Enter Username</string>
     <string name="login_enter_password">Enter Password</string>
     <string name="login_log_in">Log In</string>
+    <string name="login_fb_log_in">Facebook Log In</string>
     <string name="login_sign_up">Sign Up!</string>
 
     <!-- Signup Screen Strings -->

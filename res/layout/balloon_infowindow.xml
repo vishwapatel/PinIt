@@ -20,7 +20,7 @@
 	android:layout_height="wrap_content"
 	android:orientation="vertical" 
 	android:paddingBottom="13dip"
-	android:minWidth="300dp"
+	android:minWidth="@dimen/balloon_min_width"
 	android:id="@+id/balloon_main_layout"
 	android:background="@drawable/balloonbackground2"
 	android:paddingTop="0dip">

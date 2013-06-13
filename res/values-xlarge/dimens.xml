@@ -6,5 +6,6 @@
     -->
     <bool name="portrait_only">false</bool>
 	
+    <dimen name="balloon_min_width">400dp</dimen>
     <dimen name="balloon_image_layout_width">150dp</dimen>
 </resources>

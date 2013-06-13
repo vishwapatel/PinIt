@@ -9,20 +9,17 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 <item android:state_focused="true" >
     <shape android:shape="rectangle">
         <solid
-            android:color="#2F89BB" />
+            android:color="#2D4486" />
         <stroke
             android:width="10dp"
-            android:color="#AA2F89BB" />
+            android:color="#AA2D4486" />
     </shape>
 </item>
 
 <item>        
     <shape>
-        <gradient
-            android:endColor="#2F89BB"
-            android:centerColor="#2F89BB"
-            android:startColor="#2F89BB"
-            android:angle="270" />
+        <solid
+            android:color="#2D4486" />
     </shape>
 </item>
 

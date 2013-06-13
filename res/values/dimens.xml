@@ -5,6 +5,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 	
     <dimen name="balloon_image_layout_width">100dp</dimen>
+    <dimen name="balloon_min_width">300dp</dimen>
     
     <bool name="portrait_only">true</bool>
 

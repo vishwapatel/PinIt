@@ -30,7 +30,6 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -60,7 +59,6 @@ public class SignupActivity extends Activity {
     private boolean mIsDefaultPhoto = true;
     private String mUsername;
 
-    private Bitmap mProfilePhoto;
     private Bitmap mProfilePhotoThumbnail;
 
     @Override
@@ -81,9 +79,9 @@ public class SignupActivity extends Activity {
         mProgressBar = (ProgressBar) findViewById(R.id.signup_progressBar);
 
         mProgressBar.setVisibility(View.INVISIBLE);
-
-        mProfilePhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_image);
-        mProfilePhotoThumbnail = ThumbnailUtils.extractThumbnail(mProfilePhoto, 100, 100);
+        
+        mProfilePhotoThumbnail = ThumbnailUtils.extractThumbnail(
+                BitmapFactory.decodeResource(getResources(), R.drawable.default_image), 100, 100);
 
         mProfilePhotoButton.setOnClickListener(new View.OnClickListener() {
 
@@ -239,26 +237,22 @@ public class SignupActivity extends Activity {
                 mIsDefaultPhoto = false;
                 photoUri = data.getData();
 
-                try {
-                    mProfilePhoto = 
-                            MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
-                    Matrix matrix = 
-                            PinItUtils.getRotationMatrixForImage(getApplicationContext(), photoUri);
+                String absolutePath = 
+                        PinItUtils.getAbsolutePathFromUri(getApplicationContext(), photoUri);
+                mProfilePhotoThumbnail = 
+                        PinItUtils.decodeSampledBitmapFromFilePath(absolutePath, 100, 100);
+                mProfilePhotoThumbnail = ThumbnailUtils.extractThumbnail(mProfilePhotoThumbnail, 100, 100);
+                Matrix matrix = 
+                        PinItUtils.getRotationMatrixForImage(getApplicationContext(), photoUri);
 
-                    mPhotoImageView.setAdjustViewBounds(true);
+                mPhotoImageView.setAdjustViewBounds(true);
 
-                    mProfilePhotoThumbnail = ThumbnailUtils.extractThumbnail(mProfilePhoto, 100, 100);
-                    mProfilePhoto.recycle();
-                    int profilePhotoThumbnailWidth = mProfilePhotoThumbnail.getWidth();
-                    int profilePhotoThumbnailHeight = mProfilePhotoThumbnail.getHeight();
-                    mProfilePhotoThumbnail = Bitmap.createBitmap(mProfilePhotoThumbnail, 0, 0, 
-                            profilePhotoThumbnailWidth, profilePhotoThumbnailHeight, matrix, true);
+                int profilePhotoThumbnailWidth = mProfilePhotoThumbnail.getWidth();
+                int profilePhotoThumbnailHeight = mProfilePhotoThumbnail.getHeight();
+                mProfilePhotoThumbnail = Bitmap.createBitmap(mProfilePhotoThumbnail, 0, 0, 
+                        profilePhotoThumbnailWidth, profilePhotoThumbnailHeight, matrix, true);
 
-                    mPhotoImageView.setImageBitmap(mProfilePhotoThumbnail);
-                } catch (IOException e) {
-                    PinItUtils.createAlert("This is embarrassing", 
-                            "Try choosing a photo again!", SignupActivity.this);
-                }	
+                mPhotoImageView.setImageBitmap(mProfilePhotoThumbnail);
             }
             break;
         }
@@ -276,10 +270,6 @@ public class SignupActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        if(mProfilePhoto != null) {
-            mProfilePhoto.recycle();
-            mProfilePhoto = null;
-        }
         if(mProfilePhotoThumbnail != null) {
             mProfilePhotoThumbnail.recycle();
             mProfilePhotoThumbnail = null;  

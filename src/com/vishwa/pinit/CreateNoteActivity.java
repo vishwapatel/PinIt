@@ -17,7 +17,6 @@
 package com.vishwa.pinit;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -25,7 +24,6 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -234,18 +232,29 @@ public class CreateNoteActivity extends Activity {
         switch (requestCode) {
         case REQUEST_CODE_PHOTO_SELECT:
             if (resultCode == Activity.RESULT_OK) {
+                if(mNotePhoto != null) {
+                    mNotePhoto.recycle();
+                    mNotePhoto = null;
+                }
+                if(mNotePhotoThumbnail != null) {
+                    mNotePhotoThumbnail.recycle();
+                    mNotePhotoThumbnail = null;
+                }
+                
                 photoUri = data.getData();
-                try {
-                    mNotePhoto = MediaStore.Images.Media.getBitmap
-                            (this.getContentResolver(), photoUri);
-                    Matrix matrix = 
-                            PinItUtils.getRotationMatrixForImage(getApplicationContext(), photoUri);
-                    mNotePhotoImageView.setAdjustViewBounds(true);
+                String absolutePath = 
+                        PinItUtils.getAbsolutePathFromUri(getApplicationContext(), photoUri);
+                mNotePhoto = PinItUtils.decodeSampledBitmapFromFilePath(absolutePath, 700, 700);
 
-                    mNotePhoto = Bitmap.createScaledBitmap(mNotePhoto, mNotePhoto.getWidth()/2, mNotePhoto.getHeight()/2, true);
-                    mNotePhoto = Bitmap.createBitmap(mNotePhoto, 0, 0, mNotePhoto.getWidth(), mNotePhoto.getHeight(), matrix, true);
+                Matrix matrix = 
+                        PinItUtils.getRotationMatrixForImage(getApplicationContext(), photoUri);
+                mNotePhotoImageView.setAdjustViewBounds(true);
 
-                    mNotePhotoThumbnail = Bitmap.createScaledBitmap(mNotePhoto, mNotePhoto.getWidth()/6, mNotePhoto.getHeight()/6, true);
+                if(matrix != null && mNotePhoto != null) {
+                    mNotePhoto = Bitmap.createBitmap(
+                            mNotePhoto, 0, 0, mNotePhoto.getWidth(), mNotePhoto.getHeight(), matrix, true);
+                    mNotePhotoThumbnail = Bitmap.createScaledBitmap(
+                            mNotePhoto, mNotePhoto.getWidth()/5, mNotePhoto.getHeight()/5, true);
 
                     mNotePhotoImageView.setImageBitmap(mNotePhoto);
 
@@ -254,24 +263,27 @@ public class CreateNoteActivity extends Activity {
 
                         @Override
                         public void onClick(View v) {
-                            mNotePhoto = null;
-                            mNotePhotoThumbnail = null;
+                            recycleAllBitmaps();
                             mNotePhotoImageView.setImageDrawable(
                                     getResources().getDrawable(R.drawable.plus_sign));
                             mNotePhotoCloseImageView.setVisibility(View.INVISIBLE);
                         }
-                    });
-                } catch (IOException e) {
-                    PinItUtils.createAlert("Something's gone wrong", "Trying choosing a photo again!",
-                            CreateNoteActivity.this);
-                }	
+                    }); 
+                }
+                else {
+                    PinItUtils.createAlert("This is embarrassing", "We couldn't load that image please try" +
+                    		" another image", CreateNoteActivity.this);
+                    recycleAllBitmaps();
+                    mNotePhotoImageView.setImageDrawable(
+                            getResources().getDrawable(R.drawable.plus_sign));
+                    mNotePhotoCloseImageView.setVisibility(View.INVISIBLE);
+                }
             }
             break;
         }
     }
-
-    @Override
-    protected void onDestroy() {
+    
+    public void recycleAllBitmaps() {
         if(mNotePhoto != null) {
             mNotePhoto.recycle();
             mNotePhoto = null;
@@ -280,6 +292,11 @@ public class CreateNoteActivity extends Activity {
             mNotePhotoThumbnail.recycle();
             mNotePhotoThumbnail = null;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        recycleAllBitmaps();
         super.onDestroy();
     }
 

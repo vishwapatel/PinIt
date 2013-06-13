@@ -343,6 +343,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                Toast.makeText(getApplicationContext(), userTutorialInstruction1, Toast.LENGTH_LONG).show();
                Toast.makeText(getApplicationContext(), userTutorialInstruction1, Toast.LENGTH_LONG).show();
                Toast.makeText(getApplicationContext(), userTutorialInstruction2, Toast.LENGTH_LONG).show();
+               Toast.makeText(getApplicationContext(), userTutorialInstruction2, Toast.LENGTH_LONG).show();
                PinItUtils.finishUsersFirstLogin(mCurrentUsername, getApplicationContext());
             }
             
@@ -584,6 +585,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                 mMapEditMode = MapEditMode.DEFAULT_MODE;
                 mMapViewMode = MapViewMode.YOUR_NOTES;
                 mMenu.findItem(R.id.action_create_note).setVisible(true);
+                mMenu.findItem(R.id.action_cancel).setVisible(false);
 
                 LatLngBounds mapBounds = mMap.getProjection().getVisibleRegion().latLngBounds;	
                 LatLng southwest = mapBounds.southwest;
@@ -1175,6 +1177,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
 
     @Override
     public void onBackPressed() {
+        mMenu.findItem(R.id.action_cancel).setVisible(false);
         if(mMapEditMode == MapEditMode.CREATE_NOTE) {
             hideNoteEditButtons();
             mMenu.findItem(R.id.action_create_note).setVisible(true);
