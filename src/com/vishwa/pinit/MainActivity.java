@@ -509,10 +509,14 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                             new ParseGeoPoint(southwest.latitude, -179.9), 
                             new ParseGeoPoint(northeast.latitude, northeast.longitude));
                     postIDLineQuery.setLimit(5);
-                    List<ParseObject> preIDLineNotes = query.find();
-                    List<ParseObject> postIDLineNotes = postIDLineQuery.find();
-                    preIDLineNotes.addAll(postIDLineNotes);
-                    return preIDLineNotes;
+                    
+                    List<ParseQuery> queryList = new ArrayList<ParseQuery>(2);
+                    queryList.add(query);
+                    queryList.add(postIDLineQuery);
+                    
+                    ParseQuery combinedOrQuery = ParseQuery.or(queryList);
+                    List<ParseObject> resultList = combinedOrQuery.find();
+                    return resultList;
                 }
                 else if(!isProximateToIDLine){
                     query.whereWithinGeoBox("geopoint", 
