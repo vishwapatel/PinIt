@@ -102,6 +102,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
     public static final int REQUEST_CODE_DISPLAY_NOTE = 103;
     public static final int REQUEST_CODE_EDIT_NOTE = 104;
     public static final int REQUEST_CODE_CHANGE_SETTINGS = 105;
+    public static final boolean DEBUG = true;
 
     private Button mAllNotesButton;
     private Button mYourNotesButton;
@@ -165,7 +166,10 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                     public void onAnimationEnd(Animation animation) {
                         mFrameLayout.removeViewAt(1);
                         if(PinItUtils.isUsersFirstLogin(mCurrentUsername, getApplicationContext())) {
-                            handleUsersFirstTime();
+                            
+                            if(!DEBUG) {
+                             handleUsersFirstTime();
+                            }
                         }
                     }
                 });
@@ -822,11 +826,11 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                                 Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(mSearchView.getWindowToken(), 0);
                         mSearchMenuItem.collapseActionView();
-                        String geoLocation = cursor.getString(
+                        String geolocation = cursor.getString(
                                 cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID));
-                        if(!geoLocation.isEmpty()) {
-                            double latitude = Double.parseDouble(geoLocation.split(",")[0]);
-                            double longitude = Double.parseDouble(geoLocation.split(",")[1]);
+                        if(geolocation != null && !geolocation.isEmpty()) {
+                            double latitude = Double.parseDouble(geolocation.split(",")[0]);
+                            double longitude = Double.parseDouble(geolocation.split(",")[1]);
                             LatLng geopoint = new LatLng(latitude, longitude);
                             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
                                     new CameraPosition(geopoint, 17, 0, 0)));
@@ -849,11 +853,11 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                                 Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(mSearchView.getWindowToken(), 0);
                         mSearchMenuItem.collapseActionView();
-                        String geoLocation = cursor.getString(
+                        String geolocation = cursor.getString(
                                 cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID));
-                        if(!geoLocation.isEmpty()) {
-                            double latitude = Double.parseDouble(geoLocation.split(",")[0]);
-                            double longitude = Double.parseDouble(geoLocation.split(",")[1]);
+                        if(geolocation != null && !geolocation.isEmpty()) {
+                            double latitude = Double.parseDouble(geolocation.split(",")[0]);
+                            double longitude = Double.parseDouble(geolocation.split(",")[1]);
                             LatLng geopoint = new LatLng(latitude, longitude);
                             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
                                     new CameraPosition(geopoint, 17, 0, 0)));

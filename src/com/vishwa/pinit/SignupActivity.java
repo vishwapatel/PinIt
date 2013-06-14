@@ -215,8 +215,8 @@ public class SignupActivity extends Activity {
                     outputStream.close();
                 }
                 catch (IOException e) {
-                    PinItUtils.createAlert("This is embarrassing", 
-                            "Something's gone wrong, try signing up again.", SignupActivity.this);
+                    //We can fail silently here because this was simply a cache update, the app is
+                    //built to be resilient to cache misses and fetch the data from Parse when that happens
                 }
             }
             return null;

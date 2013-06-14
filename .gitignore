@@ -1,5 +1,6 @@
 src/com/vishwa/pinit/Constants.java
 res/values/map_key.xml
+res/values/fb_app_id.xml
 
 # built application files
 *.apk

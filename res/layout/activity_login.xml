@@ -102,7 +102,7 @@
             android:textColor="@android:color/white" />
 
         <Button
-            android:id="@+id/signup_button"
+            android:id="@+id/login_signup_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

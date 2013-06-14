@@ -77,6 +77,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginTop="16dp"
         android:hint="@string/signup_username"
+        android:maxLength="20"
         android:singleLine="true" />
 
     <EditText

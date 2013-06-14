@@ -17,6 +17,7 @@
 package com.vishwa.pinit;
 
 import com.parse.Parse;
+import com.parse.ParseFacebookUtils;
 
 import android.app.Application;
 import android.view.ViewConfiguration;
@@ -30,6 +31,7 @@ public class PinItApplication extends Application {
         super.onCreate();
 
         Parse.initialize(this, Constants.PARSE_APP_ID, Constants.PARSE_CLIENT_KEY); 
+        ParseFacebookUtils.initialize(Constants.FACEBOOK_APP_ID);
 
         try {
             ViewConfiguration config = ViewConfiguration.get(this);
