@@ -7,6 +7,10 @@
     <dimen name="balloon_image_layout_width">100dp</dimen>
     <dimen name="balloon_min_width">300dp</dimen>
     
+    <dimen name="display_note_userinfo_layout_height">70dp</dimen>
+    <dimen name="display_note_action_buttons_height">30dp</dimen>
+    <dimen name="display_user_photo_radius">27dp</dimen>
+    
     <bool name="portrait_only">true</bool>
 
 </resources>

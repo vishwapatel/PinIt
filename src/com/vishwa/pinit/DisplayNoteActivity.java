@@ -15,52 +15,68 @@
  * limitations under the License.
  */
 package com.vishwa.pinit;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.CountCallback;
+import com.parse.DeleteCallback;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 
 public class DisplayNoteActivity extends Activity {
 
+    public final static String NOTE_LOAD_ERROR = "Sorry, this note couldn't be loaded. It might " +
+            "have been deleted by it's creator";
+    
     private ImageView mNotePhotoImageView;
     private TextView mNoteTitle;
     private TextView mNoteTitleAlt;
     private TextView mNoteBody;
     private TextView mNoteBodyAlt;
+    private TextView mLikesAndCommentsInfo;
     private TextView mNoteCreatedInfo;
+    private ImageButton mLikeButton;
+    private ImageButton mCommentButton;
     private ProgressBar mProgressBar;
+    private RelativeLayout mUserInfoLayout;
     private ScrollView mScrollView;
 
     private Bitmap mNotePhoto = null;
-
+    
+    private ParseObject mParseNote;
     private Note mNote;
-
-    public final static String NOTE_LOAD_ERROR = "Sorry, this note couldn't be loaded. It might " +
-            "have been deleted by it's creator";
+    private boolean mUserLikesNote = false;
+    private int mNoteLikesCount = 0;
+    private int mNoteCommentsCount = 0;
+    private List<ParseObject> mLikesList = new ArrayList<ParseObject>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +86,19 @@ public class DisplayNoteActivity extends Activity {
 
         mNote = (Note) getIntent().getExtras().getParcelable("note");
         byte[] array = getIntent().getByteArrayExtra("userPhoto");
-        Bitmap bitmap = getCroppedBitmap(BitmapFactory.decodeByteArray(array, 0, array.length));
-        Bitmap userPhoto = Bitmap.createScaledBitmap(bitmap, 40, 40, true);
-        bitmap.recycle();
-        Drawable userPhotoDrawable = new BitmapDrawable(getResources(), userPhoto);
+        Bitmap userPhoto = Bitmap.createScaledBitmap(
+                BitmapFactory.decodeByteArray(array, 0, array.length), 
+                (int) getResources().getDimension(R.dimen.display_user_photo_radius), 
+                (int) getResources().getDimension(R.dimen.display_user_photo_radius), 
+                true);
+        Bitmap frame = BitmapFactory.decodeResource(getResources(), R.drawable.circular_frame);
+        frame = Bitmap.createScaledBitmap(frame, 
+                (int) getResources().getDimension(R.dimen.display_user_photo_radius), 
+                (int) getResources().getDimension(R.dimen.display_user_photo_radius), 
+                true);
+        Canvas canvas = new Canvas(userPhoto);
+        canvas.drawBitmap(frame, 0.0f, 0.0f, null);
+        BitmapDrawable userPhotoDrawable = new BitmapDrawable(getResources(), userPhoto);
 
         if(mNote.getNoteImageThumbnailUrl().isEmpty()) {
             setContentView(R.layout.activity_display_note_alt);
@@ -103,21 +128,140 @@ public class DisplayNoteActivity extends Activity {
             mNoteBody = (TextView) findViewById(R.id.display_note_body);
             mNoteTitle = (TextView) findViewById(R.id.display_note_title);
             mNoteCreatedInfo = (TextView) findViewById(R.id.display_note_userinfo);
+            mLikeButton = (ImageButton) findViewById(R.id.display_note_like);
+            mCommentButton = (ImageButton) findViewById(R.id.display_note_comment);
+            mLikesAndCommentsInfo = (TextView) findViewById(R.id.display_note_likes_comments_button);
+            mUserInfoLayout = (RelativeLayout) findViewById(R.id.display_note_userinfo_layout);
             mScrollView = (ScrollView) findViewById(R.id.display_scroll_layout);
             mNoteCreatedInfo.setCompoundDrawablesWithIntrinsicBounds(userPhotoDrawable, null, null, null);
 
             mNotePhotoImageView.setVisibility(ImageView.GONE);
             mNoteTitle.setVisibility(TextView.GONE);
             mNoteBody.setVisibility(TextView.GONE);
-            mNoteCreatedInfo.setVisibility(TextView.GONE);
-
+            mLikesAndCommentsInfo.setVisibility(TextView.GONE);
+            mUserInfoLayout.setVisibility(RelativeLayout.GONE);
+            
             ParseQuery query = new ParseQuery("Note");
             query.getInBackground(mNote.getNoteId(), new GetCallback() {
 
                 @Override
-                public void done(ParseObject object, ParseException e) {
+                public void done(final ParseObject object, ParseException e) {
                     if(e == null) {
-                        ParseFile notePhotoFile = object.getParseFile("notePhoto");
+                        mParseNote = object;
+                        
+                        ParseQuery query = new ParseQuery("Like");
+                        query.whereEqualTo("creator", ParseUser.getCurrentUser().getUsername());
+                        query.whereEqualTo("noteId", mParseNote.getObjectId());
+                        query.getFirstInBackground(new GetCallback() {
+                            
+                            @Override
+                            public void done(ParseObject object, ParseException e) {
+                                if(e == null && object != null) {
+                                    mUserLikesNote = true;
+                                    mLikeButton.setImageResource(R.drawable.heart_red);
+                                }
+                                else if(object == null) {
+                                    mUserLikesNote = false;
+                                    mLikeButton.setImageResource(R.drawable.heart);
+                                }
+                            }
+                        });
+                        
+                        ParseQuery likesCountQuery = mParseNote.getRelation("likes").getQuery();
+                        likesCountQuery.countInBackground(new CountCallback() {
+                            
+                            @Override
+                            public void done(int count, ParseException e) {
+                                if(e == null) {
+                                    mNoteLikesCount = count;
+                                    ParseQuery commentsCountQuery = mParseNote.getRelation("comments").getQuery();
+                                    commentsCountQuery.countInBackground(new CountCallback() {
+                                        
+                                        @Override
+                                        public void done(int count, ParseException e) {
+                                            if(e == null) {
+                                                mNoteCommentsCount = count;
+                                                updateLikesAndCommentsSize();
+                                                mLikesAndCommentsInfo.setVisibility(TextView.VISIBLE);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                        
+                        mLikeButton.setOnClickListener(new OnClickListener() {
+                            
+                            @Override
+                            public void onClick(View v) {
+                                if(mUserLikesNote) {
+                                    mUserLikesNote = false;
+                                    mLikeButton.setImageResource(R.drawable.heart);
+                                    mLikeButton.setEnabled(false);
+                                    mNoteLikesCount--;
+                                    updateLikesAndCommentsSize();
+                                    final ParseRelation relation = mParseNote.getRelation("likes");
+                                    ParseQuery query = new ParseQuery("Like");
+                                    query.whereEqualTo("creator", ParseUser.getCurrentUser().getUsername());
+                                    query.whereEqualTo("noteId", mParseNote.getObjectId());
+                                    query.getFirstInBackground(new GetCallback() {
+                                        
+                                        @Override
+                                        public void done(final ParseObject object, ParseException e) {
+                                            if(e == null) {
+                                                relation.remove(object);
+                                                mParseNote.saveInBackground(new SaveCallback() {
+                                                    
+                                                    @Override
+                                                    public void done(ParseException e) {
+                                                        if(e == null) {
+                                                            object.deleteInBackground(new DeleteCallback() {
+                                                                
+                                                                @Override
+                                                                public void done(ParseException e) {
+                                                                    if(e == null) {
+                                                                        mLikeButton.setEnabled(true);
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                                else {
+                                    mUserLikesNote = true;
+                                    mLikeButton.setImageResource(R.drawable.heart_red);
+                                    mLikeButton.setEnabled(false);
+                                    mNoteLikesCount++;
+                                    updateLikesAndCommentsSize();
+                                    final ParseRelation relation = mParseNote.getRelation("likes");
+                                    final ParseObject like = new ParseObject("Like");
+                                    like.put("creator", ParseUser.getCurrentUser().getUsername());
+                                    like.put("noteId", mParseNote.getObjectId());
+                                    like.saveInBackground(new SaveCallback() {
+                                        
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if(e == null) {
+                                                relation.add(like);
+                                                mParseNote.saveInBackground(new SaveCallback() {
+                                                    
+                                                    @Override
+                                                    public void done(ParseException e) {
+                                                        mLikeButton.setEnabled(true);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                        
+                        ParseFile notePhotoFile = mParseNote.getParseFile("notePhoto");
                         mProgressBar.setVisibility(ProgressBar.VISIBLE);
                         notePhotoFile.getDataInBackground(new GetDataCallback() {
 
@@ -134,7 +278,7 @@ public class DisplayNoteActivity extends Activity {
                                             " on "+mNote.getNoteCreatedAt());
                                     mNotePhotoImageView.setVisibility(ImageView.VISIBLE);
                                     mNoteTitle.setVisibility(TextView.VISIBLE);
-                                    mNoteCreatedInfo.setVisibility(TextView.VISIBLE);
+                                    mUserInfoLayout.setVisibility(RelativeLayout.VISIBLE);
                                     if(!mNote.getNoteBody().isEmpty()) {
                                         mNoteBody.setText(mNote.getNoteBody());
                                         mNoteBody.setVisibility(TextView.VISIBLE);
@@ -168,23 +312,42 @@ public class DisplayNoteActivity extends Activity {
             });
         }
     }
-
-
-    private Bitmap getCroppedBitmap(Bitmap bitmap) {
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 2, paint);
-        paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        return output;
+    
+    private void updateLikesAndCommentsSize() {
+        if(mNoteCommentsCount == 0 && mNoteLikesCount == 0) {
+            mLikesAndCommentsInfo.setText("Be the first to like this!");
+        }
+        else if(mNoteCommentsCount == 0) {
+            if(mNoteLikesCount == 1) {
+                mLikesAndCommentsInfo.setText("1 Like \u00b7");
+            }
+            else {
+                mLikesAndCommentsInfo.setText(String.format("%d Likes", mNoteLikesCount));
+            }
+        }
+        else if(mNoteLikesCount == 0) {
+            if(mNoteCommentsCount == 1) {
+                mLikesAndCommentsInfo.setText("1 Comment");
+            }
+            else {
+                mLikesAndCommentsInfo.setText(String.format("%d Comments", mNoteCommentsCount));
+            }
+        }
+        else {
+            if(mNoteLikesCount == 1 && mNoteCommentsCount == 1) {
+                mLikesAndCommentsInfo.setText("1 Like \u00b7 1 Comment");
+            }
+            else if(mNoteLikesCount == 1) {
+                mLikesAndCommentsInfo.setText(String.format("1 Like \u00b7 %d Comments", mNoteCommentsCount));
+            }
+            else if(mNoteCommentsCount == 1) {
+                mLikesAndCommentsInfo.setText(String.format("%d Likes \u00b7 1 Comments", mNoteLikesCount));
+            }
+            else {
+                mLikesAndCommentsInfo.setText(
+                        String.format("%d Likes \u00b7 %d Comments", mNoteLikesCount, mNoteCommentsCount));
+            }
+        }
     }
 
     @Override

@@ -87,10 +87,12 @@ import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.ParseQuery.CachePolicy;
@@ -364,7 +366,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                     .getMap();
             //The name is random
             Random itsIstanbulNotConstantinople = new Random();
-            double longitude = itsIstanbulNotConstantinople.nextInt(360) - 180;
+            double longitude = itsIstanbulNotConstantinople.nextInt(359) - 179;
             mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(0,longitude)));
             if (mMap != null) {
                 setUpMap();
@@ -683,12 +685,12 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                     ParseQuery query = ParseUser.getQuery();
                     query.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
                     query.whereEqualTo("username", note.getNoteCreator());
-                    query.findInBackground(new FindCallback() {
-
+                    query.getFirstInBackground(new GetCallback() {
+                        
                         @Override
-                        public void done(List<ParseObject> objects, ParseException e) {
+                        public void done(ParseObject object, ParseException e) {
                             if(e == null) {
-                                ParseObject noteCreator = objects.get(0);
+                                ParseObject noteCreator = object;
                                 if(noteCreator.getBoolean("isDefaultPhoto")) {
                                     Bitmap balloonBackground = BitmapFactory.decodeResource(
                                             getResources(), R.drawable.balloon_background);
@@ -912,6 +914,9 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                     Toast.LENGTH_SHORT).show();
             break;
         case R.id.action_logout:
+            if(ParseFacebookUtils.getSession() != null) {
+                ParseFacebookUtils.getSession().closeAndClearTokenInformation();
+            }
             ParseUser.logOut();
             finish();
             break;
@@ -1181,18 +1186,23 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
 
     @Override
     public void onBackPressed() {
-        mMenu.findItem(R.id.action_cancel).setVisible(false);
-        if(mMapEditMode == MapEditMode.CREATE_NOTE) {
-            hideNoteEditButtons();
-            mMenu.findItem(R.id.action_create_note).setVisible(true);
-            mMenu.findItem(R.id.action_search).setVisible(true);
-            mMapEditMode = MapEditMode.DEFAULT_MODE;
-        }
-        else if(mFocusedMarker != null) {
-            if(mFocusedMarker.isInfoWindowShown()) {
+        if(mMenu != null) {
+            mMenu.findItem(R.id.action_cancel).setVisible(false);
+            if(mMapEditMode == MapEditMode.CREATE_NOTE) {
                 hideNoteEditButtons();
-                mFocusedMarker.hideInfoWindow();
-                mFocusedMarker = null;
+                mMenu.findItem(R.id.action_create_note).setVisible(true);
+                mMenu.findItem(R.id.action_search).setVisible(true);
+                mMapEditMode = MapEditMode.DEFAULT_MODE;
+            }
+            else if(mFocusedMarker != null) {
+                if(mFocusedMarker.isInfoWindowShown()) {
+                    hideNoteEditButtons();
+                    mFocusedMarker.hideInfoWindow();
+                    mFocusedMarker = null;
+                }
+            }
+            else {
+                super.onBackPressed();
             }
         }
         else {

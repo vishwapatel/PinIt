@@ -185,6 +185,7 @@ public class CreateNoteActivity extends Activity {
         }
         ParseACL noteAcl = new ParseACL(ParseUser.getCurrentUser());
         noteAcl.setPublicReadAccess(true);
+        noteAcl.setPublicWriteAccess(true);
         mNote.setACL(noteAcl);
         mNote.saveInBackground(new SaveCallback() {
 

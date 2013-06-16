@@ -39,6 +39,9 @@
     <string name="create_note_enter_title">Enter a Note Title</string>
     <string name="create_note_enter_body">Enter Note Details</string>
     <string name="create_note_share">Share</string>
+    
+    <!-- Display Note Screen Strings -->
+    <string name="display_note_be_the_first">Be the first to like this!</string>
 
     <!-- Edit Note Screen Strings -->
     <string name="edit_note_save">Save Changes</string>

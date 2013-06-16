@@ -114,7 +114,9 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
                     result = fetchImageTask.execute(note.getNoteImageThumbnailUrl()).get();
                     notePhotoImageView.setImageBitmap(result);
                     notePhotoImageView.setVisibility(ImageView.VISIBLE);
-                    mMemoryCache.put(noteId, result);
+                    if(noteId != null && result != null) {
+                        mMemoryCache.put(noteId, result);
+                    }
                 }
             } catch (InterruptedException e) {
                 return null;

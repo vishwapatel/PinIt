@@ -20,12 +20,19 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
+    
+    <ProgressBar
+        android:id="@+id/display_note_progressbar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 
     <ScrollView
         android:id="@+id/display_scroll_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="40dp" >
+        android:paddingBottom="@dimen/display_note_userinfo_layout_height" >
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -36,13 +43,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
             </ImageView>
-
-            <ProgressBar
-                android:id="@+id/display_note_progressbar"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
 
             <TextView
                 android:id="@+id/display_note_body"
@@ -57,7 +57,21 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:textIsSelectable="true"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
+            
+            <TextView
+                android:id="@+id/display_note_likes_comments_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/display_note_photo"
+                android:layout_alignLeft="@id/display_note_photo"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="5dp"
+                android:padding="5dp"
+                android:background="#7f000000"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:text="@string/display_note_be_the_first"/>
         </RelativeLayout>
     </ScrollView>
 
@@ -75,20 +89,58 @@
         android:textColor="#FFFFFF"
         android:textSize="20dp"
         android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/display_note_userinfo"
+    
+    <RelativeLayout
+        android:id="@+id/display_note_userinfo_layout"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/display_note_userinfo_layout_height"
         android:layout_alignBottom="@id/display_scroll_layout"
         android:layout_alignLeft="@id/display_scroll_layout"
         android:layout_alignRight="@id/display_scroll_layout"
         android:background="#F3F0EA"
-        android:drawablePadding="5dp"
-        android:gravity="center_vertical"
-        android:paddingLeft="5dp"
-        android:textColor="#104E9B"
-        android:textSize="12dp"
-        android:textStyle="italic" />
+        android:padding="5dp">
+       
+	    <TextView
+	        android:id="@+id/display_note_userinfo"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:background="#F3F0EA"
+	        android:drawablePadding="5dp"
+	        android:gravity="center_vertical"
+	        android:textColor="#104E9B"
+	        android:textSize="12dp"
+	        android:textStyle="italic" />
+	    
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/display_note_action_buttons_height"
+	        android:layout_below="@id/display_note_userinfo" 
+	        android:layout_marginTop="5dp"
+	        android:orientation="horizontal">
+
+		    <ImageButton
+		        android:id="@+id/display_note_like"
+		        android:layout_width="wrap_content"
+		        android:layout_height="match_parent"
+		        android:layout_weight="1"
+		        android:background="@drawable/like_button"
+		        android:src="@drawable/heart" />
+		    
+		    <View 
+		        android:layout_width="1dp"
+		        android:layout_height="match_parent"
+		        android:background="#D8D8D8"/>
+		    
+	    	<ImageButton
+		        android:id="@+id/display_note_comment"
+		        android:layout_width="wrap_content"
+		        android:layout_height="match_parent"
+		        android:layout_weight="1"
+		        android:background="@drawable/comment_button"
+		        android:src="@drawable/comment" />
+	    </LinearLayout>
+	    
+	</RelativeLayout>
 
 </RelativeLayout>

@@ -8,4 +8,8 @@
 	
     <dimen name="balloon_min_width">400dp</dimen>
     <dimen name="balloon_image_layout_width">150dp</dimen>
+    
+    <dimen name="display_note_userinfo_layout_height">80dp</dimen>
+    <dimen name="display_note_action_buttons_height">40dp</dimen>
+    <dimen name="display_user_photo_radius">27dp</dimen>
 </resources>
