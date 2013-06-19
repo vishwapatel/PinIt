@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="450dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:divider="?android:dividerHorizontal"
+	android:showDividers="middle"
+    android:orientation="vertical" >
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        
+        <ImageButton 
+            android:id="@+id/comments_like_button"
+            android:layout_height="50dp"
+            android:layout_width="50dp" 
+            android:background="@drawable/comments_likes_background"
+            android:src="@drawable/heart" />
+        
+        <TextView 
+            android:id="@+id/comments_number_of_likes"
+            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:layout_toRightOf="@id/comments_like_button"
+            android:background="@drawable/number_of_likes_background"
+            android:textStyle="bold" />
+        
+        <ImageButton
+            android:id="@+id/comments_show_likes"
+            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            style="?android:attr/buttonBarButtonStyle"
+            android:src="@drawable/likes_display_indicator" />
+        
+    </RelativeLayout>
+    
+    <ListView
+        android:id="@+id/comments_listview"
+        android:layout_width="match_parent"
+        android:showDividers="none"
+        android:layout_height="340dp" />
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal" >
+        
+	    <EditText 
+	        android:id="@+id/comments_new_comment"
+	        android:layout_width="match_parent"
+	        android:layout_height="48dp"
+	        android:layout_marginLeft="10dp"
+	        android:paddingRight="52dp"
+	        android:background="#FFFFFF"
+	        android:textColor="#000000"
+	        android:hint="@string/comments_write_a_comment" />
+	    
+	    <Button
+	        android:id="@+id/comments_send_comment"
+	        android:layout_width="50dp"
+	        android:layout_height="match_parent"
+	        android:layout_alignParentRight="true"
+	        style="?android:attr/buttonBarButtonStyle"
+	        android:text="@string/comments_send" />
+	    
+	    <View 
+            android:layout_height="match_parent"
+            android:layout_width="1dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_toLeftOf="@id/comments_send_comment"
+            android:background="?android:attr/dividerHorizontal" />
+	    
+	</RelativeLayout>
+	      
+</LinearLayout>

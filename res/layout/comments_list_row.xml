@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingTop="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+    
+    <com.android.volley.toolbox.NetworkImageView 
+        android:id="@+id/comments_comment_creator_photo"
+	    android:layout_width="40dp"
+	    android:layout_height="40dp"
+	    android:src="@drawable/default_image" />
+    
+    <TextView
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/comments_comment_creator"
+	    android:layout_marginLeft="10dp"
+	    android:layout_toRightOf="@id/comments_comment_creator_photo"
+	    android:layout_alignParentTop="true"
+	    android:textStyle="bold" />
+    
+    <TextView 
+        android:id="@+id/comments_comment_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/comments_comment_creator"
+        android:layout_alignLeft="@id/comments_comment_creator" />
+    
+    <TextView
+        android:id="@+id/comments_comment_created_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/comments_comment_text"
+        android:layout_alignLeft="@id/comments_comment_creator"
+        android:textSize="12sp"
+        android:textColor="#D8D8D8" />
+    
+</RelativeLayout>

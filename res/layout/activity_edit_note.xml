@@ -14,7 +14,8 @@
  ** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  ** See the License for the specific language governing permissions and
  ** limitations under the License.
- */ -->
+ */
+-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -48,6 +49,15 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/edit_note_title_character_count"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:textColor="#757575" />
 
         <View
             android:layout_width="fill_parent"

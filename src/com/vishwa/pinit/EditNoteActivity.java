@@ -23,10 +23,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -34,6 +37,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -57,6 +61,7 @@ public class EditNoteActivity extends Activity {
     private Button mCancelButton;
     private ProgressBar mProgressBar;
     private ProgressBar mPhotoProgressBar;
+    private TextView mNoteTitleCharCount;
 
     private Bitmap mCurrentPhoto = null;
     private Bitmap mNotePhoto = null;
@@ -66,6 +71,7 @@ public class EditNoteActivity extends Activity {
     private Note mEditNote;
     private boolean mHasPhoto = false;
     private boolean mHasChangedPhoto = false;
+    private int mNoteTitleLengthLimit = 80;
 
     private ParseFile mNotePhotoObject;
     private ParseFile mNotePhotoThumbnailObject;
@@ -86,12 +92,41 @@ public class EditNoteActivity extends Activity {
         mCancelButton = (Button) findViewById(R.id.edit_note_cancel_button);
         mProgressBar = (ProgressBar) findViewById(R.id.edit_note_progressbar);
         mPhotoProgressBar = (ProgressBar) findViewById(R.id.edit_note_photo_progressbar);
+        mNoteTitleCharCount = (TextView) findViewById(R.id.edit_note_title_character_count);
 
         mProgressBar.setVisibility(View.INVISIBLE);
         mPhotoProgressBar.setVisibility(View.INVISIBLE);
 
         mNoteTitleField.setText(mEditNote.getNoteTitle());
         mNoteBodyField.setText(mEditNote.getNoteBody());
+        mNoteTitleCharCount.setText(
+                Integer.toString(mNoteTitleLengthLimit - mNoteTitleField.getText().length()));
+        
+        mNoteTitleField.addTextChangedListener(new TextWatcher() {
+            
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                
+            }
+            
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                    int after) {
+                
+            }
+            
+            @Override
+            public void afterTextChanged(Editable s) {
+                int count = mNoteTitleLengthLimit - mNoteTitleField.getText().length();
+                mNoteTitleCharCount.setText(Integer.toString(count));
+                if(count < 10) {
+                    mNoteTitleCharCount.setTextColor(Color.RED);
+                }
+                else {
+                    mNoteTitleCharCount.setTextColor(Color.rgb(117, 117, 117));
+                }
+            }
+        });
 
         if(!mEditNote.getNoteImageThumbnailUrl().isEmpty()) {
             mHasPhoto = true;

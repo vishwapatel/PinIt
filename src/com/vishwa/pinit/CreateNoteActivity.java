@@ -21,9 +21,14 @@ import java.io.ByteArrayOutputStream;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.text.method.KeyListener;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -31,6 +36,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -51,6 +57,7 @@ public class CreateNoteActivity extends Activity {
     private Button mShareButton;
     private Button mCancelButton;
     private ProgressBar mProgressBar;
+    private TextView mNoteTitleCharCount;
 
     private Bitmap mNotePhoto = null;
     private Bitmap mNotePhotoThumbnail = null;
@@ -58,6 +65,7 @@ public class CreateNoteActivity extends Activity {
     private double mLatitude;
     private double mLongitude;
     private String mNoteImageThumbnailUrl = new String();
+    private int mNoteTitleLengthLimit = 80;
 
     private ParseObject mNote;
     private ParseFile mNotePhotoObject;
@@ -81,8 +89,36 @@ public class CreateNoteActivity extends Activity {
         mShareButton = (Button) findViewById(R.id.create_note_confirm_button);
         mCancelButton = (Button) findViewById(R.id.create_note_cancel_button);
         mProgressBar = (ProgressBar) findViewById(R.id.create_note_progressbar);
+        mNoteTitleCharCount = (TextView) findViewById(R.id.create_note_title_character_count);
 
         mProgressBar.setVisibility(View.INVISIBLE);
+        mNoteTitleCharCount.setText(
+                Integer.toString(mNoteTitleLengthLimit - mNoteTitleField.getText().length()));
+        mNoteTitleField.addTextChangedListener(new TextWatcher() {
+            
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                
+            }
+            
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                    int after) {
+                
+            }
+            
+            @Override
+            public void afterTextChanged(Editable s) {
+                int count = mNoteTitleLengthLimit - mNoteTitleField.getText().length();
+                mNoteTitleCharCount.setText(Integer.toString(count));
+                if(count < 10) {
+                    mNoteTitleCharCount.setTextColor(Color.RED);
+                }
+                else {
+                    mNoteTitleCharCount.setTextColor(Color.rgb(117, 117, 117));
+                }
+            }
+        });
 
         mNotePhotoImageView.setOnClickListener(new OnClickListener() {
 

@@ -18,7 +18,9 @@ package com.vishwa.pinit;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -29,7 +31,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -40,6 +41,7 @@ import android.widget.Toast;
 
 import com.parse.CountCallback;
 import com.parse.DeleteCallback;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -52,7 +54,8 @@ import com.parse.SaveCallback;
 
 
 public class DisplayNoteActivity extends Activity {
-
+    
+    public final static int NOTE_COMMENTS_DISPLAY = 106;
     public final static String NOTE_LOAD_ERROR = "Sorry, this note couldn't be loaded. It might " +
             "have been deleted by it's creator";
     
@@ -71,12 +74,15 @@ public class DisplayNoteActivity extends Activity {
 
     private Bitmap mNotePhoto = null;
     
-    private ParseObject mParseNote;
+    protected static ParseObject mParseNote;
+    
     private Note mNote;
+    private ArrayList<NoteComment> mNoteComments = new ArrayList<NoteComment>();
     private boolean mUserLikesNote = false;
+    private boolean mShowingComments = false;
+    private int mNumberOfCommentsLoaded = 0;
     private int mNoteLikesCount = 0;
     private int mNoteCommentsCount = 0;
-    private List<ParseObject> mLikesList = new ArrayList<ParseObject>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +136,7 @@ public class DisplayNoteActivity extends Activity {
             mNoteCreatedInfo = (TextView) findViewById(R.id.display_note_userinfo);
             mLikeButton = (ImageButton) findViewById(R.id.display_note_like);
             mCommentButton = (ImageButton) findViewById(R.id.display_note_comment);
-            mLikesAndCommentsInfo = (TextView) findViewById(R.id.display_note_likes_comments_button);
+            mLikesAndCommentsInfo = (TextView) findViewById(R.id.display_note_likes_comments_info);
             mUserInfoLayout = (RelativeLayout) findViewById(R.id.display_note_userinfo_layout);
             mScrollView = (ScrollView) findViewById(R.id.display_scroll_layout);
             mNoteCreatedInfo.setCompoundDrawablesWithIntrinsicBounds(userPhotoDrawable, null, null, null);
@@ -141,6 +147,22 @@ public class DisplayNoteActivity extends Activity {
             mLikesAndCommentsInfo.setVisibility(TextView.GONE);
             mUserInfoLayout.setVisibility(RelativeLayout.GONE);
             
+            mCommentButton.setEnabled(false);
+            mCommentButton.setOnClickListener(new OnClickListener() {
+                
+                @Override
+                public void onClick(View v) {
+                    mShowingComments = true;
+                    Intent intent = new Intent(getApplicationContext(), CommentsActivity.class);
+                    intent.putExtra("userLikesNote", mUserLikesNote);
+                    intent.putExtra("noteLikesCount", mNoteLikesCount);
+                    intent.putExtra("noteCommentsCount", mNoteCommentsCount);
+                    intent.putExtra("numberOfCommentsLoaded", mNumberOfCommentsLoaded);
+                    intent.putParcelableArrayListExtra("noteComments", mNoteComments);
+                    startActivityForResult(intent,NOTE_COMMENTS_DISPLAY);
+                }
+            });
+            
             ParseQuery query = new ParseQuery("Note");
             query.getInBackground(mNote.getNoteId(), new GetCallback() {
 
@@ -149,8 +171,10 @@ public class DisplayNoteActivity extends Activity {
                     if(e == null) {
                         mParseNote = object;
                         
+                        loadCommentsInBackground();
+                        
                         ParseQuery query = new ParseQuery("Like");
-                        query.whereEqualTo("creator", ParseUser.getCurrentUser().getUsername());
+                        query.whereEqualTo("creator", ParseUser.getCurrentUser());
                         query.whereEqualTo("noteId", mParseNote.getObjectId());
                         query.getFirstInBackground(new GetCallback() {
                             
@@ -180,9 +204,9 @@ public class DisplayNoteActivity extends Activity {
                                         @Override
                                         public void done(int count, ParseException e) {
                                             if(e == null) {
+                                                mCommentButton.setEnabled(true);
                                                 mNoteCommentsCount = count;
                                                 updateLikesAndCommentsSize();
-                                                mLikesAndCommentsInfo.setVisibility(TextView.VISIBLE);
                                             }
                                         }
                                     });
@@ -202,7 +226,7 @@ public class DisplayNoteActivity extends Activity {
                                     updateLikesAndCommentsSize();
                                     final ParseRelation relation = mParseNote.getRelation("likes");
                                     ParseQuery query = new ParseQuery("Like");
-                                    query.whereEqualTo("creator", ParseUser.getCurrentUser().getUsername());
+                                    query.whereEqualTo("creator", ParseUser.getCurrentUser());
                                     query.whereEqualTo("noteId", mParseNote.getObjectId());
                                     query.getFirstInBackground(new GetCallback() {
                                         
@@ -239,8 +263,13 @@ public class DisplayNoteActivity extends Activity {
                                     updateLikesAndCommentsSize();
                                     final ParseRelation relation = mParseNote.getRelation("likes");
                                     final ParseObject like = new ParseObject("Like");
-                                    like.put("creator", ParseUser.getCurrentUser().getUsername());
+                                    like.put("creator", ParseUser.getCurrentUser());
+                                    like.put("creatorName", ParseUser.getCurrentUser().getUsername());
                                     like.put("noteId", mParseNote.getObjectId());
+                                    like.put("creatorPhotoUrl", 
+                                            ParseUser.getCurrentUser()
+                                            .getParseFile("profilePhotoThumbnail")
+                                            .getUrl());
                                     like.saveInBackground(new SaveCallback() {
                                         
                                         @Override
@@ -277,6 +306,7 @@ public class DisplayNoteActivity extends Activity {
                                     mNoteCreatedInfo.setText("Created by "+mNote.getNoteCreator()+
                                             " on "+mNote.getNoteCreatedAt());
                                     mNotePhotoImageView.setVisibility(ImageView.VISIBLE);
+                                    mLikesAndCommentsInfo.setVisibility(TextView.VISIBLE);
                                     mNoteTitle.setVisibility(TextView.VISIBLE);
                                     mUserInfoLayout.setVisibility(RelativeLayout.VISIBLE);
                                     if(!mNote.getNoteBody().isEmpty()) {
@@ -319,7 +349,7 @@ public class DisplayNoteActivity extends Activity {
         }
         else if(mNoteCommentsCount == 0) {
             if(mNoteLikesCount == 1) {
-                mLikesAndCommentsInfo.setText("1 Like \u00b7");
+                mLikesAndCommentsInfo.setText("1 Like");
             }
             else {
                 mLikesAndCommentsInfo.setText(String.format("%d Likes", mNoteLikesCount));
@@ -346,6 +376,64 @@ public class DisplayNoteActivity extends Activity {
             else {
                 mLikesAndCommentsInfo.setText(
                         String.format("%d Likes \u00b7 %d Comments", mNoteLikesCount, mNoteCommentsCount));
+            }
+        }
+    }
+    
+    private void loadCommentsInBackground() {
+        if(!mShowingComments) {
+            ParseQuery commentsQuery = mParseNote.getRelation("comments").getQuery();
+            commentsQuery.setLimit(10);
+            commentsQuery.setSkip(mNumberOfCommentsLoaded);
+            commentsQuery.addAscendingOrder("createdAt");
+            commentsQuery.findInBackground(new FindCallback() {
+                
+                @SuppressLint("SimpleDateFormat")
+                @Override
+                public void done(List<ParseObject> objects, ParseException e) {
+                    if(e == null) {
+                        for(ParseObject comment: objects) {
+                            String date = comment.getCreatedAt().toString();
+                            mNoteComments.add(new NoteComment(
+                                    comment.getString("creatorName"), 
+                                    comment.getString("commentText"), 
+                                    comment.getString("creatorPhotoUrl"),
+                                    PinItUtils.getFormattedCommentCreatedAt(date)));
+                            mNumberOfCommentsLoaded++;
+                        }
+                    }
+                    else {
+                        //We can fail silently here because we are only pre-fetching the comments to make
+                        //the loading time as close to zero as possible, and anyway, we will reload these
+                        //comments in the CommentsActivity if this fails and we will show an error there.
+                    }
+                    if(objects != null && objects.size() != 0) {
+                        loadCommentsInBackground();
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+        case NOTE_COMMENTS_DISPLAY:
+            if(resultCode == RESULT_OK) {
+                mUserLikesNote = data.getBooleanExtra("userLikesNote", false);
+                mNoteLikesCount = data.getIntExtra("noteLikesCount", 0);
+                mNoteCommentsCount = data.getIntExtra("noteCommentsCount", mNoteCommentsCount);
+                if(mUserLikesNote) {
+                    mLikeButton.setImageResource(R.drawable.heart_red);
+                }
+                else {
+                    mLikeButton.setImageResource(R.drawable.heart);
+                }
+                mNumberOfCommentsLoaded = data.getIntExtra("numberOfCommentsLoaded", 0);
+                ArrayList<NoteComment> comments = data.getParcelableArrayListExtra("noteComments");
+                mNoteComments = comments;
+                updateLikesAndCommentsSize();
             }
         }
     }

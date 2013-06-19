@@ -14,7 +14,8 @@
  ** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  ** See the License for the specific language governing permissions and
  ** limitations under the License.
- */ -->
+ */
+-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -48,6 +49,16 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/create_note_title_character_count"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:text="@string/create_note_title_character_limit"
+            android:textColor="#757575" />
 
         <View
             android:layout_width="fill_parent"
@@ -113,11 +124,14 @@
 
         <LinearLayout
             android:id="@+id/create_buttons_layout"
-            style="?android:attr/buttonBarStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:orientation="horizontal" >
+            android:background="#FFFFFF"
+            android:divider="?android:dividerVertical"
+            android:dividerPadding="5dp"
+            android:orientation="horizontal"
+            android:showDividers="middle" >
 
             <Button
                 android:id="@+id/create_note_cancel_button"
@@ -125,7 +139,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:background="#FFFFFF"
                 android:text="@string/cancel_string" />
 
             <Button
@@ -134,7 +147,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:background="#FFFFFF"
                 android:text="@string/create_note_share" />
         </LinearLayout>
 
@@ -143,6 +155,6 @@
             android:layout_height="1dip"
             android:layout_above="@id/create_buttons_layout"
             android:background="?android:attr/dividerHorizontal" />
-        
     </RelativeLayout>
+
 </RelativeLayout>

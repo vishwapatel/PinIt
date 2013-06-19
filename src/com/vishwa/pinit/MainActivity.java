@@ -104,7 +104,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
     public static final int REQUEST_CODE_DISPLAY_NOTE = 103;
     public static final int REQUEST_CODE_EDIT_NOTE = 104;
     public static final int REQUEST_CODE_CHANGE_SETTINGS = 105;
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     private Button mAllNotesButton;
     private Button mYourNotesButton;
@@ -114,7 +114,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
     private GoogleMap mMap;
     private Menu mMenu;
     private MenuItem mSearchMenuItem;
-    protected static Marker mFocusedMarker = null;
+    private Marker mFocusedMarker = null;
     private Handler mHandler;
 
     private Bitmap mUserPhotoThumbnail;
@@ -906,8 +906,8 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
             break;
         case R.id.action_create_note:
             mMapEditMode = MapEditMode.CREATE_NOTE;
-            mMenu.findItem(R.id.action_create_note).setVisible(false);
             hideNoteEditButtons();
+            mMenu.findItem(R.id.action_create_note).setVisible(false);
             mMenu.findItem(R.id.action_cancel).setVisible(true).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
             Toast.makeText(getApplicationContext(), 
                     "Press and hold the location where you'd like to create a note", 

@@ -17,6 +17,7 @@
 package com.vishwa.pinit;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -121,6 +122,46 @@ public class PinItUtils {
         }
     
         return inSampleSize;
+    }
+    
+    public static String getFormattedCommentCreatedAt(String date) {
+        String[] arr = date.split("\\s");
+        Calendar calendar = Calendar.getInstance();
+        StringBuilder stringBuilder = new StringBuilder();
+        String hours = arr[3].split(":")[0];
+        String minutes = arr[3].split(":")[1];
+        if(Integer.parseInt(arr[5]) != calendar.get(Calendar.YEAR)) {
+            stringBuilder.append(arr[1])
+                .append(' ')
+                .append(arr[2])
+                .append(',')
+                .append(' ')
+                .append(arr[5]);
+        }
+        else {
+            stringBuilder.append(arr[1])
+                .append(' ')
+                .append(arr[2])
+                .append(" at ");
+        }
+        if(Integer.parseInt(hours) < 12) {
+            stringBuilder.append(" at ")
+            .append(hours)
+            .append(':')
+            .append(minutes);
+            stringBuilder.append(" AM ");
+        }
+        else {
+            int hoursDigits = Integer.parseInt(hours);
+            hoursDigits = hoursDigits - 12;
+            hours = Integer.toString(hoursDigits);
+            stringBuilder.append(" at ")
+            .append(hours)
+            .append(':')
+            .append(minutes);
+            stringBuilder.append(" PM ");
+        }
+        return stringBuilder.toString();
     }
     
     public static boolean isUsersFirstLogin(String username, Context context) {

@@ -19,6 +19,8 @@ package com.vishwa.pinit;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.content.Context;
@@ -97,11 +99,18 @@ public class SignupActivity extends Activity {
 
             @Override
             public void onClick(View v) {
+                Pattern pattern = Pattern.compile("\\s");
+                Matcher matcher = pattern.matcher(mUsernameField.getText().toString());
                 if(isEmpty(mUsernameField) 
                         || isEmpty(mPasswordField) 
                         || isEmpty(mConfirmPasswordField)) {
                     PinItUtils.createAlert("You've missed something!", 
                             "You've left one of the fields empty.", 
+                            SignupActivity.this);
+                }
+                else if(matcher.find()) {
+                    PinItUtils.createAlert("Username is invalid", 
+                            "Usernames cannot contain spaces", 
                             SignupActivity.this);
                 }
                 else if(mPasswordField.getText().length() < 6) {

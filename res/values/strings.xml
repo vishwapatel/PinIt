@@ -39,9 +39,17 @@
     <string name="create_note_enter_title">Enter a Note Title</string>
     <string name="create_note_enter_body">Enter Note Details</string>
     <string name="create_note_share">Share</string>
+    <string name="create_note_title_character_limit">80</string>
     
     <!-- Display Note Screen Strings -->
     <string name="display_note_be_the_first">Be the first to like this!</string>
+    
+    <!-- Comments Screen Strings -->
+    <string name="comments_write_a_comment">Write a comment...</string>
+    <string name="comments_send">Send</string>
+    
+    <!-- Likes Screen Strings -->
+    <string name="likes_people_who_like_this">People who like this</string>
 
     <!-- Edit Note Screen Strings -->
     <string name="edit_note_save">Save Changes</string>

@@ -60,7 +60,7 @@
                 android:textSize="16sp" />
             
             <TextView
-                android:id="@+id/display_note_likes_comments_button"
+                android:id="@+id/display_note_likes_comments_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/display_note_photo"

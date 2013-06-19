@@ -16,22 +16,33 @@
  */
 package com.vishwa.pinit;
 
-import com.parse.Parse;
-import com.parse.ParseFacebookUtils;
+import java.lang.reflect.Field;
 
 import android.app.Application;
 import android.view.ViewConfiguration;
 
-import java.lang.reflect.Field;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.Volley;
+import com.parse.Parse;
+import com.parse.ParseFacebookUtils;
 
 public class PinItApplication extends Application {
-
+    
+    private RequestQueue mRequestQueue;
+    private ImageLoader mImageLoader;
+    
     @Override
     public void onCreate() {
         super.onCreate();
 
         Parse.initialize(this, Constants.PARSE_APP_ID, Constants.PARSE_CLIENT_KEY); 
         ParseFacebookUtils.initialize(Constants.FACEBOOK_APP_ID);
+        
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int cacheSize = maxMemory / 10; 
+        mRequestQueue = Volley.newRequestQueue(getApplicationContext());
+        mImageLoader = new ImageLoader(mRequestQueue, new BitmapLruCache(cacheSize));
 
         try {
             ViewConfiguration config = ViewConfiguration.get(this);
@@ -42,6 +53,10 @@ public class PinItApplication extends Application {
             }
         } catch (Exception ex) {
         }
+    }
+    
+    public ImageLoader getImageLoader() {
+        return mImageLoader;
     }
 
 }

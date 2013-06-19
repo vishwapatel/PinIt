@@ -58,12 +58,10 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-
         <provider
             android:name="com.vishwa.pinit.LocationSuggestionProvider"
             android:authorities="com.vishwa.pinit.search_suggestion_provider"
             android:syncable="false" />
-
         <activity
             android:name=".CreateNoteActivity"
             android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge.NoActionBar"
@@ -77,6 +75,15 @@
         <activity
             android:name=".DisplayNoteActivity"
             android:theme="@android:style/Theme.Holo.Light.Dialog" >
+        </activity>
+        <activity
+            android:name=".CommentsActivity"
+            android:theme="@style/ThemeWithCorners" 
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name=".LikesActivity"
+            android:theme="@style/ThemeWithCorners" >
         </activity>
         <activity
             android:name=".SettingsActivity"

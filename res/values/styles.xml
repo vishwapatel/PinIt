@@ -24,7 +24,11 @@
 	    <item name="android:actionBarWidgetTheme">@style/pinit.actionBarWidgetTheme</item>
 	</style>
     -->
-
+	
+	<style name="ThemeWithCorners" parent="android:Theme.Holo.Light.Dialog">
+        <item name="android:windowBackground">@drawable/comments_likes_background</item>
+    </style>
+	
     <style name="pinit.actionBarWidgetTheme" parent="@style/AppTheme">
         <item name="android:spinnerDropDownItemStyle">@style/pinit.Widget.DropDownItem.Spinner</item>
     </style>
