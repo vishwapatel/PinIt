@@ -23,11 +23,13 @@
     <string name="login_log_in">Log In</string>
     <string name="login_fb_log_in">Facebook Log In</string>
     <string name="login_sign_up">Sign Up!</string>
+    <string name="login_forgot_password">Forgot Password?</string>
 
     <!-- Signup Screen Strings -->
     <string name="signup_sign_up">Sign Up</string>
     <string name="signup_pick_photo">Pick Profile Photo</string>
     <string name="signup_username">Username</string>
+    <string name="signup_email">Email (we don\'t spam)</string>
     <string name="signup_password">Password (min. 6 characters)</string>
     <string name="signup_confirm_password">Confirm Password</string>
 

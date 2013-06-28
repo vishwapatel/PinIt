@@ -35,6 +35,7 @@ public class LikesActivity extends Activity {
         setContentView(R.layout.activity_likes_display);
   
         mLikesListView = (ListView) findViewById(R.id.likes_listview);
+        mLikesListView.setOnScrollListener(new EndlessScrollListener());
         
         mAdapter = new LikesArrayAdapter(
                 this, 0, mNoteLikes, ((PinItApplication)getApplication()).getImageLoader());
@@ -119,10 +120,15 @@ public class LikesActivity extends Activity {
             public void done(List<ParseObject> objects, ParseException e) {
                 if(e == null) {
                     for(ParseObject like: objects) {
-                        mNoteLikes.add(new NoteLike(
+                        NoteLike newLike = new NoteLike(
                                 like.getString("creatorName"), 
-                                like.getString("creatorPhotoUrl")));
-                        setActivityResult();
+                                like.getString("creatorPhotoUrl"),
+                                mParseNote.getObjectId());
+                        if(!mNoteLikes.contains(newLike)) {
+                            mNoteLikes.add(newLike);
+                            mNumberOfLikesLoaded++;
+                            setActivityResult();
+                        }
                     }
                     mAdapter.notifyDataSetChanged();
                 }

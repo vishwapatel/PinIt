@@ -27,8 +27,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.KeyListener;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -109,6 +107,7 @@ public class CreateNoteActivity extends Activity {
             
             @Override
             public void afterTextChanged(Editable s) {
+                mNoteTitleField.setError(null);
                 int count = mNoteTitleLengthLimit - mNoteTitleField.getText().length();
                 mNoteTitleCharCount.setText(Integer.toString(count));
                 if(count < 10) {
@@ -130,7 +129,7 @@ public class CreateNoteActivity extends Activity {
             }
         });
 
-        mShareButton.setOnClickListener(new ShareButtonOnClickListener());
+        mShareButton.setOnClickListener(new OnShareClickListener());
 
         mCancelButton.setOnClickListener(new OnClickListener() {
 
@@ -142,7 +141,7 @@ public class CreateNoteActivity extends Activity {
         });
     }
 
-    class ShareButtonOnClickListener implements OnClickListener {
+    class OnShareClickListener implements OnClickListener {
 
         @Override
         public void onClick(View arg0) {

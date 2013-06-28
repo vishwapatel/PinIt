@@ -1,85 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+ ** Copyright 2013 Vishwa Patel
+ **
+ ** Licensed under the Apache License, Version 2.0 (the "License");
+ ** you may not use this file except in compliance with the License.
+ ** You may obtain a copy of the License in the 'assets' directory of this 
+ ** application or at
+ **
+ **     http://www.apache.org/licenses/LICENSE-2.0
+ **
+ ** Unless required by applicable law or agreed to in writing, software
+ ** distributed under the License is distributed on an "AS IS" BASIS,
+ ** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ** See the License for the specific language governing permissions and
+ ** limitations under the License.
+ */
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="450dp"
+    android:divider="?android:dividerHorizontal"
+    android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:divider="?android:dividerHorizontal"
-	android:showDividers="middle"
-    android:orientation="vertical" >
-    
-    <RelativeLayout 
+    android:showDividers="middle" >
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-        
-        <ImageButton 
+
+        <ImageButton
             android:id="@+id/comments_like_button"
+            android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_width="50dp" 
             android:background="@drawable/comments_likes_background"
             android:src="@drawable/heart" />
-        
-        <TextView 
+
+        <TextView
             android:id="@+id/comments_number_of_likes"
-            android:layout_height="50dp"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_height="50dp"
             android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:gravity="center_vertical"
             android:layout_toRightOf="@id/comments_like_button"
             android:background="@drawable/number_of_likes_background"
+            android:gravity="center_vertical"
             android:textStyle="bold" />
-        
+
         <ImageButton
             android:id="@+id/comments_show_likes"
-            android:layout_height="50dp"
-            android:layout_width="wrap_content"
-            android:layout_alignParentRight="true"
             style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
             android:src="@drawable/likes_display_indicator" />
-        
     </RelativeLayout>
-    
+
     <ListView
         android:id="@+id/comments_listview"
         android:layout_width="match_parent"
-        android:showDividers="none"
-        android:layout_height="340dp" />
-    
+        android:layout_height="340dp"
+        android:background="@drawable/empty_list_background"
+        android:showDividers="none" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal" >
-        
-	    <EditText 
-	        android:id="@+id/comments_new_comment"
-	        android:layout_width="match_parent"
-	        android:layout_height="48dp"
-	        android:layout_marginLeft="10dp"
-	        android:paddingRight="52dp"
-	        android:background="#FFFFFF"
-	        android:textColor="#000000"
-	        android:hint="@string/comments_write_a_comment" />
-	    
-	    <Button
-	        android:id="@+id/comments_send_comment"
-	        android:layout_width="50dp"
-	        android:layout_height="match_parent"
-	        android:layout_alignParentRight="true"
-	        style="?android:attr/buttonBarButtonStyle"
-	        android:text="@string/comments_send" />
-	    
-	    <View 
+
+        <EditText
+            android:id="@+id/comments_new_comment"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginLeft="10dp"
+            android:background="#FFFFFF"
+            android:hint="@string/comments_write_a_comment"
+            android:paddingRight="52dp"
+            android:textColor="#000000" />
+
+        <Button
+            android:id="@+id/comments_send_comment"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:text="@string/comments_send" />
+
+        <View
             android:layout_width="1dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
             android:layout_toLeftOf="@id/comments_send_comment"
-            android:background="?android:attr/dividerHorizontal" />
-	    
-	</RelativeLayout>
-	      
+            android:background="?android:attr/dividerHorizontal"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp" />
+    </RelativeLayout>
+
 </LinearLayout>

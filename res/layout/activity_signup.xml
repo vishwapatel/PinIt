@@ -79,6 +79,17 @@
         android:hint="@string/signup_username"
         android:maxLength="16"
         android:singleLine="true" />
+    
+    <EditText
+        android:id="@+id/signup_email_field"
+        android:inputType="textEmailAddress"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:hint="@string/signup_email"
+        android:singleLine="true" />
 
     <EditText
         android:id="@+id/signup_password_field"
@@ -86,7 +97,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:fontFamily="sans-serif"
         android:hint="@string/signup_password"
         android:inputType="textPassword"
@@ -99,7 +110,6 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
-        android:layout_marginTop="4dp"
         android:fontFamily="sans-serif"
         android:hint="@string/signup_confirm_password"
         android:inputType="textPassword"

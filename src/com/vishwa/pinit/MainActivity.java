@@ -61,13 +61,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SearchView.OnSuggestionListener;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
@@ -82,6 +85,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.ui.BubbleIconFactory;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -168,9 +172,8 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                     public void onAnimationEnd(Animation animation) {
                         mFrameLayout.removeViewAt(1);
                         if(PinItUtils.isUsersFirstLogin(mCurrentUsername, getApplicationContext())) {
-                            
                             if(!DEBUG) {
-                             handleUsersFirstTime();
+                                handleUsersFirstTime();
                             }
                         }
                     }
@@ -253,16 +256,25 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                 setProgressBarIndeterminateVisibility(true);
             }
         });
-
-        if(!PinItUtils.isOnline(getApplicationContext())) {
-            PinItUtils.createAlert("Internet connection not found.", 
-                    "Connect to the Internet and press the refresh button at the top", this);
-            mHasInternet = false;
+        
+        try {
+            MapsInitializer.initialize(this);
+            if(!PinItUtils.isOnline(getApplicationContext())) {
+                PinItUtils.createAlert("Internet connection not found.", 
+                        "Connect to the Internet and press the refresh button at the top", this);
+                mHasInternet = false;
+            }
+            else {
+                mHasInternet = true;
+                loadMapWhenOnline();
+            }
         }
-        else {
-            mHasInternet = true;
-            loadMapWhenOnline();
+        catch (GooglePlayServicesNotAvailableException e) {
+            PinItUtils.createAlert("We're sorry", "It seems that your phone doesn't have Google Play" +
+                    "services installed, or is missing the maps application. Please download both of" +
+                    "these and then try running this application", MainActivity.this);
         }
+        
     }
 
     private void loadMapWhenOnline() {
@@ -362,13 +374,14 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
 
     private void setUpMapIfNeeded() {
         if (mMap == null) {
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.main_map))
+            mMap = ((SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.main_map))
                     .getMap();
-            //The name is random
-            Random itsIstanbulNotConstantinople = new Random();
-            double longitude = itsIstanbulNotConstantinople.nextInt(359) - 179;
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(0,longitude)));
             if (mMap != null) {
+                //The name is random
+                Random itsIstanbulNotConstantinople = new Random();
+                double longitude = itsIstanbulNotConstantinople.nextInt(359) - 179;
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(0,longitude)));
                 setUpMap();
             }
         }
@@ -671,9 +684,19 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
             }
             else {
                 if(mMemoryCache.get(note.getNoteCreator()) != null) {
+//                    BubbleIconFactory mBubbleFactory = new BubbleIconFactory(this);
+                   
                     balloonBackground = Bitmap.createScaledBitmap(balloonBackground, 87, 94, false);
                     userPhoto = Bitmap.createScaledBitmap(
                             mMemoryCache.get(note.getNoteCreator()), 75, 71, false);
+//                    ImageView imgView = new ImageView(this);
+//                    imgView.setImageBitmap(userPhoto);
+//                    mBubbleFactory.setContentView(imgView);
+//                    mBubbleFactory.setContentPadding(5, 5, 5, 5);
+//                    
+//                    addMarkerToMap(note, mBubbleFactory.makeIcon(), latitude, longitude);
+//                    imgView = null;
+//                    userPhoto.recycle();
 
                     Canvas canvas = new Canvas(balloonBackground);
                     canvas.drawBitmap(balloonBackground, 0, 0, null);
@@ -700,7 +723,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                                     userPhoto = Bitmap.createScaledBitmap(
                                             mMemoryCache.get("defaultPhoto"), 75, 71, false);
                                     note.setNoteCreatorHasDefaultPhoto(true);
-
+                                    
                                     Canvas canvas = new Canvas(balloonBackground);
                                     canvas.drawBitmap(balloonBackground, 0, 0, null);
                                     canvas.drawBitmap(userPhoto, 6, 6, null);

@@ -54,16 +54,14 @@ import com.parse.SaveCallback;
 
 
 public class DisplayNoteActivity extends Activity {
-    
+
     public final static int NOTE_COMMENTS_DISPLAY = 106;
     public final static String NOTE_LOAD_ERROR = "Sorry, this note couldn't be loaded. It might " +
             "have been deleted by it's creator";
-    
+
     private ImageView mNotePhotoImageView;
     private TextView mNoteTitle;
-    private TextView mNoteTitleAlt;
     private TextView mNoteBody;
-    private TextView mNoteBodyAlt;
     private TextView mLikesAndCommentsInfo;
     private TextView mNoteCreatedInfo;
     private ImageButton mLikeButton;
@@ -73,9 +71,9 @@ public class DisplayNoteActivity extends Activity {
     private ScrollView mScrollView;
 
     private Bitmap mNotePhoto = null;
-    
+
     protected static ParseObject mParseNote;
-    
+
     private Note mNote;
     private ArrayList<NoteComment> mNoteComments = new ArrayList<NoteComment>();
     private boolean mUserLikesNote = false;
@@ -109,22 +107,26 @@ public class DisplayNoteActivity extends Activity {
         if(mNote.getNoteImageThumbnailUrl().isEmpty()) {
             setContentView(R.layout.activity_display_note_alt);
 
-            mNoteBodyAlt = (TextView) findViewById(R.id.display_note_body_alt);
-            mNoteTitleAlt = (TextView) findViewById(R.id.display_note_title_alt);
+            mNoteBody = (TextView) findViewById(R.id.display_note_body_alt);
+            mNoteTitle = (TextView) findViewById(R.id.display_note_title_alt);
             mNoteCreatedInfo = (TextView) findViewById(R.id.display_note_userinfo_alt);
+            mLikeButton = (ImageButton) findViewById(R.id.display_note_like_alt);
+            mCommentButton = (ImageButton) findViewById(R.id.display_note_comment_alt);
+            mLikesAndCommentsInfo = (TextView) findViewById(R.id.display_note_likes_comments_info_alt);
             mNoteCreatedInfo.setCompoundDrawablesWithIntrinsicBounds(userPhotoDrawable, null, null, null);
 
-            mNoteTitleAlt.setVisibility(TextView.GONE);
-            mNoteBodyAlt.setVisibility(TextView.GONE);
-            mNoteCreatedInfo.setVisibility(TextView.GONE);
+            mNoteTitle.setVisibility(TextView.GONE);
+            mNoteBody.setVisibility(TextView.GONE);
+            mLikesAndCommentsInfo.setVisibility(TextView.GONE);
 
-            mNoteTitleAlt.setText(mNote.getNoteTitle());
-            mNoteTitleAlt.setVisibility(TextView.VISIBLE);
+            mLikeButton.setEnabled(false);
+            mNoteTitle.setText(mNote.getNoteTitle());
+            mNoteTitle.setVisibility(TextView.VISIBLE);
             mNoteCreatedInfo.setText("Created by "+mNote.getNoteCreator()+" on "+mNote.getNoteCreatedAt());
             mNoteCreatedInfo.setVisibility(TextView.VISIBLE);
             if(!mNote.getNoteBody().isEmpty()) {
-                mNoteBodyAlt.setText(mNote.getNoteBody());
-                mNoteBodyAlt.setVisibility(TextView.VISIBLE);
+                mNoteBody.setText(mNote.getNoteBody());
+                mNoteBody.setVisibility(TextView.VISIBLE);
             }
         }
         else {
@@ -146,150 +148,23 @@ public class DisplayNoteActivity extends Activity {
             mNoteBody.setVisibility(TextView.GONE);
             mLikesAndCommentsInfo.setVisibility(TextView.GONE);
             mUserInfoLayout.setVisibility(RelativeLayout.GONE);
-            
-            mCommentButton.setEnabled(false);
-            mCommentButton.setOnClickListener(new OnClickListener() {
-                
-                @Override
-                public void onClick(View v) {
-                    mShowingComments = true;
-                    Intent intent = new Intent(getApplicationContext(), CommentsActivity.class);
-                    intent.putExtra("userLikesNote", mUserLikesNote);
-                    intent.putExtra("noteLikesCount", mNoteLikesCount);
-                    intent.putExtra("noteCommentsCount", mNoteCommentsCount);
-                    intent.putExtra("numberOfCommentsLoaded", mNumberOfCommentsLoaded);
-                    intent.putParcelableArrayListExtra("noteComments", mNoteComments);
-                    startActivityForResult(intent,NOTE_COMMENTS_DISPLAY);
-                }
-            });
-            
-            ParseQuery query = new ParseQuery("Note");
-            query.getInBackground(mNote.getNoteId(), new GetCallback() {
 
-                @Override
-                public void done(final ParseObject object, ParseException e) {
-                    if(e == null) {
-                        mParseNote = object;
-                        
-                        loadCommentsInBackground();
-                        
-                        ParseQuery query = new ParseQuery("Like");
-                        query.whereEqualTo("creator", ParseUser.getCurrentUser());
-                        query.whereEqualTo("noteId", mParseNote.getObjectId());
-                        query.getFirstInBackground(new GetCallback() {
-                            
-                            @Override
-                            public void done(ParseObject object, ParseException e) {
-                                if(e == null && object != null) {
-                                    mUserLikesNote = true;
-                                    mLikeButton.setImageResource(R.drawable.heart_red);
-                                }
-                                else if(object == null) {
-                                    mUserLikesNote = false;
-                                    mLikeButton.setImageResource(R.drawable.heart);
-                                }
-                            }
-                        });
-                        
-                        ParseQuery likesCountQuery = mParseNote.getRelation("likes").getQuery();
-                        likesCountQuery.countInBackground(new CountCallback() {
-                            
-                            @Override
-                            public void done(int count, ParseException e) {
-                                if(e == null) {
-                                    mNoteLikesCount = count;
-                                    ParseQuery commentsCountQuery = mParseNote.getRelation("comments").getQuery();
-                                    commentsCountQuery.countInBackground(new CountCallback() {
-                                        
-                                        @Override
-                                        public void done(int count, ParseException e) {
-                                            if(e == null) {
-                                                mCommentButton.setEnabled(true);
-                                                mNoteCommentsCount = count;
-                                                updateLikesAndCommentsSize();
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                        
-                        mLikeButton.setOnClickListener(new OnClickListener() {
-                            
-                            @Override
-                            public void onClick(View v) {
-                                if(mUserLikesNote) {
-                                    mUserLikesNote = false;
-                                    mLikeButton.setImageResource(R.drawable.heart);
-                                    mLikeButton.setEnabled(false);
-                                    mNoteLikesCount--;
-                                    updateLikesAndCommentsSize();
-                                    final ParseRelation relation = mParseNote.getRelation("likes");
-                                    ParseQuery query = new ParseQuery("Like");
-                                    query.whereEqualTo("creator", ParseUser.getCurrentUser());
-                                    query.whereEqualTo("noteId", mParseNote.getObjectId());
-                                    query.getFirstInBackground(new GetCallback() {
-                                        
-                                        @Override
-                                        public void done(final ParseObject object, ParseException e) {
-                                            if(e == null) {
-                                                relation.remove(object);
-                                                mParseNote.saveInBackground(new SaveCallback() {
-                                                    
-                                                    @Override
-                                                    public void done(ParseException e) {
-                                                        if(e == null) {
-                                                            object.deleteInBackground(new DeleteCallback() {
-                                                                
-                                                                @Override
-                                                                public void done(ParseException e) {
-                                                                    if(e == null) {
-                                                                        mLikeButton.setEnabled(true);
-                                                                    }
-                                                                }
-                                                            });
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    });
-                                }
-                                else {
-                                    mUserLikesNote = true;
-                                    mLikeButton.setImageResource(R.drawable.heart_red);
-                                    mLikeButton.setEnabled(false);
-                                    mNoteLikesCount++;
-                                    updateLikesAndCommentsSize();
-                                    final ParseRelation relation = mParseNote.getRelation("likes");
-                                    final ParseObject like = new ParseObject("Like");
-                                    like.put("creator", ParseUser.getCurrentUser());
-                                    like.put("creatorName", ParseUser.getCurrentUser().getUsername());
-                                    like.put("noteId", mParseNote.getObjectId());
-                                    like.put("creatorPhotoUrl", 
-                                            ParseUser.getCurrentUser()
-                                            .getParseFile("profilePhotoThumbnail")
-                                            .getUrl());
-                                    like.saveInBackground(new SaveCallback() {
-                                        
-                                        @Override
-                                        public void done(ParseException e) {
-                                            if(e == null) {
-                                                relation.add(like);
-                                                mParseNote.saveInBackground(new SaveCallback() {
-                                                    
-                                                    @Override
-                                                    public void done(ParseException e) {
-                                                        mLikeButton.setEnabled(true);
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                        
+            mLikeButton.setEnabled(false);
+        }
+
+        ParseQuery query = new ParseQuery("Note");
+        query.getInBackground(mNote.getNoteId(), new GetCallback() {
+
+            @Override
+            public void done(final ParseObject object, ParseException e) {
+                if(e == null) {
+                    mParseNote = object;
+
+                    loadLikesAndCommentsCounts();
+                    loadUserLikePreference();
+                    loadCommentsInBackground();
+
+                    if(!mNote.getNoteImageThumbnailUrl().isEmpty()) {
                         ParseFile notePhotoFile = mParseNote.getParseFile("notePhoto");
                         mProgressBar.setVisibility(ProgressBar.VISIBLE);
                         notePhotoFile.getDataInBackground(new GetDataCallback() {
@@ -334,15 +209,165 @@ public class DisplayNoteActivity extends Activity {
                             }
                         });
                     }
-                    else {
-                        Toast.makeText(getApplicationContext(), NOTE_LOAD_ERROR, Toast.LENGTH_LONG).show();
-                        finish();
-                    }
                 }
-            });
+                else {
+                    Toast.makeText(getApplicationContext(), NOTE_LOAD_ERROR, Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        });
+
+        mLikesAndCommentsInfo.setOnClickListener(new OnCommentClickListener());
+        mCommentButton.setOnClickListener(new OnCommentClickListener());    
+        mLikeButton.setOnClickListener(new OnLikeClickListener());
+    }
+
+    private class OnCommentClickListener implements OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            mShowingComments = true;
+            Intent intent = new Intent(getApplicationContext(), CommentsActivity.class);
+            intent.putExtra("userLikesNote", mUserLikesNote);
+            intent.putExtra("noteLikesCount", mNoteLikesCount);
+            intent.putExtra("noteCommentsCount", mNoteCommentsCount);
+            intent.putExtra("numberOfCommentsLoaded", mNumberOfCommentsLoaded);
+            intent.putParcelableArrayListExtra("noteComments", mNoteComments);
+            startActivityForResult(intent,NOTE_COMMENTS_DISPLAY);
+        }
+
+    }
+
+    private class OnLikeClickListener implements OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            if(mUserLikesNote) {
+                mUserLikesNote = false;
+                mLikeButton.setImageResource(R.drawable.heart);
+                mLikeButton.setEnabled(false);
+                mNoteLikesCount--;
+                updateLikesAndCommentsSize();
+                final ParseRelation relation = mParseNote.getRelation("likes");
+                ParseQuery query = new ParseQuery("Like");
+                query.whereEqualTo("creator", ParseUser.getCurrentUser());
+                query.whereEqualTo("noteId", mParseNote.getObjectId());
+                query.getFirstInBackground(new GetCallback() {
+
+                    @Override
+                    public void done(final ParseObject object, ParseException e) {
+                        if(e == null) {
+                            relation.remove(object);
+                            mParseNote.saveInBackground(new SaveCallback() {
+
+                                @Override
+                                public void done(ParseException e) {
+                                    if(e == null) {
+                                        object.deleteInBackground(new DeleteCallback() {
+
+                                            @Override
+                                            public void done(ParseException e) {
+                                                if(e == null) {
+                                                    mLikeButton.setEnabled(true);
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+            else {
+                mUserLikesNote = true;
+                mLikeButton.setImageResource(R.drawable.heart_red);
+                mLikeButton.setEnabled(false);
+                mNoteLikesCount++;
+                updateLikesAndCommentsSize();
+                final ParseRelation relation = mParseNote.getRelation("likes");
+                final ParseObject like = new ParseObject("Like");
+                like.put("creator", ParseUser.getCurrentUser());
+                like.put("creatorName", ParseUser.getCurrentUser().getUsername());
+                like.put("noteId", mParseNote.getObjectId());
+                if(ParseUser.getCurrentUser().getBoolean("isDefaultPhoto")) {
+                    like.put("creatorPhotoUrl", "http://s3.amazonaws.com/pinit/default_image.png");
+                }
+                else {
+                    like.put("creatorPhotoUrl", 
+                            ParseUser.getCurrentUser()
+                            .getParseFile("profilePhotoThumbnail")
+                            .getUrl());
+                }
+                like.saveInBackground(new SaveCallback() {
+
+                    @Override
+                    public void done(ParseException e) {
+                        if(e == null) {
+                            relation.add(like);
+                            mParseNote.saveInBackground(new SaveCallback() {
+
+                                @Override
+                                public void done(ParseException e) {
+                                    mLikeButton.setEnabled(true);
+                                }
+                            });
+                        }
+                    }
+                });
+            }
         }
     }
-    
+
+    private void loadLikesAndCommentsCounts() {
+        ParseQuery likesCountQuery = mParseNote.getRelation("likes").getQuery();
+        likesCountQuery.countInBackground(new CountCallback() {
+
+            @Override
+            public void done(int count, ParseException e) {
+                if(e == null) {
+                    mNoteLikesCount = count;
+                    ParseQuery commentsCountQuery = mParseNote.getRelation("comments").getQuery();
+                    commentsCountQuery.countInBackground(new CountCallback() {
+
+                        @Override
+                        public void done(int count, ParseException e) {
+                            if(e == null) {
+                                mNoteCommentsCount = count;
+                                updateLikesAndCommentsSize();
+
+                                if(mNote.getNoteImageThumbnailUrl().isEmpty()) {
+                                    mLikesAndCommentsInfo.setVisibility(TextView.VISIBLE);    
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void loadUserLikePreference() {
+        ParseQuery likeQuery = new ParseQuery("Like");
+        likeQuery.whereEqualTo("creator", ParseUser.getCurrentUser());
+        likeQuery.whereEqualTo("noteId", mParseNote.getObjectId());
+        likeQuery.getFirstInBackground(new GetCallback() {
+
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                mLikeButton.setEnabled(true);
+                if(e == null && object != null) {
+                    mUserLikesNote = true;
+                    mLikeButton.setImageResource(R.drawable.heart_red);
+                }
+                else if(object == null) {
+                    mUserLikesNote = false;
+                    mLikeButton.setImageResource(R.drawable.heart);
+                }
+            }
+        });
+    }
+
     private void updateLikesAndCommentsSize() {
         if(mNoteCommentsCount == 0 && mNoteLikesCount == 0) {
             mLikesAndCommentsInfo.setText("Be the first to like this!");
@@ -379,7 +404,7 @@ public class DisplayNoteActivity extends Activity {
             }
         }
     }
-    
+
     private void loadCommentsInBackground() {
         if(!mShowingComments) {
             ParseQuery commentsQuery = mParseNote.getRelation("comments").getQuery();
@@ -387,19 +412,23 @@ public class DisplayNoteActivity extends Activity {
             commentsQuery.setSkip(mNumberOfCommentsLoaded);
             commentsQuery.addAscendingOrder("createdAt");
             commentsQuery.findInBackground(new FindCallback() {
-                
+
                 @SuppressLint("SimpleDateFormat")
                 @Override
                 public void done(List<ParseObject> objects, ParseException e) {
                     if(e == null) {
                         for(ParseObject comment: objects) {
                             String date = comment.getCreatedAt().toString();
-                            mNoteComments.add(new NoteComment(
+                            NoteComment newComment = new NoteComment(
                                     comment.getString("creatorName"), 
                                     comment.getString("commentText"), 
                                     comment.getString("creatorPhotoUrl"),
-                                    PinItUtils.getFormattedCommentCreatedAt(date)));
-                            mNumberOfCommentsLoaded++;
+                                    PinItUtils.getFormattedCommentCreatedAt(date),
+                                    comment.getCreatedAt().toString());
+                            if(!mNoteComments.contains(newComment)) {
+                                mNoteComments.add(newComment);
+                                mNumberOfCommentsLoaded++;
+                            }
                         }
                     }
                     else {
@@ -423,7 +452,6 @@ public class DisplayNoteActivity extends Activity {
             if(resultCode == RESULT_OK) {
                 mUserLikesNote = data.getBooleanExtra("userLikesNote", false);
                 mNoteLikesCount = data.getIntExtra("noteLikesCount", 0);
-                mNoteCommentsCount = data.getIntExtra("noteCommentsCount", mNoteCommentsCount);
                 if(mUserLikesNote) {
                     mLikeButton.setImageResource(R.drawable.heart_red);
                 }
@@ -431,6 +459,9 @@ public class DisplayNoteActivity extends Activity {
                     mLikeButton.setImageResource(R.drawable.heart);
                 }
                 mNumberOfCommentsLoaded = data.getIntExtra("numberOfCommentsLoaded", 0);
+                if(mNoteCommentsCount < data.getIntExtra("noteCommentsCount", mNoteCommentsCount)) {
+                    mNoteCommentsCount = data.getIntExtra("noteCommentsCount", mNoteCommentsCount);
+                }
                 ArrayList<NoteComment> comments = data.getParcelableArrayListExtra("noteComments");
                 mNoteComments = comments;
                 updateLikesAndCommentsSize();

@@ -18,31 +18,46 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:paddingBottom="5dp"
+    android:background="#F3F0EA"
     android:orientation="vertical" >
 
     <TextView
         android:id="@+id/display_note_title_alt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F3F0EA"
-        android:paddingBottom="5dp"
+        android:paddingBottom="40dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:textColor="#AA434343"
         android:textSize="20dp"
         android:textStyle="bold" />
+    
+    <TextView
+        android:id="@+id/display_note_likes_comments_info_alt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/display_note_title_alt"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:padding="5dp"
+        android:background="#7f000000"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:text="@string/display_note_be_the_first"/>
 
     <ScrollView
         android:id="@+id/display_scroll_layout_alt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/display_note_title_alt"
-        android:paddingBottom="40dp" >
+        android:paddingBottom="@dimen/display_note_userinfo_layout_height" >
 
         <TextView
             android:id="@+id/display_note_body_alt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="2dp"
             android:autoLink="web|email"
             android:background="#FFFFFF"
             android:paddingLeft="5dp"
@@ -52,27 +67,67 @@
             android:textSize="16dp" />
 
     </ScrollView>
-
-    <TextView
-        android:id="@+id/display_note_userinfo_alt"
+    
+    <RelativeLayout
+        android:id="@+id/display_note_userinfo_layout_alt"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/display_note_userinfo_layout_height"
         android:layout_alignBottom="@id/display_scroll_layout_alt"
         android:layout_alignLeft="@id/display_scroll_layout_alt"
         android:layout_alignRight="@id/display_scroll_layout_alt"
         android:background="#F3F0EA"
-        android:drawablePadding="5dp"
-        android:gravity="center_vertical"
-        android:padding="5dp"
-        android:textColor="#104E9B"
-        android:textSize="12dp"
-        android:textStyle="italic" />
-
-    <View
+        android:padding="5dp">
+       
+	    <TextView
+	        android:id="@+id/display_note_userinfo_alt"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:background="#F3F0EA"
+	        android:drawablePadding="5dp"
+	        android:layout_marginTop="5dp"
+	        android:gravity="center_vertical"
+	        android:textColor="#104E9B"
+	        android:textSize="12dp"
+	        android:textStyle="italic" />
+	    
+	    <View
         android:id="@+id/display_divider"
         android:layout_width="match_parent"
-        android:layout_height="2dip"
-        android:layout_above="@id/display_note_userinfo_alt"
+        android:layout_height="1dip"
+        android:layout_alignParentTop="true"
+        android:paddingBottom="10dp"
         android:background="#FFFFFF" />
+	    
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/display_note_action_buttons_height"
+	        android:layout_below="@id/display_note_userinfo_alt" 
+	        android:layout_marginTop="5dp"
+	        android:orientation="horizontal">
+
+		    <ImageButton
+		        android:id="@+id/display_note_like_alt"
+		        android:layout_width="wrap_content"
+		        android:layout_height="match_parent"
+		        android:layout_weight="1"
+		        android:background="@drawable/like_button"
+		        android:src="@drawable/heart" />
+		    
+		    <View 
+		        android:layout_width="1dp"
+		        android:layout_height="match_parent"
+		        android:background="#D8D8D8"/>
+		    
+	    	<ImageButton
+		        android:id="@+id/display_note_comment_alt"
+		        android:layout_width="wrap_content"
+		        android:layout_height="match_parent"
+		        android:layout_weight="1"
+		        android:background="@drawable/comment_button"
+		        android:src="@drawable/comment" />
+	    </LinearLayout>
+	    
+	</RelativeLayout>
 
 </RelativeLayout>

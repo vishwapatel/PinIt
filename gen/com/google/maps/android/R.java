@@ -4,7 +4,7 @@
  * aapt tool from the resource data it found.  It
  * should not be modified by hand.
  */
-package com.google.android.gms;
+package com.google.maps.android;
 
 public final class R {
 	public static final class attr {
@@ -38,6 +38,12 @@ public final class R {
 		public static final int common_signin_btn_text_light = 0x7f060010;
 	}
 	public static final class drawable {
+		public static final int bubble_blue = 0x7f020005;
+		public static final int bubble_green = 0x7f020006;
+		public static final int bubble_orange = 0x7f020007;
+		public static final int bubble_purple = 0x7f020008;
+		public static final int bubble_red = 0x7f020009;
+		public static final int bubble_white = 0x7f02000a;
 		public static final int common_signin_btn_icon_dark = 0x7f02002f;
 		public static final int common_signin_btn_icon_disabled_dark = 0x7f020030;
 		public static final int common_signin_btn_icon_disabled_focus_dark = 0x7f020031;
@@ -69,6 +75,10 @@ public final class R {
 		public static final int normal = 0x7f070001;
 		public static final int satellite = 0x7f070002;
 		public static final int terrain = 0x7f070003;
+		public static final int text = 0x7f070005;
+	}
+	public static final class layout {
+		public static final int text_bubble = 0x7f03001d;
 	}
 	public static final class string {
 		public static final int auth_client_availability_notification_title = 0x7f08000f;
@@ -92,6 +102,10 @@ public final class R {
 		public static final int location_client_ulr_inactive_age_under_13 = 0x7f080012;
 		public static final int location_client_ulr_inactive_age_unknown = 0x7f080013;
 		public static final int location_client_ulr_inactive_unknown_restriction = 0x7f080014;
+	}
+	public static final class style {
+		public static final int Bubble_TextAppearance_Dark = 0x7f090000;
+		public static final int Bubble_TextAppearance_Light = 0x7f090001;
 	}
 	public static final class styleable {
 		public static final int[] MapAttrs = { 0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003, 0x7f010004, 0x7f010005, 0x7f010006, 0x7f010007, 0x7f010008, 0x7f010009, 0x7f01000a, 0x7f01000b, 0x7f01000c, 0x7f01000d };

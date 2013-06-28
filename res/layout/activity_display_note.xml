@@ -68,7 +68,8 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginBottom="5dp"
                 android:padding="5dp"
-                android:background="#7f000000"
+                android:clickable="true"
+                android:background="@drawable/number_of_likes_and_comments_background"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
                 android:text="@string/display_note_be_the_first"/>

@@ -14,7 +14,8 @@
  ** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  ** See the License for the specific language governing permissions and
  ** limitations under the License.
- */ -->
+ */
+-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:whatever="http://schemas.android.com/apk/res/com.vishwa.pinit"
     android:layout_width="fill_parent"
@@ -83,33 +84,47 @@
         <Button
             android:id="@+id/login_button"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_centerHorizontal="true"
             android:background="@drawable/custom_login_button"
             android:text="@string/login_log_in"
-            android:textColor="@android:color/white" />
-        
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
         <Button
             android:id="@+id/login_fb_button"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/login_button"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/custom_fb_login_button"
             android:layout_marginTop="10dp"
-            android:layout_below="@+id/login_button"
-            android:text="@string/login_fb_log_in"
+            android:background="@drawable/custom_fb_login_button"
             android:drawableLeft="@drawable/fb_logo"
-            android:textColor="@android:color/white" />
+            android:text="@string/login_fb_log_in"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/login_forgot_password"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_below="@id/login_fb_button"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/login_forgot_password"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
 
         <Button
             android:id="@+id/login_signup_button"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:background="@drawable/custom_signup_button"
             android:text="@string/login_sign_up"
-            android:textColor="@android:color/white" >
+            android:textColor="@android:color/white"
+            android:textSize="14sp" >
         </Button>
     </RelativeLayout>
 

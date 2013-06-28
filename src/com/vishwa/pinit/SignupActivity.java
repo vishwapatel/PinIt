@@ -32,6 +32,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -52,6 +53,7 @@ public class SignupActivity extends Activity {
     private ImageView mPhotoImageView;
     private Button mProfilePhotoButton;
     private EditText mUsernameField;
+    private EditText mEmailField;
     private EditText mPasswordField;
     private EditText mConfirmPasswordField;
     private Button mConfirmSignupButton;
@@ -74,6 +76,7 @@ public class SignupActivity extends Activity {
         mPhotoImageView = (ImageView) findViewById(R.id.signup_photo);
         mProfilePhotoButton = (Button) findViewById(R.id.signup_photo_button);
         mUsernameField = (EditText) findViewById(R.id.signup_username_field);
+        mEmailField = (EditText) findViewById(R.id.signup_email_field);
         mPasswordField = (EditText) findViewById(R.id.signup_password_field);
         mConfirmPasswordField = (EditText) findViewById(R.id.signup_confirm_password_field);
         mConfirmSignupButton = (Button) findViewById(R.id.signup_confirm_signup_button);
@@ -101,7 +104,9 @@ public class SignupActivity extends Activity {
             public void onClick(View v) {
                 Pattern pattern = Pattern.compile("\\s");
                 Matcher matcher = pattern.matcher(mUsernameField.getText().toString());
+                Pattern emailPattern = Patterns.EMAIL_ADDRESS;
                 if(isEmpty(mUsernameField) 
+                        || isEmpty(mEmailField)
                         || isEmpty(mPasswordField) 
                         || isEmpty(mConfirmPasswordField)) {
                     PinItUtils.createAlert("You've missed something!", 
@@ -113,8 +118,12 @@ public class SignupActivity extends Activity {
                             "Usernames cannot contain spaces", 
                             SignupActivity.this);
                 }
+                else if(!emailPattern.matcher(mEmailField.getText().toString()).matches()) {
+                    PinItUtils.createAlert("The email is invalid", 
+                            "Please enter a correctly formatted email address", 
+                            SignupActivity.this);
+                }
                 else if(mPasswordField.getText().length() < 6) {
-                    mPasswordField.setError("Password should be at least 6 characters");
                     PinItUtils.createAlert("Your password is too short!", 
                             "The password must be 6 characters or more", 
                             SignupActivity.this);
@@ -133,6 +142,7 @@ public class SignupActivity extends Activity {
 
                     final ParseUser user = new ParseUser();
                     user.setUsername(mUsernameField.getText().toString());
+                    user.setEmail(mEmailField.getText().toString());
                     user.setPassword(mPasswordField.getText().toString());
                     user.put("isDefaultPhoto", mIsDefaultPhoto);
 

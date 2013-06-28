@@ -16,11 +16,18 @@
  ** limitations under the License.
  */
 -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle" >
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/linear_interpolator" >
 
-    <solid android:color="#FFFFFF" />
+    <scale
+        android:duration="300"
+        android:fromXScale="1.0"
+        android:fromYScale="1.0"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:repeatCount="1"
+        android:repeatMode="reverse"
+        android:toXScale="1.5"
+        android:toYScale="1.5" />
 
-    <corners android:radius="10dp" />
-
-</shape>
+</set>

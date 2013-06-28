@@ -28,27 +28,26 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Point;
-import android.media.ThumbnailUtils;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.andreabaccega.widget.FormEditText;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.model.GraphUser;
-import com.google.common.base.Strings;
-import com.parse.DeleteCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.RequestPasswordResetCallback;
 import com.parse.SaveCallback;
 
 
@@ -56,24 +55,26 @@ public class LoginActivity extends Activity {
 
     private static final int USERNAME_TAKEN = 0;
     private static final int USERNAME_MISSING = 0;
-    
+
     private Button mLoginButton;
     private Button mSignupButton;
     private Button mFbLoginButton;
+    private Button mForgotPasswordButton;
     private FormEditText mUsernameField;
     private FormEditText mPasswordField;
-    
+    private EditText mPasswordResetField;
+
     private Bitmap mUserPhoto = null;
-    
+
     private ParseUser mCurrentUser;
- 
+
     private byte[] mPhotoByteArray = null;
     private boolean hasUserLoggedInSuccessfully = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
             hasUserLoggedInSuccessfully = true;
@@ -91,17 +92,61 @@ public class LoginActivity extends Activity {
         mLoginButton = (Button) findViewById(R.id.login_button);
         mSignupButton = (Button) findViewById(R.id.login_signup_button);
         mFbLoginButton = (Button) findViewById(R.id.login_fb_button);
+        mForgotPasswordButton = (Button) findViewById(R.id.login_forgot_password);
         mUsernameField = (FormEditText) findViewById(R.id.login_username_field);
         mPasswordField = (FormEditText) findViewById(R.id.login_password_field);
 
         resizeButtons();
 
-        mLoginButton.setOnClickListener(new LoginClickListener());
-        mFbLoginButton.setOnClickListener(new FbLoginClickListener());
-        mSignupButton.setOnClickListener(new SignupClickListener());
+        mLoginButton.setOnClickListener(new OnLoginClickListener());
+        mFbLoginButton.setOnClickListener(new OnFbLoginClickListener());
+        mSignupButton.setOnClickListener(new OnSignupClickListener());
+        mForgotPasswordButton.setOnClickListener(new OnForgotPasswordClickListener());
     }
 
-    class LoginClickListener implements View.OnClickListener {
+    public class OnForgotPasswordClickListener implements OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            final AlertDialog dialog = createForgotPasswordDialog();
+            dialog.show();
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    final String email = mPasswordResetField.getText().toString();
+                    if(email.isEmpty()) {
+                        mPasswordResetField.setError("Enter an email");
+                    }
+                    else {
+                        mPasswordResetField.setError(null);
+                        setProgressBarIndeterminateVisibility(true);
+                        ParseUser.requestPasswordResetInBackground(email, new RequestPasswordResetCallback() {
+
+                            @Override
+                            public void done(ParseException e) {
+                                setProgressBarIndeterminateVisibility(false);
+                                if(e == null) {
+                                    Toast.makeText(getApplicationContext(), "An email has been sent to "+email+
+                                            " with a link to reset your password. Please check it.", Toast.LENGTH_LONG).show();
+                                    dialog.dismiss();
+                                }
+                                else if(e.getCode() == ParseException.EMAIL_NOT_FOUND) {
+                                    PinItUtils.createAlert("Email not found", "Sorry, that email address " +
+                                            "doesn't exist, please create a new account with it.", LoginActivity.this);
+                                }
+                                else {
+                                    PinItUtils.createAlert("We're sorry", "That email is invalid", LoginActivity.this);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    class OnLoginClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
@@ -149,8 +194,8 @@ public class LoginActivity extends Activity {
         }
 
     }
-    
-    class FbLoginClickListener implements View.OnClickListener {
+
+    class OnFbLoginClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
@@ -185,11 +230,11 @@ public class LoginActivity extends Activity {
                         else {
                             String error = e.getMessage().substring(0, 1).toUpperCase() + 
                                     e.getMessage().substring(1);
-    
+
                             PinItUtils.createAlert("Unable to login", error, LoginActivity.this);
                         }
                     }
-                    
+
                 });
             }
             else {
@@ -199,7 +244,7 @@ public class LoginActivity extends Activity {
         }
 
     }
-    
+
     private void setupParseAccountInBackground() {
         Request.executeMeRequestAsync(ParseFacebookUtils.getSession(), new Request.GraphUserCallback() {
 
@@ -215,9 +260,9 @@ public class LoginActivity extends Activity {
                             ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
                             mUserPhoto.compress(CompressFormat.PNG, 100, byteStream);
                             mPhotoByteArray = byteStream.toByteArray();
-                            
+
                             recycleAllBitmaps();
-                            
+
                             mCurrentUser.put("isDefaultPhoto", false);
                             mCurrentUser.put("fbId", user.getId());
                             if(user.getUsername() != null) {
@@ -232,7 +277,7 @@ public class LoginActivity extends Activity {
                                     final ParseFile userPhotoThumbnailFile = 
                                             new ParseFile("photoThumbnail.png", mPhotoByteArray);
                                     userPhotoThumbnailFile.saveInBackground(new SaveCallback() {
-                                        
+
                                         @Override
                                         public void done(ParseException e) {
                                             if(e == null) {
@@ -255,10 +300,10 @@ public class LoginActivity extends Activity {
             }
         });
     }
-    
+
     private void saveParseUserInBackground(ParseUser user) {
         user.saveInBackground(new SaveCallback() {
-            
+
             @Override
             public void done(ParseException e) {
                 setProgressBarIndeterminateVisibility(false);
@@ -271,7 +316,7 @@ public class LoginActivity extends Activity {
                 else if(e.getCode() == ParseException.USERNAME_TAKEN) {
                     hasUserLoggedInSuccessfully = false;
                     String errorMessage = "Your Facebook username has already been taken, please enter "+
-                    		"another username:";
+                            "another username:";
                     createUsernameErrorDialog(errorMessage, USERNAME_TAKEN).show();
                 }
                 else {
@@ -284,7 +329,7 @@ public class LoginActivity extends Activity {
         });
     }
 
-    class SignupClickListener implements View.OnClickListener {
+    class OnSignupClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
@@ -293,8 +338,42 @@ public class LoginActivity extends Activity {
             startActivity(signupIntent);
         }
     }
-    
-    private Dialog createUsernameErrorDialog(String errorMessage, final int errorType) {
+
+    private AlertDialog createForgotPasswordDialog() {
+        String title = "Password Reset";
+        String message = "Enter the email you had signed up with to reset your password. You will " +
+                "receive an email to reset your password on completion.";
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(message);
+
+        mPasswordResetField = new EditText(this);
+        builder.setView(mPasswordResetField);
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                //We are overriding this to create the button with the Ok label. Android
+                //automatically dismisses AlertDialogs on button clicks, so to avoid this, we have to
+                //override the button's on click listener separately (done in the
+                //OnForgotPasswordClickListener class's onClick method).
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                setProgressBarIndeterminateVisibility(false);
+                return;
+            }
+        });
+
+        return builder.create();
+    }
+
+    private Dialog createUsernameErrorDialog(String errorMessage, final int errorCode) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("We're sorry");
@@ -309,16 +388,16 @@ public class LoginActivity extends Activity {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String username = input.getText().toString();
                 if(username.isEmpty()) {
-                    input.setError("Username cannot be empty");
+                    Toast.makeText(getApplicationContext(), "Username cannot be empty", Toast.LENGTH_LONG).show();
                     return;
                 }
                 mCurrentUser.setUsername(username);
-                if(errorType == USERNAME_MISSING) {
+                if(errorCode == USERNAME_MISSING) {
                     setProgressBarIndeterminateVisibility(true);
                     final ParseFile userPhotoThumbnailFile = 
                             new ParseFile("photoThumbnail.png", mPhotoByteArray);
                     userPhotoThumbnailFile.saveInBackground(new SaveCallback() {
-                        
+
                         @Override
                         public void done(ParseException e) {
                             if(e == null) {
@@ -366,13 +445,13 @@ public class LoginActivity extends Activity {
         mLoginButton.setLayoutParams(loginParams);
         mFbLoginButton.setLayoutParams(fbLoginParams);
     }
-    
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
     }
-    
+
     public void recycleAllBitmaps() {
         if(mUserPhoto != null) {
             mUserPhoto.recycle();
@@ -388,7 +467,7 @@ public class LoginActivity extends Activity {
                 ParseUser.getCurrentUser().delete();
                 ParseUser.logOut();
             } catch (ParseException e) {
-               
+
             }
         }
         super.onDestroy();
