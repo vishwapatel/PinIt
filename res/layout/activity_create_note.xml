@@ -85,6 +85,36 @@
                     android:hint="@string/create_note_enter_body"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp" />
+                
+                <RadioGroup
+			        android:id="@+id/create_note_radio_group"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:paddingLeft="10dp"
+			        android:background="#FFFFFF" 
+			        android:orientation="horizontal">
+			 		
+                    <TextView 
+                        android:id="@+id/create_note_who_can_see"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/create_note_who_can_see_this"/>
+                    
+			        <RadioButton
+			            android:id="@+id/create_note_public"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:text="@string/create_note_public" 
+			            android:checked="true" />
+			 
+			        <RadioButton
+			            android:id="@+id/create_note_private"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:text="@string/create_note_private" />
+			 
+			    </RadioGroup>
 
                 <View
                     android:layout_width="fill_parent"
@@ -151,10 +181,36 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/view1"
             android:layout_width="fill_parent"
             android:layout_height="1dip"
             android:layout_above="@id/create_buttons_layout"
             android:background="?android:attr/dividerHorizontal" />
+		
+        <!-- <LinearLayout
+            android:id="@+id/create_note_privacy_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/view1"
+            android:layout_alignParentLeft="true"
+        <RadioButton
+            android:id="@+id/radioButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/view1"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="206dp"
+            android:text="Public" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/radioButton1"
+            android:layout_alignBottom="@+id/radioButton1"
+            android:layout_toRightOf="@+id/radioButton1"
+            android:text="Privatte" /> -->
+
     </RelativeLayout>
 
 </RelativeLayout>

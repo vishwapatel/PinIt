@@ -34,6 +34,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.parse.ParseACL;
@@ -50,6 +52,7 @@ public class CreateNoteActivity extends Activity {
 
     private EditText mNoteTitleField;
     private EditText mNoteBodyField;
+    private RadioGroup mPrivacyRadioGroup;
     private ImageView mNotePhotoImageView;
     private ImageView mNotePhotoCloseImageView;
     private Button mShareButton;
@@ -82,6 +85,7 @@ public class CreateNoteActivity extends Activity {
 
         mNoteTitleField = (EditText) findViewById(R.id.create_note_title);
         mNoteBodyField = (EditText) findViewById(R.id.create_note_body);
+        mPrivacyRadioGroup = (RadioGroup) findViewById(R.id.create_note_radio_group);
         mNotePhotoImageView = (ImageView) findViewById(R.id.create_note_photo);
         mNotePhotoCloseImageView = (ImageView) findViewById(R.id.create_note_photo_close_button);
         mShareButton = (Button) findViewById(R.id.create_note_confirm_button);
@@ -151,11 +155,15 @@ public class CreateNoteActivity extends Activity {
             else {
                 mShareButton.setEnabled(false);
                 mProgressBar.setVisibility(View.VISIBLE);
+                
+                int selectedId = mPrivacyRadioGroup.getCheckedRadioButtonId();
+                RadioButton selectedRadioButton = (RadioButton) findViewById(selectedId);
 
                 mNote = new ParseObject("Note");
                 mNote.put("title", mNoteTitleField.getText().toString());
                 mNote.put("body", mNoteBodyField.getText().toString());
                 mNote.put("geopoint", mGeoPoint);
+                mNote.put("visibility", selectedRadioButton.getText().toString().toLowerCase()); 
                 mNote.put("creator", ParseUser.getCurrentUser().getUsername());
 
                 if(mNotePhoto == null) {

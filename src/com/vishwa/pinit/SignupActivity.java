@@ -207,6 +207,7 @@ public class SignupActivity extends Activity {
                 mProgressBar.setVisibility(View.INVISIBLE);
 
                 if(e == null) {
+                    ((PinItApplication) getApplication()).setHasUserLoggedInSuccesfully(true);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     finish();

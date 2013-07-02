@@ -32,6 +32,8 @@ public class PinItApplication extends Application {
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
     
+    private boolean hasUserLoggedInSuccesfully = false;
+    
     @Override
     public void onCreate() {
         super.onCreate();
@@ -57,6 +59,14 @@ public class PinItApplication extends Application {
     
     public ImageLoader getImageLoader() {
         return mImageLoader;
+    }
+    
+    public boolean getHasUserLoggedInSuccessfully() {
+        return hasUserLoggedInSuccesfully;
+    }
+    
+    public void setHasUserLoggedInSuccesfully(boolean hasUserLoggedInSuccessfully) {
+        this.hasUserLoggedInSuccesfully = hasUserLoggedInSuccessfully;
     }
 
 }

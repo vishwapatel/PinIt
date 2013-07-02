@@ -27,11 +27,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
-import android.graphics.Point;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -67,9 +64,8 @@ public class LoginActivity extends Activity {
     private Bitmap mUserPhoto = null;
 
     private ParseUser mCurrentUser;
-
+    
     private byte[] mPhotoByteArray = null;
-    private boolean hasUserLoggedInSuccessfully = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +73,7 @@ public class LoginActivity extends Activity {
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
-            hasUserLoggedInSuccessfully = true;
+            ((PinItApplication) getApplication()).setHasUserLoggedInSuccesfully(true);
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             finish();
@@ -88,16 +84,14 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
 
         setProgressBarIndeterminateVisibility(false);
-
+        
         mLoginButton = (Button) findViewById(R.id.login_button);
         mSignupButton = (Button) findViewById(R.id.login_signup_button);
         mFbLoginButton = (Button) findViewById(R.id.login_fb_button);
         mForgotPasswordButton = (Button) findViewById(R.id.login_forgot_password);
         mUsernameField = (FormEditText) findViewById(R.id.login_username_field);
         mPasswordField = (FormEditText) findViewById(R.id.login_password_field);
-
-        resizeButtons();
-
+        
         mLoginButton.setOnClickListener(new OnLoginClickListener());
         mFbLoginButton.setOnClickListener(new OnFbLoginClickListener());
         mSignupButton.setOnClickListener(new OnSignupClickListener());
@@ -172,7 +166,7 @@ public class LoginActivity extends Activity {
                             setProgressBarIndeterminateVisibility(false);
 
                             if (e == null) {
-                                hasUserLoggedInSuccessfully = true;
+                                ((PinItApplication) getApplication()).setHasUserLoggedInSuccesfully(true);
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -181,7 +175,7 @@ public class LoginActivity extends Activity {
                                 String error = e.getMessage().substring(0, 1).toUpperCase() + 
                                         e.getMessage().substring(1);
 
-                                PinItUtils.createAlert("Unable to login", error, LoginActivity.this);
+                                PinItUtils.createAlert("Login Failed", error, LoginActivity.this);
                             }
                         }
                     });
@@ -213,7 +207,7 @@ public class LoginActivity extends Activity {
                                 }
                                 else {
                                     if(ParseUser.getCurrentUser().getParseFile("profilePhotoThumbnail") != null) {
-                                        hasUserLoggedInSuccessfully = true;
+                                        ((PinItApplication) getApplication()).setHasUserLoggedInSuccesfully(true);
                                         setProgressBarIndeterminateVisibility(false);
                                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                         startActivity(intent);
@@ -308,19 +302,19 @@ public class LoginActivity extends Activity {
             public void done(ParseException e) {
                 setProgressBarIndeterminateVisibility(false);
                 if(e == null) {
-                    hasUserLoggedInSuccessfully = true;
+                    ((PinItApplication) getApplication()).setHasUserLoggedInSuccesfully(true);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     finish();
                 }
                 else if(e.getCode() == ParseException.USERNAME_TAKEN) {
-                    hasUserLoggedInSuccessfully = false;
+                    ((PinItApplication) getApplication()).setHasUserLoggedInSuccesfully(false);
                     String errorMessage = "Your Facebook username has already been taken, please enter "+
                             "another username:";
                     createUsernameErrorDialog(errorMessage, USERNAME_TAKEN).show();
                 }
                 else {
-                    hasUserLoggedInSuccessfully = false;
+                    ((PinItApplication) getApplication()).setHasUserLoggedInSuccesfully(false);
                     String error = e.getMessage().substring(0, 1).toUpperCase()+ 
                             e.getMessage().substring(1);
                     PinItUtils.createAlert("Login in using Facebook failed", error, LoginActivity.this);
@@ -340,14 +334,14 @@ public class LoginActivity extends Activity {
     }
 
     private AlertDialog createForgotPasswordDialog() {
-        String title = "Password Reset";
-        String message = "Enter the email you had signed up with to reset your password. You will " +
-                "receive an email to reset your password on completion.";
+        String title = "Forgot Password?";
+        String message = "Please enter the email address you signed up with to reset your password";
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
         builder.setMessage(message);
 
         mPasswordResetField = new EditText(this);
+        mPasswordResetField.setHint("Email address");
         builder.setView(mPasswordResetField);
 
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -427,25 +421,6 @@ public class LoginActivity extends Activity {
         return builder.create();
     }
 
-    public void resizeButtons() {
-        ViewGroup.LayoutParams signupParams = mSignupButton.getLayoutParams();
-        ViewGroup.LayoutParams loginParams = mLoginButton.getLayoutParams();
-        ViewGroup.LayoutParams fbLoginParams = mFbLoginButton.getLayoutParams();
-
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-
-        signupParams.width = (int) width / 2;
-        loginParams.width = (int) ((width*3)/5);
-        fbLoginParams.width= (int) ((width*3)/5);
-
-        mSignupButton.setLayoutParams(signupParams);
-        mLoginButton.setLayoutParams(loginParams);
-        mFbLoginButton.setLayoutParams(fbLoginParams);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -462,7 +437,7 @@ public class LoginActivity extends Activity {
     @Override
     protected void onDestroy() {
         recycleAllBitmaps();
-        if(ParseUser.getCurrentUser() != null && !hasUserLoggedInSuccessfully) {
+        if(ParseUser.getCurrentUser() != null && !((PinItApplication) getApplication()).getHasUserLoggedInSuccessfully()) {
             try {
                 ParseUser.getCurrentUser().delete();
                 ParseUser.logOut();
@@ -472,6 +447,7 @@ public class LoginActivity extends Activity {
         }
         super.onDestroy();
     }
+    
 
     @Override
     protected void onPause() {

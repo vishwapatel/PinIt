@@ -396,7 +396,7 @@ public class DisplayNoteActivity extends Activity {
                 mLikesAndCommentsInfo.setText(String.format("1 Like \u00b7 %d Comments", mNoteCommentsCount));
             }
             else if(mNoteCommentsCount == 1) {
-                mLikesAndCommentsInfo.setText(String.format("%d Likes \u00b7 1 Comments", mNoteLikesCount));
+                mLikesAndCommentsInfo.setText(String.format("%d Likes \u00b7 1 Comment", mNoteLikesCount));
             }
             else {
                 mLikesAndCommentsInfo.setText(

@@ -37,6 +37,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +57,7 @@ public class EditNoteActivity extends Activity {
 
     private EditText mNoteTitleField;
     private EditText mNoteBodyField;
+    private RadioGroup mPrivacyRadioGroup;
     private ImageView mNotePhotoImageView;
     private ImageView mNotePhotoCloseImageView;
     private Button mSaveButton;
@@ -86,6 +89,7 @@ public class EditNoteActivity extends Activity {
 
         mNoteTitleField = (EditText) findViewById(R.id.edit_note_title);
         mNoteBodyField = (EditText) findViewById(R.id.edit_note_body);
+        mPrivacyRadioGroup = (RadioGroup) findViewById(R.id.edit_note_radio_group);
         mNotePhotoImageView = (ImageView) findViewById(R.id.edit_note_photo);
         mNotePhotoCloseImageView = (ImageView) findViewById(R.id.edit_note_photo_close_button);
         mSaveButton = (Button) findViewById(R.id.edit_note_confirm_button);
@@ -204,6 +208,12 @@ public class EditNoteActivity extends Activity {
                 query.getInBackground(mEditNote.getNoteId(), new GetCallback() {
                     public void done(final ParseObject note, ParseException e) {
                         if (e == null) {
+                            
+                            int selectedId = mPrivacyRadioGroup.getCheckedRadioButtonId();
+                            RadioButton selectedRadioButton = (RadioButton) findViewById(selectedId);
+                            
+                            note.put("visibility", selectedRadioButton.getText().toString().toLowerCase());
+                            
                             if(!mEditNote.getNoteTitle().equals(mNoteTitleField.getText().toString())) {
                                 note.put("title", mNoteTitleField.getText().toString());
                             }

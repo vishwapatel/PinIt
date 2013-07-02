@@ -391,7 +391,7 @@ public class CommentsActivity extends Activity {
                 mNumberOfLikesLoaded = data.getIntExtra("numberOfLikesLoaded", 0);
                 ArrayList<NoteLike> likes = data.getParcelableArrayListExtra("noteLikes");
                 mNoteLikes = likes;
-                if(mNumberOfLikesLoaded > mNoteLikesCount) {
+                if(mNumberOfLikesLoaded >= mNoteLikesCount) {
                     mNoteLikesCount = mNumberOfLikesLoaded;
                     updateLikesSize();
                 }

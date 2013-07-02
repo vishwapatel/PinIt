@@ -61,7 +61,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SearchView.OnSuggestionListener;
@@ -85,9 +84,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.android.ui.BubbleIconFactory;
 import com.parse.DeleteCallback;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -96,10 +93,8 @@ import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.parse.ParseQuery.CachePolicy;
 
 public class MainActivity extends FragmentActivity implements OnMapLongClickListener, OnMarkerDragListener, 
 OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
@@ -388,6 +383,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
     }
 
     private void setUpMap() {
+        mMap.setMyLocationEnabled(true);
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMapClickListener(this);
         mMap.setOnMarkerClickListener(this);
@@ -503,7 +499,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                     query.whereEqualTo("creator", mCurrentUsername);
                 }
                 else {
-                    query.whereNotEqualTo("creator", mCurrentUsername);
+                    query.whereEqualTo("visibility", "public");
                 }
                 LatLng southwest = tuple.getSouthwest();
                 LatLng northeast = tuple.getNortheast();
@@ -684,19 +680,10 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
             }
             else {
                 if(mMemoryCache.get(note.getNoteCreator()) != null) {
-//                    BubbleIconFactory mBubbleFactory = new BubbleIconFactory(this);
                    
                     balloonBackground = Bitmap.createScaledBitmap(balloonBackground, 87, 94, false);
                     userPhoto = Bitmap.createScaledBitmap(
                             mMemoryCache.get(note.getNoteCreator()), 75, 71, false);
-//                    ImageView imgView = new ImageView(this);
-//                    imgView.setImageBitmap(userPhoto);
-//                    mBubbleFactory.setContentView(imgView);
-//                    mBubbleFactory.setContentPadding(5, 5, 5, 5);
-//                    
-//                    addMarkerToMap(note, mBubbleFactory.makeIcon(), latitude, longitude);
-//                    imgView = null;
-//                    userPhoto.recycle();
 
                     Canvas canvas = new Canvas(balloonBackground);
                     canvas.drawBitmap(balloonBackground, 0, 0, null);
@@ -706,7 +693,6 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                 }
                 else {
                     ParseQuery query = ParseUser.getQuery();
-                    query.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
                     query.whereEqualTo("username", note.getNoteCreator());
                     query.getFirstInBackground(new GetCallback() {
                         
@@ -756,6 +742,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                                                 addMarkerToMap(note, balloonBackground, latitude, longitude);
                                             }
                                             else {
+                                                Toast.makeText(getApplicationContext(), "Photo load failed", Toast.LENGTH_LONG).show();
                                                 PinItUtils.createAlert("This is embarrassing", 
                                                         "Please log out and login again", MainActivity.this);
                                             }
@@ -764,6 +751,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
                                 }
                             }
                             else {
+                                Toast.makeText(getApplicationContext(), note.getNoteCreator(), Toast.LENGTH_LONG).show();
                                 PinItUtils.createAlert("This is embarrassing", 
                                         "Please log out and login again", MainActivity.this);
                             }

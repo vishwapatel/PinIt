@@ -18,10 +18,10 @@
     <string name="menu_about">About</string>
 
     <!-- Login Screen Strings -->
-    <string name="login_enter_username">Enter Username</string>
-    <string name="login_enter_password">Enter Password</string>
+    <string name="login_enter_username">Username</string>
+    <string name="login_enter_password">Password</string>
     <string name="login_log_in">Log In</string>
-    <string name="login_fb_log_in">Facebook Log In</string>
+    <string name="login_fb_log_in">Sign in with Facebook</string>
     <string name="login_sign_up">Sign Up!</string>
     <string name="login_forgot_password">Forgot Password?</string>
 
@@ -42,6 +42,9 @@
     <string name="create_note_enter_body">Enter Note Details</string>
     <string name="create_note_share">Share</string>
     <string name="create_note_title_character_limit">80</string>
+    <string name="create_note_private">Private</string>
+    <string name="create_note_public">Public</string>
+    <string name="create_note_who_can_see_this">Make this note: </string>
     
     <!-- Display Note Screen Strings -->
     <string name="display_note_be_the_first">Be the first to like this!</string>
