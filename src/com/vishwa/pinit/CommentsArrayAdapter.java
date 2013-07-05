@@ -40,30 +40,32 @@ public class CommentsArrayAdapter extends ArrayAdapter<NoteComment> {
         
         NoteComment entry = getItem(position);
         if (entry.getThumbnailUrl() != null) {
-            holder.userPhoto.setImageUrl(entry.getThumbnailUrl(), mImageLoader);
+            holder.mUserPhoto.setImageUrl(entry.getThumbnailUrl(), mImageLoader);
         } else {
-            holder.userPhoto.setImageResource(R.drawable.default_image);
+            holder.mUserPhoto.setImageResource(R.drawable.default_image);
         }
         
-        holder.commentText.setText(entry.getCommentText());
-        holder.commentCreator.setText(entry.getCommentCreator());
-        holder.commentCreatedAt.setText(entry.getCommentCreatedAt());
+        holder.mCommentText.setText(entry.getCommentText());
+        holder.mCommentCreator.setText(entry.getCommentCreator());
+        holder.mCommentCreatedAt.setText(entry.getCommentCreatedAt());
         
         return v;
     }
     
     
     private class ViewHolder {
-        NetworkImageView userPhoto;
-        TextView commentText; 
-        TextView commentCreator;
-        TextView commentCreatedAt;
+        NetworkImageView mUserPhoto;
+        TextView mCommentText; 
+        TextView mCommentCreator;
+        TextView mCommentCreatedAt;
         
         public ViewHolder(View v) {
-            userPhoto = (NetworkImageView) v.findViewById(R.id.comments_comment_creator_photo);
-            commentText = (TextView) v.findViewById(R.id.comments_comment_text);
-            commentCreator = (TextView) v.findViewById(R.id.comments_comment_creator);
-            commentCreatedAt = (TextView) v.findViewById(R.id.comments_comment_created_time);
+            mUserPhoto = (NetworkImageView) v.findViewById(R.id.comments_comment_creator_photo);
+            mCommentText = (TextView) v.findViewById(R.id.comments_comment_text);
+            mCommentCreator = (TextView) v.findViewById(R.id.comments_comment_creator);
+            mCommentCreatedAt = (TextView) v.findViewById(R.id.comments_comment_created_time);
+            
+            mUserPhoto.setDefaultImageResId(R.drawable.default_image);
             
             v.setTag(this);
         }

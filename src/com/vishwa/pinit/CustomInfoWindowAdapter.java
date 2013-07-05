@@ -16,23 +16,23 @@
  */
 package com.vishwa.pinit;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageLoader.ImageListener;
+import com.android.volley.toolbox.ImageLoader.ImageContainer;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.model.Marker;
 
@@ -44,16 +44,19 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
     private TextView noteCreatedAtTextView;
     private View view;
     private Context mContext;
+    private LruCache<String, Bitmap> mMemoryCache;
+    private ImageLoader mImageLoader;
 
     private Note note;
 
     private HashMap<String, Note> mNoteStore;
-    private LruCache<String, Bitmap> mMemoryCache;
 
-    public CustomInfoWindowAdapter(Context ctx, HashMap<String, Note> noteStore, LruCache<String, Bitmap> memoryCache){
+    public CustomInfoWindowAdapter(Context ctx, HashMap<String, Note> noteStore, 
+            LruCache<String, Bitmap> memoryCache, ImageLoader imageLoader){
         mContext = ctx;
         mNoteStore = noteStore;
         mMemoryCache = memoryCache;
+        mImageLoader = imageLoader;
     }
 
     @Override
@@ -62,8 +65,7 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
     }
 
     @Override
-    public View getInfoWindow(Marker marker){
-
+    public View getInfoWindow(final Marker marker){
 
         note = mNoteStore.get(marker.getId());
 
@@ -102,51 +104,47 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
                 "Created by "+note.getNoteCreator()+" on "+ note.getNoteCreatedAt());
 
         if(!note.getNoteImageThumbnailUrl().trim().isEmpty()) {
-            FetchImageTask fetchImageTask = new FetchImageTask();
-            try {
-                String noteId = note.getNoteId();
-                Bitmap result = mMemoryCache.get(noteId);
-                if(result != null) {
-                    notePhotoImageView.setImageBitmap(result);
-                    notePhotoImageView.setVisibility(ImageView.VISIBLE);
-                }
-                else {
-                    result = fetchImageTask.execute(note.getNoteImageThumbnailUrl()).get();
-                    notePhotoImageView.setImageBitmap(result);
-                    notePhotoImageView.setVisibility(ImageView.VISIBLE);
-                    if(noteId != null && result != null) {
-                        mMemoryCache.put(noteId, result);
+            String noteId = note.getNoteId();
+            Bitmap result = mMemoryCache.get(noteId);
+            if(result != null) {
+                notePhotoImageView.setImageBitmap(result);
+                notePhotoImageView.setVisibility(ImageView.VISIBLE);
+            }
+            else {
+                ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) notePhotoImageView.getLayoutParams();
+                params.height = 100;
+                params.width = 100;
+                notePhotoImageView.setImageResource(R.drawable.loading);
+                notePhotoImageView.setLayoutParams(params);
+                
+                notePhotoImageView.setVisibility(ImageView.VISIBLE);
+                mImageLoader.get(note.getNoteImageThumbnailUrl(), new ImageListener() {
+                    
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(mContext, "We couldn't load the note image preview currently, " +
+                        		"please try loading this note again", Toast.LENGTH_LONG).show();
                     }
-                }
-            } catch (InterruptedException e) {
-                return null;
-            } catch (ExecutionException e) {
-                return null;
+                    
+                    @Override
+                    public void onResponse(ImageContainer response, boolean isImmediate) {
+                        ViewGroup.LayoutParams layoutParams = (ViewGroup.LayoutParams) notePhotoImageView.getLayoutParams();
+                        Bitmap responseBitmap = response.getBitmap();
+                        if(responseBitmap != null) {
+                            layoutParams.height = LayoutParams.WRAP_CONTENT;
+                            layoutParams.width = LayoutParams.WRAP_CONTENT;
+                            notePhotoImageView.setLayoutParams(layoutParams);
+                            notePhotoImageView.setImageBitmap(responseBitmap);
+                            if (marker != null &&
+                                    marker.isInfoWindowShown()) {
+                                marker.hideInfoWindow();
+                                marker.showInfoWindow();
+                            }
+                        }
+                    }
+                });
             }
         }
         return view;
-    }
-    
-    class FetchImageTask extends AsyncTask<String, Void, Bitmap> {
-        @Override
-        protected Bitmap doInBackground(String... arg0) {
-            Bitmap notePhoto = null;
-            try {
-                if(arg0.equals(null) || arg0.equals(""))
-                {
-                    notePhotoImageView.setVisibility(ImageView.GONE);
-                    return null;
-                }
-                else
-                {
-                    notePhoto = BitmapFactory.decodeStream((InputStream) new URL(arg0[0]).getContent());
-                }
-            } catch (MalformedURLException e) {
-                return null;
-            } catch (IOException e) {
-                return null;
-            } 
-            return notePhoto;
-        }   
     }
 }

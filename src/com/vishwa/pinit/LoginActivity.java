@@ -18,7 +18,6 @@ package com.vishwa.pinit;
 
 
 import java.io.ByteArrayOutputStream;
-import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -36,6 +35,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.andreabaccega.widget.FormEditText;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageLoader.ImageContainer;
+import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.model.GraphUser;
@@ -60,6 +63,7 @@ public class LoginActivity extends Activity {
     private FormEditText mUsernameField;
     private FormEditText mPasswordField;
     private EditText mPasswordResetField;
+    private ImageLoader mImageLoader;
 
     private Bitmap mUserPhoto = null;
 
@@ -91,6 +95,8 @@ public class LoginActivity extends Activity {
         mForgotPasswordButton = (Button) findViewById(R.id.login_forgot_password);
         mUsernameField = (FormEditText) findViewById(R.id.login_username_field);
         mPasswordField = (FormEditText) findViewById(R.id.login_password_field);
+        
+        mImageLoader = ((PinItApplication) getApplication()).getImageLoader();
         
         mLoginButton.setOnClickListener(new OnLoginClickListener());
         mFbLoginButton.setOnClickListener(new OnFbLoginClickListener());
@@ -243,56 +249,77 @@ public class LoginActivity extends Activity {
         Request.executeMeRequestAsync(ParseFacebookUtils.getSession(), new Request.GraphUserCallback() {
 
             @Override
-            public void onCompleted(GraphUser user, Response response) {
+            public void onCompleted(final GraphUser user, Response response) {
                 if (user != null) {
-                    try {
-                        String userPhotoUrl = String.format(
-                                "http://graph.facebook.com/%s/picture?width=100&height=100", user.getId());
-                        mUserPhoto = new DownloadImageFromUrlTask(
-                                getApplicationContext(), user.getUsername()).execute(userPhotoUrl).get();
-                        if(mUserPhoto != null) {
-                            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-                            mUserPhoto.compress(CompressFormat.PNG, 100, byteStream);
-                            mPhotoByteArray = byteStream.toByteArray();
+                    String userPhotoUrl = String.format(
+                            "http://graph.facebook.com/%s/picture?width=100&height=100", user.getId());
+                    
+                    mImageLoader.get(userPhotoUrl, new ImageListener() {
+                        
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            PinItUtils.createAlert("Facebook Sign In Error", 
+                                    "We couldn't retrieve your Facebook photograph, please try again",
+                                    LoginActivity.this);
+                        }
+                        
+                        @Override
+                        public void onResponse(ImageContainer response, boolean isImmediate) {
+                            mUserPhoto = response.getBitmap();
+                            if(mUserPhoto != null) {
+                                ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+                                mUserPhoto.compress(CompressFormat.PNG, 100, byteStream);
+                                mPhotoByteArray = byteStream.toByteArray();
 
-                            recycleAllBitmaps();
+                                recycleAllBitmaps();
 
-                            mCurrentUser.put("isDefaultPhoto", false);
-                            mCurrentUser.put("fbId", user.getId());
-                            if(user.getUsername() != null) {
-                                if(user.getUsername().isEmpty()) {
-                                    setProgressBarIndeterminateVisibility(false);
-                                    String errorMessage = "It seems like you don't have a Facebook " +
-                                            "username, please enter a username here:";
-                                    createUsernameErrorDialog(errorMessage, USERNAME_MISSING).show();  
+                                mCurrentUser.put("isDefaultPhoto", false);
+                                mCurrentUser.put("fbId", user.getId());
+                                if(user.getUsername() != null) {
+                                    if(user.getUsername().isEmpty()) {
+                                        handleLackOfFacebookUsername(); 
+                                    }
+                                    else {
+                                        handlePresenceOfFacebookUsername(user);
+                                    }
                                 }
                                 else {
-                                    mCurrentUser.setUsername(user.getUsername());
-                                    final ParseFile userPhotoThumbnailFile = 
-                                            new ParseFile("photoThumbnail.png", mPhotoByteArray);
-                                    userPhotoThumbnailFile.saveInBackground(new SaveCallback() {
-
-                                        @Override
-                                        public void done(ParseException e) {
-                                            if(e == null) {
-                                                mCurrentUser.put("profilePhotoThumbnail", userPhotoThumbnailFile);
-                                                saveParseUserInBackground(mCurrentUser);
-                                            }
-                                        }
-                                    });
+                                    handleLackOfFacebookUsername();
                                 }
                             }
                         }
-                    }
-                    catch(InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    catch (ExecutionException e) {
-                        e.printStackTrace();
-                    }
+                    });
                 }
             }
         });
+    }
+    
+    private void handleLackOfFacebookUsername() {
+        setProgressBarIndeterminateVisibility(false);
+        String errorMessage = "It seems like you don't have a Facebook " +
+                "username, please enter a username here:";
+        createUsernameErrorDialog(errorMessage, USERNAME_MISSING).show();  
+    }
+    
+    private void handlePresenceOfFacebookUsername(GraphUser user) {
+        if(user.getUsername().isEmpty()) {
+            handleLackOfFacebookUsername(); 
+        }
+        else {
+            mCurrentUser.setUsername(user.getUsername());
+            final ParseFile userPhotoThumbnailFile = 
+                    new ParseFile("photoThumbnail.png", mPhotoByteArray);
+            userPhotoThumbnailFile.saveInBackground(new SaveCallback() {
+
+                @Override
+                public void done(ParseException e) {
+                    if(e == null) {
+                        mCurrentUser.put("profilePhotoThumbnail", userPhotoThumbnailFile);
+                        saveParseUserInBackground(mCurrentUser);
+                    }
+                }
+            });
+        }
     }
 
     private void saveParseUserInBackground(ParseUser user) {

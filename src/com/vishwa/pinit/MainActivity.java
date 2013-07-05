@@ -390,7 +390,11 @@ OnMarkerClickListener, OnInfoWindowClickListener, OnMapClickListener{
         mMap.setOnInfoWindowClickListener(this);
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.getUiSettings().setRotateGesturesEnabled(false);
-        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(getApplicationContext(), mNoteStore, mMemoryCache));
+        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(
+                getApplicationContext(), 
+                mNoteStore, 
+                mMemoryCache,
+                ((PinItApplication) getApplication()).getImageLoader()));
     }
 
     class LoadCurrentUserPhotoTask extends AsyncTask<Void, Boolean, Void> {

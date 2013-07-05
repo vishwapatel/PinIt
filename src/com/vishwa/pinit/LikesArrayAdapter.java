@@ -40,24 +40,26 @@ public class LikesArrayAdapter extends ArrayAdapter<NoteLike> {
         
         NoteLike entry = getItem(position);
         if (entry.getThumbnailUrl() != null) {
-            holder.userPhoto.setImageUrl(entry.getThumbnailUrl(), mImageLoader);
+            holder.mUserPhoto.setImageUrl(entry.getThumbnailUrl(), mImageLoader);
         } else {
-            holder.userPhoto.setImageResource(R.drawable.default_image);
+            holder.mUserPhoto.setImageResource(R.drawable.default_image);
         }
        
-        holder.commentCreator.setText(entry.getCommentCreator());
+        holder.mCommentCreator.setText(entry.getCommentCreator());
         
         return v;
     }
     
     
     private class ViewHolder {
-        NetworkImageView userPhoto;
-        TextView commentCreator;
+        NetworkImageView mUserPhoto;
+        TextView mCommentCreator;
         
         public ViewHolder(View v) {
-            userPhoto = (NetworkImageView) v.findViewById(R.id.likes_like_creator_photo);
-            commentCreator = (TextView) v.findViewById(R.id.likes_like_creator);
+            mUserPhoto = (NetworkImageView) v.findViewById(R.id.likes_like_creator_photo);
+            mCommentCreator = (TextView) v.findViewById(R.id.likes_like_creator);
+            
+            mUserPhoto.setDefaultImageResId(R.drawable.default_image);
             
             v.setTag(this);
         }
